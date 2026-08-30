@@ -10,7 +10,7 @@ const propertyBlank = (): Property => ({
   id: crypto.randomUUID(), slug: '', status: 'draft', name: '', developer: '', location: '',
   propertyType: 'Apartment', marketType: 'Off-plan', priceAED: 1, bedrooms: '1', areaSqft: '',
   handover: '', paymentPlan: '', summary: '', highlights: [], imageUrl: 'https://', sourceLabel: '',
-  sourceUrl: 'https://', verifiedAt: new Date().toISOString().slice(0, 10), featured: false,
+  sourceUrl: 'https://', verifiedAt: new Date().toISOString().slice(0, 10), featured: false, demo: false,
 });
 
 const articleBlank = (): Article => ({
@@ -123,10 +123,11 @@ function PropertyFields({ value, change }: { value: Property; change: (value: Pr
     <div className="form-pair"><Field label="Handover / availability" value={value.handover} onChange={(v) => set('handover', v)} /><Field label="Payment plan" value={value.paymentPlan} onChange={(v) => set('paymentPlan', v)} /></div>
     <TextArea label="Factual summary" value={value.summary} onChange={(v) => set('summary', v)} />
     <TextArea label="Highlights (one per line)" value={value.highlights.join('\n')} onChange={(v) => set('highlights', v.split('\n').map(s => s.trim()).filter(Boolean))} />
-    <Field label="Image URL (HTTPS, authorised image only)" value={value.imageUrl} onChange={(v) => set('imageUrl', v)} />
+    <Field label="Image URL (/demo/... or authorised HTTPS image)" value={value.imageUrl} onChange={(v) => set('imageUrl', v)} />
     <div className="form-pair"><Field label="Source name" value={value.sourceLabel} onChange={(v) => set('sourceLabel', v)} /><Field label="Last verified" type="date" value={value.verifiedAt} onChange={(v) => set('verifiedAt', v)} /></div>
     <Field label="Source URL (HTTPS)" value={value.sourceUrl} onChange={(v) => set('sourceUrl', v)} />
     <label className="check-label"><input type="checkbox" checked={value.featured} onChange={(e) => set('featured', e.target.checked)} /> Feature on homepage</label>
+    <label className="check-label"><input type="checkbox" checked={value.demo} onChange={(e) => set('demo', e.target.checked)} /> Mark clearly as demonstration content</label>
   </>;
 }
 function ArticleFields({ value, change }: { value: Article; change: (value: Article) => void }) {

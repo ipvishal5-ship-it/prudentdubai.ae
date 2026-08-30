@@ -15,12 +15,17 @@ export const CURRENCIES: Record<Currency, { symbol: string; name: string; rate: 
   USDT: { symbol: 'USDT', name: 'Tether', rate: 0.272294 },
 };
 
-export function formatPrice(aed: number, currency: Currency = 'AED') {
+export function formatPrice(aed: number, currency: Currency = 'AED', locale: 'en' | 'ar' = 'en') {
   const item = CURRENCIES[currency];
-  return `${item.symbol} ${Math.round(aed * item.rate).toLocaleString('en-US')}`;
+  const number = new Intl.NumberFormat(locale === 'ar' ? 'ar-AE' : 'en-AE', { maximumFractionDigits: 0 }).format(Math.round(aed * item.rate));
+  return `${item.symbol} ${number}`;
 }
 
 const httpsUrl = z.string().url().refine((value) => value.startsWith('https://'), 'Use an HTTPS URL');
+const webImage = z.string().refine(
+  (value) => /^\/[a-zA-Z0-9/_\-.]+$/.test(value) || (z.string().url().safeParse(value).success && value.startsWith('https://')),
+  'Use a local /path or an HTTPS URL',
+);
 
 export const propertySchema = z.object({
   id: z.string().min(3).max(80),
@@ -38,11 +43,12 @@ export const propertySchema = z.object({
   paymentPlan: z.string().min(2).max(160),
   summary: z.string().min(20).max(500),
   highlights: z.array(z.string().min(2).max(160)).max(8),
-  imageUrl: httpsUrl,
+  imageUrl: webImage,
   sourceLabel: z.string().min(2).max(100),
   sourceUrl: httpsUrl,
   verifiedAt: z.string().date(),
   featured: z.boolean().default(false),
+  demo: z.boolean().default(false),
 });
 export type Property = z.infer<typeof propertySchema>;
 

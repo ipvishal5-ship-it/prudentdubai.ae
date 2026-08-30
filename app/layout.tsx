@@ -3,6 +3,8 @@ import './globals.css';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { CurrencyProvider } from '@/components/CurrencyContext';
+import { LanguageProvider } from '@/components/LanguageContext';
+import MotionProvider from '@/components/MotionProvider';
 import { getSiteSettings } from '@/lib/content';
 
 export const metadata: Metadata = {
@@ -24,6 +26,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     address: { '@type': 'PostalAddress', streetAddress: 'Westburry Tower, Business Bay', addressLocality: 'Dubai', addressCountry: 'AE' },
     telephone: site.phone, email: site.email,
   };
-  return <html lang="en"><head><meta name="theme-color" content="#FAFAF9" /><script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(schema)}} /></head>
-    <body><CurrencyProvider><Navbar /><main id="main-content">{children}</main><Footer /></CurrencyProvider></body></html>;
+  return <html lang="en" dir="ltr" suppressHydrationWarning><head><meta name="theme-color" content="#FAFAF9" /><script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(schema)}} /></head>
+    <body><LanguageProvider><CurrencyProvider><MotionProvider /><Navbar /><main id="main-content">{children}</main><Footer /></CurrencyProvider></LanguageProvider></body></html>;
 }

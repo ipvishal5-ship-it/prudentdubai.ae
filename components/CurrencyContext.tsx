@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Currency, CURRENCIES, formatPrice } from '@/lib/data';
+import { useLanguage } from './LanguageContext';
 
 type CurrencyContextType = {
   currency: Currency;
@@ -18,6 +19,7 @@ const CurrencyContext = createContext<CurrencyContextType>({
 });
 
 export function CurrencyProvider({ children }: { children: ReactNode }) {
+  const { locale } = useLanguage();
   const [currency, setCurrencyState] = useState<Currency>('AED');
 
   useEffect(() => {
@@ -36,7 +38,7 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
     <CurrencyContext.Provider value={{
       currency,
       setCurrency,
-      format: (aed) => formatPrice(aed, currency),
+      format: (aed) => formatPrice(aed, currency, locale),
       currencyData: CURRENCIES[currency],
     }}>
       {children}
