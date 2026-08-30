@@ -1,0 +1,53 @@
+[
+  {
+    "id": "guide-official-market-data",
+    "slug": "how-we-verify-dubai-property-information",
+    "status": "published",
+    "title": "How we verify Dubai property information",
+    "excerpt": "A clear explanation of the official records, source dates and checks used before a property opportunity is published on this website.",
+    "body": [
+      "Every property opportunity should be traceable. Before publication, we record the developer or authorised source, the source URL or document, the date checked, the quoted starting price, the payment schedule and the stated completion timeline.",
+      "Dubai Land Department provides official open-data tools covering transactions, rents, projects, buildings, units, brokers and developers. Its project records can include the project name, developer, status, completion percentage and escrow account number. We use official records as a verification reference rather than presenting unsourced market claims.",
+      "Availability and prices can change after verification. Visitors should request the current availability sheet and review the developer's reservation form and sale agreement before making a decision."
+    ],
+    "category": "Buying responsibly",
+    "publishedAt": "2026-08-30",
+    "updatedAt": "2026-08-30",
+    "sourceLabel": "Dubai Land Department — Real Estate Data",
+    "sourceUrl": "https://dubailand.gov.ae/en/open-data/real-estate-data/"
+  },
+  {
+    "id": "guide-buying-process",
+    "slug": "a-practical-dubai-property-buying-checklist",
+    "status": "published",
+    "title": "A practical Dubai property buying checklist",
+    "excerpt": "The documents and commercial details a buyer should examine before reserving a ready or off-plan property in Dubai.",
+    "body": [
+      "Start with the legal identity of the seller or developer and confirm the property or project through official channels. For an off-plan purchase, review the project registration, payment destination, reservation form, sale and purchase agreement, completion schedule and cancellation terms.",
+      "For a ready property, review the title deed, service-charge position, mortgage or restriction status, inspection findings and the full transfer-cost estimate. Never rely only on a brochure, social-media post or verbal promise.",
+      "Budget beyond the purchase price. Depending on the transaction, costs may include registration, trustee or service-partner charges, mortgage-related costs, valuation, conveyancing and recurring service charges. Obtain a transaction-specific written cost sheet before proceeding."
+    ],
+    "category": "Buyer guide",
+    "publishedAt": "2026-08-30",
+    "updatedAt": "2026-08-30",
+    "sourceLabel": "Dubai Land Department — Investor guidance",
+    "sourceUrl": "https://dubailand.gov.ae/media/wlzmuycr/know_your_rights.pdf"
+  },
+  {
+    "id": "guide-golden-residency",
+    "slug": "property-and-uae-golden-residency",
+    "status": "published",
+    "title": "Property and UAE Golden Residency: check eligibility carefully",
+    "excerpt": "The official UAE portal lists an AED 2 million threshold for real-estate investors, but eligibility and visa duration remain subject to authority assessment.",
+    "body": [
+      "The UAE Government's official portal lists real-estate investors among Golden Visa eligibility categories and states a minimum real-estate investment threshold of AED 2 million. The portal currently describes a five-year renewable residence route for qualifying real-estate investment.",
+      "Property value alone should not be treated as automatic approval. Ownership structure, financing, supporting documents and the rules applied by the relevant authority can affect eligibility. Requirements can change, so applicants should confirm the current position with the official authority before committing to a purchase for residency purposes.",
+      "Prudent Dubai Properties can help organise the property information required for a consultation, but this website does not promise visa approval and does not replace advice from the competent authority."
+    ],
+    "category": "Residency information",
+    "publishedAt": "2026-08-30",
+    "updatedAt": "2026-08-30",
+    "sourceLabel": "Official UAE Government Portal — Golden Visa",
+    "sourceUrl": "https://u.ae/en/information-and-services/visa-and-emirates-id/residence-visas/golden-visa"
+  }
+]

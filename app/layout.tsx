@@ -1,0 +1,29 @@
+import type { Metadata } from 'next';
+import './globals.css';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+import { CurrencyProvider } from '@/components/CurrencyContext';
+import { getSiteSettings } from '@/lib/content';
+
+export const metadata: Metadata = {
+  metadataBase: new URL('https://prudentdubai.ae'),
+  title: { default: 'Prudent Dubai Properties | Clear Dubai Property Guidance', template: '%s | Prudent Dubai Properties' },
+  description: 'Source-led Dubai property information, verified opportunity pages and practical buying support from the Prudent Dubai group.',
+  openGraph: { title: 'Prudent Dubai Properties', description: 'Clear information for considered Dubai property decisions.', url: 'https://prudentdubai.ae', siteName: 'Prudent Dubai Properties', type: 'website', locale: 'en_AE' },
+  twitter: { card: 'summary_large_image' },
+  robots: { index: true, follow: true },
+  alternates: { canonical: 'https://prudentdubai.ae' },
+};
+
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const site = await getSiteSettings();
+  const schema = {
+    '@context': 'https://schema.org', '@type': 'Organization', name: 'Prudent Dubai Properties',
+    url: 'https://prudentdubai.ae', logo: 'https://prudentdubai.ae/brand/prudent-dubai-logo.png',
+    parentOrganization: { '@type': 'Organization', name: 'Prudent Dubai', url: site.sisterWebsite },
+    address: { '@type': 'PostalAddress', streetAddress: 'Westburry Tower, Business Bay', addressLocality: 'Dubai', addressCountry: 'AE' },
+    telephone: site.phone, email: site.email,
+  };
+  return <html lang="en"><head><meta name="theme-color" content="#FAFAF9" /><script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(schema)}} /></head>
+    <body><CurrencyProvider><Navbar /><main id="main-content">{children}</main><Footer /></CurrencyProvider></body></html>;
+}
