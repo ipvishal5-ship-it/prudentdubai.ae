@@ -15,7 +15,6 @@ export default function LeadForm({ whatsapp }: { whatsapp: string }) {
     type && `Property type: ${type}`,
     purpose === 'home' && 'Purpose: home to live in',
     purpose === 'invest' && 'Purpose: investment',
-    purpose === 'visa' && 'Purpose: Golden Visa planning',
   ].filter(Boolean).join('. ');
   const interestDefault = purpose === 'invest' ? 'Property investment' : purpose === 'home' ? 'Buy a home' : '';
   const [status, setStatus] = useState<'idle' | 'busy' | 'success' | 'error'>('idle');

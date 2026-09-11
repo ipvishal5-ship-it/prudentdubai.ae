@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { FormEvent, useState } from 'react';
 
 export default function AdminLogin() {
@@ -25,7 +26,10 @@ export default function AdminLogin() {
   return (
     <main className="admin-shell">
       <form className="admin-panel admin-login-panel" onSubmit={submit}>
-        <span className="eyebrow">Private workspace</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 14 }}>
+          <Image src="/brand/smalllogo.png" alt="Prudent" width={42} height={29} />
+          <span className="eyebrow" style={{ margin: 0 }}>Private workspace</span>
+        </div>
         <h1>Prudent Content Studio</h1>
         <p>Manage verified property opportunities and editorial guides.</p>
         <label className="field-label" htmlFor="admin-password">Password</label>

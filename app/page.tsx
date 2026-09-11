@@ -22,20 +22,16 @@ export default async function HomePage() {
         </div>
         <div className="hero-visual">
           <img src="/demo/dubai-tower.jpg" alt="Dubai towers shown for location context" draggable={false} />
-          <div className="hero-note"><strong><T id="home.noteTitle" /></strong><span className="fine-print"><T id="home.noteBody" /></span></div>
         </div>
       </div>
     </section>
-    <div className="trust-strip"><div className="container trust-items"><span><T id="home.trust1" /></span><span><T id="home.trust2" /></span><span><T id="home.trust3" /></span><span><T id="home.trust4" /></span></div></div>
 
     <section className="section">
       <div className="container">
-        <span className="eyebrow"><T id="home.approach" /></span>
         <h2 className="section-title"><T id="home.approachTitle" /></h2>
         <p className="lede"><T id="home.approachBody" /></p>
         <div className="editorial-grid">
           <div className="feature-panel">
-            <span className="eyebrow"><T id="home.starting" /></span>
             <h3><T id="home.startingTitle" /></h3>
             <p className="lede"><T id="home.startingBody" /></p>
             <Link className="button button-link" href="/contact"><T id="home.brief" /> <span className="directional">→</span></Link>
@@ -52,7 +48,6 @@ export default async function HomePage() {
       <div className="container">
         <div className="section-heading">
           <div>
-            <span className="eyebrow"><T id="home.helpEyebrow" /></span>
             <h2 className="section-title"><T id="home.helpTitle" /></h2>
             <p className="lede"><T id="home.helpBody" /></p>
           </div>
@@ -74,7 +69,6 @@ export default async function HomePage() {
       <div className="container">
         <div className="section-heading">
           <div>
-            <span className="eyebrow"><T id="home.areasEyebrow" /></span>
             <h2 className="section-title"><T id="home.areasTitle" /></h2>
             <p className="lede"><T id="home.areasBody" /></p>
           </div>
@@ -85,25 +79,10 @@ export default async function HomePage() {
       </div>
     </section>
 
-    <section className="section visual-story section-soft">
-      <div className="container visual-story-layout">
-        <div>
-          <span className="eyebrow"><T id="home.approach" /></span>
-          <h2 className="section-title"><T id="home.visualTitle" /></h2>
-          <p className="lede"><T id="home.visualBody" /></p>
-        </div>
-        <div className="visual-story-grid" data-reveal>
-          <img src="/demo/city-apartment.jpg" alt="Modern apartment interior, illustrative" draggable={false} />
-          <img src="/demo/villa-exterior.jpg" alt="Modern villa exterior, illustrative" draggable={false} />
-          <img src="/demo/pool-villa.jpg" alt="Villa pool, illustrative" draggable={false} />
-        </div>
-      </div>
-    </section>
-
     <section className="section">
       <div className="container">
-        <span className="eyebrow"><T id="home.process" /></span>
         <h2 className="section-title"><T id="home.processTitle" /></h2>
+        <p className="lede section-intro-copy"><T id="home.processBody" /></p>
         <div className="process">
           <article className="process-step"><h3><T id="home.step1" /></h3><p><T id="home.step1Body" /></p></article>
           <article className="process-step"><h3><T id="home.step2" /></h3><p><T id="home.step2Body" /></p></article>
@@ -117,12 +96,38 @@ export default async function HomePage() {
       <div className="container">
         <div className="section-heading">
           <div>
-            <span className="eyebrow"><T id="home.guides" /></span>
             <h2 className="section-title"><T id="home.guidesTitle" /></h2>
+            <p className="lede"><T id="home.guidesBody" /></p>
           </div>
           <Link className="button button-secondary" href="/insights"><T id="home.allInsights" /></Link>
         </div>
-        <div className="card-grid">{articles.slice(0, 3).map(item => <article className="article-card" key={item.id}><span className="eyebrow">{item.category}</span><h3>{item.title}</h3><p>{item.excerpt}</p><Link className="button button-link" href={`/insights/${item.slug}`}><T id="home.read" /> <span className="directional">→</span></Link></article>)}</div>
+        <div className="card-grid">
+          {articles.slice(0, 3).map((item) => (
+            <article className="article-card insight-card" key={item.id}>
+              {item.imageUrl && (
+                <Link href={`/insights/${item.slug}`} className="insight-card-image-wrap">
+                  <img src={item.imageUrl} alt={item.title} className="insight-card-image" loading="lazy" />
+                </Link>
+              )}
+              <div className="insight-card-body">
+                <div className="article-meta-row">
+                  <span className="category-pill">{item.category}</span>
+                  {item.readTime && <span className="read-time">{item.readTime}</span>}
+                </div>
+                <h3>
+                  <Link href={`/insights/${item.slug}`}>{item.title}</Link>
+                </h3>
+                <p>{item.excerpt}</p>
+                <div className="article-card-footer">
+                  <span className="fine-print">Updated {item.updatedAt}</span>
+                  <Link className="button button-link" href={`/insights/${item.slug}`}>
+                    <T id="home.read" /> <span className="directional">→</span>
+                  </Link>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
       </div>
     </section>
   </>;

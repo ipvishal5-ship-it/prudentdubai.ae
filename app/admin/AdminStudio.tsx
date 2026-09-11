@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { FormEvent, useEffect, useState } from 'react';
 import type { Article, Property } from '@/lib/data';
 
@@ -69,7 +70,10 @@ export default function AdminStudio() {
     <main className="admin-shell">
       <div className="admin-workspace">
         <header className="admin-toolbar">
-          <div><span className="eyebrow">Private workspace</span><h1>Content Studio</h1></div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+            <Image src="/brand/smalllogo.png" alt="Prudent Dubai" width={40} height={27} />
+            <div><span className="eyebrow">Private workspace</span><h1>Content Studio</h1></div>
+          </div>
           <div className="admin-actions"><a className="button button-secondary" href="/" target="_blank">View website</a><button className="button button-secondary" onClick={logout}>Sign out</button></div>
         </header>
         <div className="admin-tabs" role="tablist">

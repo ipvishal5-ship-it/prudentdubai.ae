@@ -10,8 +10,9 @@ import { getSiteSettings } from '@/lib/content';
 export const metadata: Metadata = {
   metadataBase: new URL('https://prudentdubai.ae'),
   title: { default: 'Prudent Dubai Properties | Clear Dubai Property Guidance', template: '%s | Prudent Dubai Properties' },
-  description: 'Prudent Dubai Properties helps clients buy across Dubai through requirement-led guidance. Share your area, property type and purpose — pricing is discussed directly with our team.',
-  openGraph: { title: 'Prudent Dubai Properties', description: 'Your Dubai property partner — areas, property types and practical buying support.', url: 'https://prudentdubai.ae', siteName: 'Prudent Dubai Properties', type: 'website', locale: 'en_AE' },
+  description: 'Prudent Dubai Properties provides direct property advisory across Dubai. Share your preferred area, property type, and goals, and our team will discuss pricing directly with you.',
+  icons: { icon: '/brand/smalllogo.png', apple: '/brand/smalllogo.png' },
+  openGraph: { title: 'Prudent Dubai Properties', description: 'Your Dubai property partner for area selection, home categories, and direct buying support.', url: 'https://prudentdubai.ae', siteName: 'Prudent Dubai Properties', type: 'website', locale: 'en_AE' },
   twitter: { card: 'summary_large_image' },
   robots: { index: true, follow: true },
   alternates: { canonical: 'https://prudentdubai.ae' },
@@ -21,7 +22,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const site = await getSiteSettings();
   const schema = {
     '@context': 'https://schema.org', '@type': 'Organization', name: 'Prudent Dubai Properties',
-    url: 'https://prudentdubai.ae', logo: 'https://prudentdubai.ae/brand/prudent-dubai-logo.png',
+    url: 'https://prudentdubai.ae', logo: 'https://prudentdubai.ae/brand/prudentlogo.png',
     parentOrganization: { '@type': 'Organization', name: 'Prudent Dubai', url: site.sisterWebsite },
     address: { '@type': 'PostalAddress', streetAddress: 'Westburry Tower, Business Bay', addressLocality: 'Dubai', addressCountry: 'AE' },
     telephone: site.phone, email: site.email,

@@ -48,7 +48,6 @@ export const GROUP_VISUALS: Record<string, { image: string; mood: string; line: 
 export const BUYER_PURPOSES = [
   { title: 'Home to live in', body: 'School access, commute, building quality and long-term fit matter most.' },
   { title: 'Investment', body: 'Rental demand, service charges, handover timing and exit flexibility need a clear comparison.' },
-  { title: 'Golden Visa planning', body: 'Eligibility depends on the full transaction structure, not property marketing alone.' },
 ] as const;
 
 export const DUBAI_AREA_GROUPS: AreaGroup[] = [

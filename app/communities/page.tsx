@@ -3,8 +3,8 @@ import { Suspense } from 'react';
 import AreaExplorer from '@/components/AreaExplorer';
 
 export const metadata: Metadata = {
-  title: 'Areas we serve',
-  description: 'Explore Dubai areas visually — waterfront, family communities, apartment districts and more. Pricing is shared in conversation.',
+  title: 'Explore Dubai areas',
+  description: 'Browse general information about Dubai neighbourhoods by district group and common residential property type.',
 };
 
 export default function CommunitiesPage() {

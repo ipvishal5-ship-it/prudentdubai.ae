@@ -64,6 +64,10 @@ export const articleSchema = z.object({
   updatedAt: z.string().date(),
   sourceLabel: z.string().min(2).max(100),
   sourceUrl: httpsUrl,
+  imageUrl: webImage.optional(),
+  readTime: z.string().min(2).max(40).optional(),
+  author: z.string().min(2).max(80).optional(),
+  keyTakeaways: z.array(z.string().min(5).max(250)).optional(),
 });
 export type Article = z.infer<typeof articleSchema>;
 

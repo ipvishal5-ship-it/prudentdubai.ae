@@ -1,27 +1,43 @@
 'use client';
 
 import Link from 'next/link';
-import { KeyboardEvent, useEffect, useMemo, useState } from 'react';
+import Image from 'next/image';
+import { KeyboardEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { DUBAI_AREA_GROUPS, GROUP_VISUALS, TYPE_FILTERS, VISUAL_AREAS } from '@/lib/areas';
-import type { MessageKey } from '@/lib/i18n';
 import { useLanguage } from './LanguageContext';
-
-const PURPOSES = [
-  { id: 'home', titleKey: 'areas.purposeHome', groups: ['Family communities & villas', 'Established neighbourhoods', 'Central & waterfront'] },
-  { id: 'invest', titleKey: 'areas.purposeInvest', groups: ['Central & waterfront', 'Popular apartment districts', 'Value & emerging districts'] },
-  { id: 'visa', titleKey: 'areas.purposeVisa', groups: ['Family communities & villas', 'Central & waterfront'] },
-] as const;
 
 const SHORTLIST_KEY = 'pd_area_shortlist';
 
-function mapEmbedUrl(lat: number, lng: number) {
-  const delta = 0.035;
-  const left = lng - delta;
-  const right = lng + delta;
-  const top = lat + delta * 0.75;
-  const bottom = lat - delta * 0.75;
-  return `https://www.openstreetmap.org/export/embed.html?bbox=${left}%2C${bottom}%2C${right}%2C${top}&layer=mapnik&marker=${lat}%2C${lng}`;
+function mapEmbedUrl(name: string) {
+  return `https://maps.google.com/maps?q=${encodeURIComponent(`${name}, Dubai`)}&t=&z=14&ie=UTF8&iwloc=&output=embed`;
+}
+
+function getInitialArea(searchParams: URLSearchParams): string {
+  const requested = searchParams.get('area');
+  if (requested && VISUAL_AREAS.some((area) => area.name === requested)) return requested;
+  return VISUAL_AREAS[0].name;
+}
+
+function getInitialType(searchParams: URLSearchParams): string {
+  const requested = searchParams.get('type');
+  if (requested && TYPE_FILTERS.includes(requested as (typeof TYPE_FILTERS)[number])) return requested;
+  return 'all';
+}
+
+function getInitialShortlist(): string[] {
+  try {
+    const saved = localStorage.getItem(SHORTLIST_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved) as string[];
+      if (Array.isArray(parsed)) {
+        return parsed.filter((name) => VISUAL_AREAS.some((area) => area.name === name));
+      }
+    }
+  } catch {
+    // Ignore localStorage access errors
+  }
+  return [];
 }
 
 export default function AreaExplorer() {
@@ -29,61 +45,56 @@ export default function AreaExplorer() {
   const params = useSearchParams();
   const [query, setQuery] = useState('');
   const [group, setGroup] = useState('all');
-  const [type, setType] = useState('all');
-  const [purpose, setPurpose] = useState<(typeof PURPOSES)[number]['id'] | 'all'>('all');
-  const [activeName, setActiveName] = useState(VISUAL_AREAS[0].name);
+  const [type, setType] = useState(() => getInitialType(params));
+  const [activeName, setActiveName] = useState(() => getInitialArea(params));
   const [shortlist, setShortlist] = useState<string[]>([]);
-  const [hasLoadedShortlist, setHasLoadedShortlist] = useState(false);
+  const [mobileListOpen, setMobileListOpen] = useState(false);
+  const [mobileMapOpen, setMobileMapOpen] = useState(false);
 
-  useEffect(() => {
-    const requested = params.get('area');
-    const requestedType = params.get('type');
-    if (requested && VISUAL_AREAS.some((area) => area.name === requested)) setActiveName(requested);
-    if (requestedType && TYPE_FILTERS.includes(requestedType as (typeof TYPE_FILTERS)[number])) setType(requestedType);
-  }, [params]);
+  // Track whether the localStorage read has completed (ref avoids re-render)
+  const hasMountedRef = useRef(false);
 
+  // Load shortlist from localStorage once on mount (client only).
+  // Syncing external state into React on mount is the exact contract useEffect is designed for.
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem(SHORTLIST_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved) as string[];
-        if (Array.isArray(parsed)) setShortlist(parsed.filter((name) => VISUAL_AREAS.some((area) => area.name === name)));
-      }
-    } catch {
-      // Ignore localStorage access errors
-    } finally {
-      setHasLoadedShortlist(true);
-    }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setShortlist(getInitialShortlist());
+    hasMountedRef.current = true;
   }, []);
 
+  // Persist shortlist to localStorage whenever it changes (after mount)
   useEffect(() => {
-    if (!hasLoadedShortlist) return;
+    if (!hasMountedRef.current) return;
     try {
       localStorage.setItem(SHORTLIST_KEY, JSON.stringify(shortlist));
     } catch {
       // Ignore localStorage write errors
     }
-  }, [hasLoadedShortlist, shortlist]);
+  }, [shortlist]);
 
   const filtered = useMemo(() => {
-    const purposeGroups = PURPOSES.find((item) => item.id === purpose)?.groups;
     return VISUAL_AREAS.filter((area) => {
       const matchesQuery = !query || area.name.toLowerCase().includes(query.toLowerCase());
       const matchesGroup = group === 'all' || area.group === group;
       const matchesType = type === 'all' || area.types.includes(type);
-      const matchesPurpose = !purposeGroups || (purposeGroups as readonly string[]).includes(area.group);
-      return matchesQuery && matchesGroup && matchesType && matchesPurpose;
+      return matchesQuery && matchesGroup && matchesType;
     });
-  }, [group, purpose, query, type]);
+  }, [group, query, type]);
 
-  const active = filtered.find((area) => area.name === activeName) ?? filtered[0] ?? VISUAL_AREAS[0];
+  // Derive active area — if current activeName is filtered out, fall back to first result
+  const active = useMemo(
+    () => filtered.find((area) => area.name === activeName) ?? filtered[0] ?? VISUAL_AREAS[0],
+    [filtered, activeName],
+  );
+
   const saved = shortlist.includes(active.name);
   const mapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${active.name}, Dubai`)}`;
-  const mapSrc = mapEmbedUrl(active.lat, active.lng);
+  const mapSrc = mapEmbedUrl(active.name);
 
-  useEffect(() => {
-    if (!filtered.some((area) => area.name === activeName) && filtered[0]) setActiveName(filtered[0].name);
-  }, [activeName, filtered]);
+  const handleSelectArea = useCallback((name: string) => {
+    setActiveName(name);
+    setMobileListOpen(false);
+  }, []);
 
   function move(delta: number) {
     const index = filtered.findIndex((area) => area.name === active.name);
@@ -100,7 +111,7 @@ export default function AreaExplorer() {
     setShortlist((current) => (current.includes(active.name) ? current.filter((name) => name !== active.name) : [...current, active.name]));
   }
 
-  const contactHref = `/contact?area=${encodeURIComponent(active.name)}${shortlist.length ? `&areas=${encodeURIComponent(shortlist.join(', '))}` : ''}${type !== 'all' ? `&type=${encodeURIComponent(type)}` : ''}${purpose !== 'all' ? `&purpose=${purpose}` : ''}`;
+  const contactHref = `/contact?area=${encodeURIComponent(active.name)}${shortlist.length ? `&areas=${encodeURIComponent(shortlist.join(', '))}` : ''}${type !== 'all' ? `&type=${encodeURIComponent(type)}` : ''}`;
   const shortlistHref = `/contact?areas=${encodeURIComponent(shortlist.join(', '))}`;
 
   return (
@@ -114,15 +125,11 @@ export default function AreaExplorer() {
             <span className="sr-only">{t('areas.search')}</span>
             <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t('areas.search')} />
           </label>
-          <div className="button-row">
-            <Link className="button button-primary" href="/contact">{t('areas.cta')}</Link>
-            <a className="button button-secondary" href="#area-board">{t('areas.browseAreas')}</a>
-          </div>
         </div>
         <div className="area-hero-stack" aria-hidden="true">
-          <img src="/demo/dubai-tower.jpg" alt="" />
-          <img src="/demo/pool-villa.jpg" alt="" />
-          <img src="/demo/city-apartment.jpg" alt="" />
+          <Image src="/demo/dubai-tower.jpg" alt="" width={900} height={650} sizes="(max-width: 640px) calc(100vw - 20px), (max-width: 1000px) calc(100vw - 40px), 48vw" preload />
+          <Image src="/demo/pool-villa.jpg" alt="" width={540} height={420} sizes="(max-width: 640px) 1px, (max-width: 1000px) 46vw, 24vw" />
+          <Image src="/demo/city-apartment.jpg" alt="" width={500} height={360} sizes="(max-width: 640px) 1px, (max-width: 1000px) 42vw, 22vw" />
         </div>
       </section>
 
@@ -140,14 +147,6 @@ export default function AreaExplorer() {
               </button>
             ))}
           </div>
-          <div className="studio-seg quiet" role="group" aria-label={t('areas.purposeTitle')}>
-            <button className={purpose === 'all' ? 'active' : ''} type="button" onClick={() => setPurpose('all')}>{t('areas.all')}</button>
-            {PURPOSES.map((item) => (
-              <button key={item.id} className={purpose === item.id ? 'active' : ''} type="button" onClick={() => setPurpose(item.id)}>
-                {t(item.titleKey as MessageKey)}
-              </button>
-            ))}
-          </div>
           <div className="studio-seg quiet" role="group" aria-label={t('areas.typesTitle')}>
             <button className={type === 'all' ? 'active' : ''} type="button" onClick={() => setType('all')}>{t('areas.anyType')}</button>
             {TYPE_FILTERS.map((item) => (
@@ -161,11 +160,26 @@ export default function AreaExplorer() {
         <div className="empty-state">
           <h2>{t('areas.noMatch')}</h2>
           <p>{t('areas.noMatchBody')}</p>
-          <button className="button button-primary" type="button" onClick={() => { setQuery(''); setGroup('all'); setType('all'); setPurpose('all'); }}>{t('areas.reset')}</button>
+          <button className="button button-primary" type="button" onClick={() => { setQuery(''); setGroup('all'); setType('all'); }}>{t('areas.reset')}</button>
         </div>
       ) : (
         <div className="studio-board" id="area-board">
-          <div className="studio-list" role="listbox" aria-label={t('areas.mapTitle')} tabIndex={0} onKeyDown={onListKey}>
+          {/* Mobile: collapsible area picker */}
+          <button
+            className="mobile-area-picker"
+            type="button"
+            onClick={() => setMobileListOpen((v) => !v)}
+            aria-expanded={mobileListOpen}
+          >
+            <span>
+              <strong>{active.name}</strong>
+              <em>{active.types.join(' · ')}</em>
+            </span>
+            <span className="picker-chevron">{mobileListOpen ? '▲' : '▼'}</span>
+          </button>
+
+          {/* Desktop sidebar / Mobile dropdown */}
+          <div className={`studio-list${mobileListOpen ? ' mobile-open' : ''}`} role="listbox" aria-label={t('areas.mapTitle')} tabIndex={0} onKeyDown={onListKey}>
             <p className="studio-count">{filtered.length} {t('areas.count')}</p>
             {filtered.map((area) => (
               <button
@@ -174,7 +188,7 @@ export default function AreaExplorer() {
                 type="button"
                 role="option"
                 aria-selected={area.name === active.name}
-                onClick={() => setActiveName(area.name)}
+                onClick={() => handleSelectArea(area.name)}
               >
                 <strong>{area.name}</strong>
                 <span>{area.types.join(' · ')}</span>
@@ -189,15 +203,12 @@ export default function AreaExplorer() {
 
           <div className="studio-stage">
             <article className="studio-feature">
-              <img key={active.image + active.name} src={active.image} alt="" />
+              <Image key={active.image + active.name} src={active.image} alt="" width={1200} height={760} sizes="(max-width: 1000px) calc(100vw - 20px), 66vw" />
               <div className="studio-feature-copy">
                 <p className="eyebrow">{GROUP_VISUALS[active.group].short}</p>
                 <h2>{active.name}</h2>
                 <p>{active.summary}</p>
-                <p className="studio-meta">
-                  {active.types.join(' · ')}
-                  {active.kmToDowntown > 0 ? ` · ${active.kmToDowntown} ${t('areas.kmDowntown')}` : ` · ${t('areas.downtownCore')}`}
-                </p>
+                <p className="studio-meta">{active.types.join(' · ')}</p>
                 <div className="button-row">
                   <Link className="button button-primary" href={contactHref}>{t('areas.talkArea')}</Link>
                   <button className="button button-secondary" type="button" onClick={toggleSave}>{saved ? t('areas.saved') : t('areas.save')}</button>
@@ -205,7 +216,18 @@ export default function AreaExplorer() {
               </div>
             </article>
 
-            <aside className="studio-map-panel">
+            {/* Mobile: collapsible map */}
+            <button
+              className="mobile-map-toggle"
+              type="button"
+              onClick={() => setMobileMapOpen((v) => !v)}
+              aria-expanded={mobileMapOpen}
+            >
+              <span>{t('areas.mapLabel')}: {active.name}</span>
+              <span>{mobileMapOpen ? '▲' : '▼'}</span>
+            </button>
+
+            <aside className={`studio-map-panel${mobileMapOpen ? ' mobile-map-open' : ''}`}>
               <div className="studio-map-head">
                 <div>
                   <p className="eyebrow">{t('areas.mapLabel')}</p>
@@ -215,7 +237,7 @@ export default function AreaExplorer() {
               </div>
               <div className="studio-map-frame">
                 <iframe
-                  key={`${active.lat}-${active.lng}`}
+                  key={active.name}
                   title={`${active.name} map`}
                   src={mapSrc}
                   loading="lazy"

@@ -1,53 +1,131 @@
 [
   {
-    "id": "guide-official-market-data",
-    "slug": "how-we-verify-dubai-property-information",
+    "id": "blog-service-charges-mollak",
+    "slug": "how-to-calculate-dubai-service-charges-mollak",
     "status": "published",
-    "title": "How we verify Dubai property information",
-    "excerpt": "A clear explanation of the official records, source dates and checks used before a property opportunity is published on this website.",
+    "title": "How to Calculate Dubai Service Charges with the RERA Mollak System",
+    "excerpt": "A practical guide to understanding annual service fees, reserve funds, and district cooling costs before purchasing an apartment or villa in Dubai.",
     "body": [
-      "Every property opportunity should be traceable. Before publication, we record the developer or authorised source, the source URL or document, the date checked, the quoted starting price, the payment schedule and the stated completion timeline.",
-      "Dubai Land Department provides official open-data tools covering transactions, rents, projects, buildings, units, brokers and developers. Its project records can include the project name, developer, status, completion percentage and escrow account number. We use official records as a verification reference rather than presenting unsourced market claims.",
-      "Availability and prices can change after verification. Visitors should request the current availability sheet and review the developer's reservation form and sale agreement before making a decision."
+      "Every property owner in a Dubai freehold building contributes to the maintenance of shared facilities through annual service charges. These charges cover building security, swimming pool and gymnasium maintenance, cleaning, building insurance, elevator servicing, and landscaping. RERA regulates and approves these rates annually through an electronic system called Mollak, ensuring that developers and property management companies cannot increase fees arbitrarily.",
+      "Service charges are calculated on a rate per square foot of gross property area, not the net internal apartment area. In established suburban communities like Jumeirah Village Circle or Dubai Silicon Oasis, typical residential charges range between AED 12 and AED 18 per square foot. In prime areas such as Downtown Dubai or Palm Jumeirah, charges often range between AED 22 and AED 38 per square foot. Luxury hotel-serviced residences with concierge services can exceed AED 45 per square foot.",
+      "A critical distinction that many buyers overlook is air conditioning billing. Some buildings include chiller charges inside the overall service fee, while other towers require separate monthly payments directly to utility providers such as Empower, Tabreed, or Emicool. When evaluating net rental yields on an investment unit, the difference between chiller-free buildings and metered consumption can alter your annual return by over one percent.",
+      "Under RERA regulations, every approved service fee includes a mandatory contribution to a sinking or reserve fund. This reserve fund is ring-fenced to finance long-term structural replacements, such as repainting facades, replacing chiller compressors, or modernizing elevator machinery after ten or fifteen years. An adequately funded reserve protects owners against sudden special assessments later in the building lifecycle.",
+      "Prospective buyers do not need to rely on verbal estimates. You can look up the official approved service charge for any registered building in Dubai on the Dubai Land Department website or through the Dubai REST mobile application using the property Makani number or building name before signing a binding contract."
     ],
-    "category": "Buying responsibly",
-    "publishedAt": "2026-08-30",
-    "updatedAt": "2026-08-30",
-    "sourceLabel": "Dubai Land Department — Real Estate Data",
+    "category": "Property Costs",
+    "publishedAt": "2026-09-01",
+    "updatedAt": "2026-09-10",
+    "imageUrl": "/insights/dubai-service-charges.jpg",
+    "readTime": "5 min read",
+    "author": "Prudent Property Advisory",
+    "keyTakeaways": [
+      "Service charges are calculated per square foot of gross floor area and approved annually by RERA via the Mollak system.",
+      "Residential fees range from AED 12 per sq.ft in mid-market suburban districts to over AED 35 per sq.ft in luxury Downtown towers.",
+      "Check whether air conditioning is included in the service fee or billed separately through district cooling providers like Empower or Tabreed.",
+      "Official approved service charges for any building can be verified in seconds on the Dubai REST app before purchase."
+    ],
+    "sourceLabel": "Dubai Land Department: Mollak Service Charge Index",
     "sourceUrl": "https://dubailand.gov.ae/en/open-data/real-estate-data/"
   },
   {
-    "id": "guide-buying-process",
-    "slug": "a-practical-dubai-property-buying-checklist",
+    "id": "blog-offplan-vs-secondary",
+    "slug": "off-plan-vs-secondary-market-dubai-property",
     "status": "published",
-    "title": "A practical Dubai property buying checklist",
-    "excerpt": "The documents and commercial details a buyer should examine before reserving a ready or off-plan property in Dubai.",
+    "title": "Off-Plan vs Secondary Market in Dubai: A Realistic Buyer Guide",
+    "excerpt": "Compare capital commitment, payment schedules, mortgage eligibility, and completion timelines between ready properties and off-plan projects.",
     "body": [
-      "Start with the legal identity of the seller or developer and confirm the property or project through official channels. For an off-plan purchase, review the project registration, payment destination, reservation form, sale and purchase agreement, completion schedule and cancellation terms.",
-      "For a ready property, review the title deed, service-charge position, mortgage or restriction status, inspection findings and the full transfer-cost estimate. Never rely only on a brochure, social-media post or verbal promise.",
-      "Budget beyond the purchase price. Depending on the transaction, costs may include registration, trustee or service-partner charges, mortgage-related costs, valuation, conveyancing and recurring service charges. Obtain a transaction-specific written cost sheet before proceeding."
+      "Choosing between an off-plan project under construction and a completed secondary market home is the first strategic decision every Dubai property buyer faces. Each path serves different financial objectives, risk tolerances, and occupancy timelines. Understanding the real differences in cash requirements and legal safeguards prevents costly mismatches between your personal brief and the property you acquire.",
+      "Off-plan purchases allow buyers to spread their capital outlay over several years through developer payment plans. An initial down payment between 10% and 20% reserves the unit, followed by linked milestone payments until handover. The primary government cost is the 4% Dubai Land Department fee, registered as an initial Oqood title. This structure suits investors seeking capital appreciation during construction without paying a full mortgage immediately.",
+      "The secondary market requires substantially higher upfront liquidity. In addition to the purchase price, buyers must budget for the 4% DLD transfer fee, a 2% agency commission, mortgage registration fees if financing, a valuation fee, and a developer No Objection Certificate (NOC) fee between AED 500 and AED 5,000. However, completed homes offer immediate certainty: you can inspect the build quality, evaluate sunlight and view lines, and either move in or generate rental income from day one.",
+      "Financing rules established by the UAE Central Bank also differ significantly. For completed residential properties, expatriate residents can obtain bank mortgages for up to 80% of the property value on their first home purchase under AED 5 million. For off-plan properties, bank financing is generally capped at 50% during the construction phase and is subject to strict developer accreditation.",
+      "When evaluating off-plan opportunities, prioritize the developer track record of timely delivery and verify that the project is registered with RERA with an active escrow account. For secondary properties, commission an independent snagging inspection to identify hidden plumbing, electrical, or structural defects before transferring funds."
     ],
-    "category": "Buyer guide",
-    "publishedAt": "2026-08-30",
-    "updatedAt": "2026-08-30",
-    "sourceLabel": "Dubai Land Department — Investor guidance",
-    "sourceUrl": "https://dubailand.gov.ae/media/wlzmuycr/know_your_rights.pdf"
+    "category": "Buying Strategy",
+    "publishedAt": "2026-08-25",
+    "updatedAt": "2026-09-08",
+    "imageUrl": "/insights/offplan-vs-secondary.jpg",
+    "readTime": "6 min read",
+    "author": "Prudent Property Advisory",
+    "keyTakeaways": [
+      "Off-plan projects allow phased capital deployment with 10% to 20% down, while secondary purchases require full upfront capital or mortgage equity.",
+      "Secondary properties deliver immediate rental income or personal occupancy, eliminating construction delay risks.",
+      "Expatriate mortgage limits allow up to 80% loan-to-value on ready homes compared to 50% during off-plan construction.",
+      "Secondary purchases require budgeting approximately 7% to 8% in total acquisition fees including DLD, agency, trustee, and NOC fees."
+    ],
+    "sourceLabel": "Dubai Land Department: Real Estate Market Data",
+    "sourceUrl": "https://dubailand.gov.ae/en/open-data/real-estate-data/"
   },
   {
-    "id": "guide-golden-residency",
-    "slug": "property-and-uae-golden-residency",
+    "id": "blog-escrow-law",
+    "slug": "how-dubai-escrow-law-protects-property-buyers",
     "status": "published",
-    "title": "Property and UAE Golden Residency: check eligibility carefully",
-    "excerpt": "The official UAE portal lists an AED 2 million threshold for real-estate investors, but eligibility and visa duration remain subject to authority assessment.",
+    "title": "How Dubai Escrow Accounts Protect Off-Plan Buyers Under Law No. 8",
+    "excerpt": "An explanation of the regulatory framework that safeguards investor funds, monitors construction progress, and prevents unauthorized withdrawals.",
     "body": [
-      "The UAE Government's official portal lists real-estate investors among Golden Visa eligibility categories and states a minimum real-estate investment threshold of AED 2 million. The portal currently describes a five-year renewable residence route for qualifying real-estate investment.",
-      "Property value alone should not be treated as automatic approval. Ownership structure, financing, supporting documents and the rules applied by the relevant authority can affect eligibility. Requirements can change, so applicants should confirm the current position with the official authority before committing to a purchase for residency purposes.",
-      "Prudent Dubai Properties can help organise the property information required for a consultation, but this website does not promise visa approval and does not replace advice from the competent authority."
+      "Dubai was among the first jurisdictions in the Middle East to introduce comprehensive statutory protection for off-plan property purchasers through Law No. 8 of 2007. Under this legislation, every real estate developer selling off-plan units in Dubai is legally required to open a separate project escrow account with an authorized financial institution approved by the Land Department.",
+      "The legal framework prevents developers from pooling customer funds or diverting money from one tower to finance another development. All installment payments made by buyers must be paid directly into the specific escrow account associated with that exact project. Payments directed to personal accounts, parent company holdings, or unregulated entities are illegal under Dubai real estate law.",
+      "Developers cannot access money in the escrow account whenever they please. Funds are released in strictly audited stages that correspond directly to physical construction milestones verified on-site by accredited engineering inspectors. Before RERA authorizes a payment disbursement to the contractor, an independent technical audit verifies that the claimed construction percentage has been genuinely completed.",
+      "Law No. 8 also mandates that the escrow agent retain 5% of the total project value for one complete year after the official building completion certificate is issued. This retention fund guarantees that funds remain available to rectify any construction defects, snags, or contractor omissions identified by owners during their initial year of occupancy.",
+      "Buyers have direct transparency into this process. By entering the project name or developer registration number on the Dubai REST application, you can view the certified construction progress percentage, the approved escrow bank name, and official inspection photographs updated directly by government auditors."
     ],
-    "category": "Residency information",
+    "category": "Legal & Due Diligence",
+    "publishedAt": "2026-08-20",
+    "updatedAt": "2026-09-05",
+    "imageUrl": "/insights/dubai-escrow-law.jpg",
+    "readTime": "5 min read",
+    "author": "Prudent Legal Advisory",
+    "keyTakeaways": [
+      "Law No. 8 of 2007 mandates dedicated bank escrow accounts for every off-plan project registered in Dubai.",
+      "Developers can only withdraw funds against certified construction milestones verified by RERA technical inspectors.",
+      "A mandatory 5% retention fund is held for 12 months after handover to protect buyers against post-completion structural defects.",
+      "Buyers can verify project progress and active escrow account credentials in real time on the Dubai REST app."
+    ],
+    "sourceLabel": "Government of Dubai: Law No. 8 of 2007 on Escrow Accounts",
+    "sourceUrl": "https://dubailand.gov.ae/en/open-data/real-estate-data/"
+  },
+  {
+    "id": "blog-transfer-day",
+    "slug": "what-happens-on-transfer-day-dubai-trustee-office",
+    "status": "published",
+    "title": "What Happens on Transfer Day at a Dubai Registration Trustee Office",
+    "excerpt": "A step-by-step walkthrough of signing final contracts, settling manager's cheques, and receiving your digital Title Deed at the trustee desk.",
+    "body": [
+      "The culmination of a property purchase in Dubai takes place at a licensed Dubai Land Department Registration Trustee office. These authorized private centers manage the official identity verification, financial settlement, and legal conveyance on behalf of the government, allowing transfers to complete smoothly within forty minutes without visiting the central government headquarters.",
+      "Before booking the trustee appointment, the seller must obtain an official No Objection Certificate (NOC) from the master developer. The developer issues this certificate only after confirming that all outstanding service charges, cooling fees, and administrative dues have been settled in full. The NOC confirms that the developer has no objection to the property transferring to the new buyer.",
+      "On transfer day, both buyer and seller (or their legal representatives with attested Powers of Attorney) meet at the trustee office. The buyer brings manager's cheques drawn on a UAE bank: one cheque payable to the seller for the agreed balance of the purchase price, and separate cheques or card payments for the official 4% DLD transfer fee and the trustee administration charge.",
+      "The Registration Trustee fee is standardized by the government: AED 4,000 plus 5% VAT for properties valued at or above AED 500,000, and AED 2,000 plus VAT for properties below that threshold. The trustee officer checks original passports, Emirates IDs, and proof of identity, records biometric confirmations, and uploads the verified Unified Form F contract directly into the DLD central land registry.",
+      "Once the officer verifies the cheques and submits the transaction electronically, the Dubai Land Department immediately generates the new electronic Title Deed. The buyer receives the Title Deed via SMS and email with an embedded QR code, and the property appears instantly under their profile in the Dubai REST app. At that moment, ownership officially passes, and physical keys, access cards, and parking remotes are handed over."
+    ],
+    "category": "Transaction Guide",
+    "publishedAt": "2026-08-15",
+    "updatedAt": "2026-09-02",
+    "imageUrl": "/insights/dubai-transfer-day.jpg",
+    "readTime": "5 min read",
+    "author": "Prudent Transaction Services",
+    "keyTakeaways": [
+      "Transfers occur at licensed DLD Registration Trustee offices and typically take between 30 and 45 minutes to complete.",
+      "The seller must present an original developer NOC proving all community service fees are fully settled before transfer.",
+      "Payment is completed through certified manager's cheques drawn on a UAE bank for the purchase price and 4% DLD fee.",
+      "Electronic Title Deeds are issued instantly upon biometric sign-off and accessible via the Dubai REST application."
+    ],
+    "sourceLabel": "Dubai Land Department: Registration Trustee Services",
+    "sourceUrl": "https://dubailand.gov.ae/en/services/real-estate-registration-trustee-services/"
+  },
+  {
+    "id": "guide-official-market-data",
+    "slug": "how-we-verify-dubai-property-information",
+    "status": "published",
+    "title": "How We Verify Dubai Property Information",
+    "excerpt": "A clear explanation of official records, source dates, and verification checks used before publishing property information.",
+    "body": [
+      "Every property opportunity should be traceable. Before publication, we record the developer or authorised source, the source URL or document, the date checked, the quoted starting price, the payment schedule, and the stated completion timeline.",
+      "Dubai Land Department provides official open-data tools covering transactions, rents, projects, buildings, units, brokers, and developers. Its project records can include the project name, developer, status, completion percentage, and escrow account number. We use official records as a verification reference rather than presenting unsourced market claims.",
+      "Availability and prices can change after verification. Visitors should request the current availability sheet and review the developer's reservation form and sale agreement before making a decision."
+    ],
+    "category": "Due Diligence",
     "publishedAt": "2026-08-30",
     "updatedAt": "2026-08-30",
-    "sourceLabel": "Official UAE Government Portal — Golden Visa",
-    "sourceUrl": "https://u.ae/en/information-and-services/visa-and-emirates-id/residence-visas/golden-visa"
+    "sourceLabel": "Dubai Land Department: Real Estate Data",
+    "sourceUrl": "https://dubailand.gov.ae/en/open-data/real-estate-data/"
   }
 ]
