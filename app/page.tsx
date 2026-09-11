@@ -1,12 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from 'next/link';
-import PropertyCard from '@/components/PropertyCard';
 import { T } from '@/components/LanguageContext';
-import { getAllArticles, getAllProperties } from '@/lib/content';
+import { getAllArticles } from '@/lib/content';
+import DestinationStrip from '@/components/DestinationStrip';
+import { PROPERTY_TYPES } from '@/lib/areas';
 
 export default async function HomePage() {
-  const [properties, articles] = await Promise.all([getAllProperties(), getAllArticles()]);
-  const featured = properties.filter(item => item.featured).slice(0, 3);
+  const articles = await getAllArticles();
   return <>
     <section className="hero">
       <div className="container hero-layout">
@@ -14,8 +14,11 @@ export default async function HomePage() {
           <span className="eyebrow"><T id="home.eyebrow" /></span>
           <h1 className="display"><T id="home.title" /></h1>
           <p className="lede"><T id="home.lede" /></p>
-          <div className="button-row"><Link className="button button-primary" href="/properties"><T id="home.explore" /></Link><Link className="button button-secondary" href="/contact"><T id="home.discuss" /></Link></div>
-          <p className="fine-print" style={{marginTop:18}}><T id="home.disclaimer" /></p>
+          <div className="button-row">
+            <Link className="button button-primary" href="/contact"><T id="home.discuss" /></Link>
+            <Link className="button button-secondary" href="/communities"><T id="home.explore" /></Link>
+          </div>
+          <p className="fine-print" style={{ marginTop: 18 }}><T id="home.disclaimer" /></p>
         </div>
         <div className="hero-visual">
           <img src="/demo/dubai-tower.jpg" alt="Dubai towers shown for location context" draggable={false} />
@@ -27,10 +30,16 @@ export default async function HomePage() {
 
     <section className="section">
       <div className="container">
-        <span className="eyebrow"><T id="home.approach" /></span><h2 className="section-title"><T id="home.approachTitle" /></h2>
+        <span className="eyebrow"><T id="home.approach" /></span>
+        <h2 className="section-title"><T id="home.approachTitle" /></h2>
         <p className="lede"><T id="home.approachBody" /></p>
         <div className="editorial-grid">
-          <div className="feature-panel"><span className="eyebrow"><T id="home.starting" /></span><h3><T id="home.startingTitle" /></h3><p className="lede"><T id="home.startingBody" /></p><Link className="button button-link" href="/contact"><T id="home.brief" /> <span className="directional">→</span></Link></div>
+          <div className="feature-panel">
+            <span className="eyebrow"><T id="home.starting" /></span>
+            <h3><T id="home.startingTitle" /></h3>
+            <p className="lede"><T id="home.startingBody" /></p>
+            <Link className="button button-link" href="/contact"><T id="home.brief" /> <span className="directional">→</span></Link>
+          </div>
           <div className="side-stack">
             <article className="mini-panel"><div className="icon-box">01</div><h3><T id="home.traceTitle" /></h3><p><T id="home.traceBody" /></p></article>
             <article className="mini-panel"><div className="icon-box">02</div><h3><T id="home.clarityTitle" /></h3><p><T id="home.clarityBody" /></p></article>
@@ -41,24 +50,60 @@ export default async function HomePage() {
 
     <section className="section section-soft">
       <div className="container">
-        <div className="section-heading"><div><span className="eyebrow"><T id="home.demoEyebrow" /></span><h2 className="section-title"><T id="home.demoTitle" /></h2><p className="lede"><T id="home.demoNotice" /></p></div><Link className="button button-secondary" href="/properties"><T id="home.viewAll" /></Link></div>
-        <div className="card-grid">
-          {featured.map(item => <PropertyCard key={item.id} property={item} />)}
-          {featured.length === 0 && <div className="empty-state"><span className="eyebrow">Verification in progress</span><h3>Public listings will appear after source review.</h3><p>We are intentionally not displaying sample inventory as live property. Tell us what you need and we can begin with a requirement-led search.</p><Link className="button button-primary" href="/contact">Share your requirements</Link></div>}
+        <div className="section-heading">
+          <div>
+            <span className="eyebrow"><T id="home.helpEyebrow" /></span>
+            <h2 className="section-title"><T id="home.helpTitle" /></h2>
+            <p className="lede"><T id="home.helpBody" /></p>
+          </div>
         </div>
-      </div>
-    </section>
-
-    <section className="section visual-story">
-      <div className="container visual-story-layout">
-        <div><span className="eyebrow"><T id="home.approach" /></span><h2 className="section-title"><T id="home.visualTitle" /></h2><p className="lede"><T id="home.visualBody" /></p></div>
-        <div className="visual-story-grid" data-reveal><img src="/demo/city-apartment.jpg" alt="Modern apartment interior, illustrative" draggable={false} /><img src="/demo/villa-exterior.jpg" alt="Modern villa exterior, illustrative" draggable={false} /><img src="/demo/pool-villa.jpg" alt="Villa pool, illustrative" draggable={false} /></div>
+        <div className="type-mosaic type-mosaic-tight">
+          {PROPERTY_TYPES.filter((item) => item.filter).map((item) => (
+            <Link className="type-tile" href={`/communities?type=${encodeURIComponent(item.filter)}#explore`} key={item.title}>
+              <img src={item.image} alt="" />
+              <span>
+                <strong>{item.title}</strong>
+              </span>
+            </Link>
+          ))}
+        </div>
       </div>
     </section>
 
     <section className="section">
       <div className="container">
-        <span className="eyebrow"><T id="home.process" /></span><h2 className="section-title"><T id="home.processTitle" /></h2>
+        <div className="section-heading">
+          <div>
+            <span className="eyebrow"><T id="home.areasEyebrow" /></span>
+            <h2 className="section-title"><T id="home.areasTitle" /></h2>
+            <p className="lede"><T id="home.areasBody" /></p>
+          </div>
+          <Link className="button button-secondary" href="/communities"><T id="home.viewAllAreas" /></Link>
+        </div>
+        <DestinationStrip />
+        <p className="fine-print" style={{ marginTop: 18 }}><T id="home.areasNote" /></p>
+      </div>
+    </section>
+
+    <section className="section visual-story section-soft">
+      <div className="container visual-story-layout">
+        <div>
+          <span className="eyebrow"><T id="home.approach" /></span>
+          <h2 className="section-title"><T id="home.visualTitle" /></h2>
+          <p className="lede"><T id="home.visualBody" /></p>
+        </div>
+        <div className="visual-story-grid" data-reveal>
+          <img src="/demo/city-apartment.jpg" alt="Modern apartment interior, illustrative" draggable={false} />
+          <img src="/demo/villa-exterior.jpg" alt="Modern villa exterior, illustrative" draggable={false} />
+          <img src="/demo/pool-villa.jpg" alt="Villa pool, illustrative" draggable={false} />
+        </div>
+      </div>
+    </section>
+
+    <section className="section">
+      <div className="container">
+        <span className="eyebrow"><T id="home.process" /></span>
+        <h2 className="section-title"><T id="home.processTitle" /></h2>
         <div className="process">
           <article className="process-step"><h3><T id="home.step1" /></h3><p><T id="home.step1Body" /></p></article>
           <article className="process-step"><h3><T id="home.step2" /></h3><p><T id="home.step2Body" /></p></article>
@@ -70,8 +115,14 @@ export default async function HomePage() {
 
     <section className="section section-soft">
       <div className="container">
-        <div className="section-heading"><div><span className="eyebrow"><T id="home.guides" /></span><h2 className="section-title"><T id="home.guidesTitle" /></h2></div><Link className="button button-secondary" href="/insights"><T id="home.allInsights" /></Link></div>
-        <div className="card-grid">{articles.slice(0,3).map(item => <article className="article-card" key={item.id}><span className="eyebrow">{item.category}</span><h3>{item.title}</h3><p>{item.excerpt}</p><Link className="button button-link" href={`/insights/${item.slug}`}><T id="home.read" /> <span className="directional">→</span></Link></article>)}</div>
+        <div className="section-heading">
+          <div>
+            <span className="eyebrow"><T id="home.guides" /></span>
+            <h2 className="section-title"><T id="home.guidesTitle" /></h2>
+          </div>
+          <Link className="button button-secondary" href="/insights"><T id="home.allInsights" /></Link>
+        </div>
+        <div className="card-grid">{articles.slice(0, 3).map(item => <article className="article-card" key={item.id}><span className="eyebrow">{item.category}</span><h3>{item.title}</h3><p>{item.excerpt}</p><Link className="button button-link" href={`/insights/${item.slug}`}><T id="home.read" /> <span className="directional">→</span></Link></article>)}</div>
       </div>
     </section>
   </>;

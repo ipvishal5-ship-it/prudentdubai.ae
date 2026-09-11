@@ -1,2 +1,12 @@
-import type { MetadataRoute } from 'next';import { getAllArticles,getAllProperties } from '@/lib/content';
-export default async function sitemap():Promise<MetadataRoute.Sitemap>{const base='https://prudentdubai.ae';const staticRoutes=['','/properties','/off-plan','/communities','/insights','/about','/contact','/calculator','/golden-visa','/privacy','/terms'];const [properties,articles]=await Promise.all([getAllProperties(),getAllArticles()]);return [...staticRoutes.map(route=>({url:`${base}${route}`,changeFrequency:'weekly' as const,priority:route===''?1:.7})),...properties.map(item=>({url:`${base}/properties/${item.slug}`,lastModified:item.verifiedAt,changeFrequency:'weekly' as const,priority:.8})),...articles.map(item=>({url:`${base}/insights/${item.slug}`,lastModified:item.updatedAt,changeFrequency:'monthly' as const,priority:.6}))]}
+import type { MetadataRoute } from 'next';
+import { getAllArticles } from '@/lib/content';
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const base = 'https://prudentdubai.ae';
+  const staticRoutes = ['', '/communities', '/off-plan', '/insights', '/about', '/contact', '/calculator', '/golden-visa', '/privacy', '/terms'];
+  const articles = await getAllArticles();
+  return [
+    ...staticRoutes.map((route) => ({ url: `${base}${route}`, changeFrequency: 'weekly' as const, priority: route === '' ? 1 : 0.7 })),
+    ...articles.map((item) => ({ url: `${base}/insights/${item.slug}`, lastModified: item.updatedAt, changeFrequency: 'monthly' as const, priority: 0.6 })),
+  ];
+}

@@ -10,8 +10,8 @@ import { getSiteSettings } from '@/lib/content';
 export const metadata: Metadata = {
   metadataBase: new URL('https://prudentdubai.ae'),
   title: { default: 'Prudent Dubai Properties | Clear Dubai Property Guidance', template: '%s | Prudent Dubai Properties' },
-  description: 'Source-led Dubai property information, verified opportunity pages and practical buying support from the Prudent Dubai group.',
-  openGraph: { title: 'Prudent Dubai Properties', description: 'Clear information for considered Dubai property decisions.', url: 'https://prudentdubai.ae', siteName: 'Prudent Dubai Properties', type: 'website', locale: 'en_AE' },
+  description: 'Prudent Dubai Properties helps clients buy across Dubai through requirement-led guidance. Share your area, property type and purpose — pricing is discussed directly with our team.',
+  openGraph: { title: 'Prudent Dubai Properties', description: 'Your Dubai property partner — areas, property types and practical buying support.', url: 'https://prudentdubai.ae', siteName: 'Prudent Dubai Properties', type: 'website', locale: 'en_AE' },
   twitter: { card: 'summary_large_image' },
   robots: { index: true, follow: true },
   alternates: { canonical: 'https://prudentdubai.ae' },
