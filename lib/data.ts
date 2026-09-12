@@ -76,8 +76,8 @@ export const siteSettingsSchema = z.object({
   whatsapp: z.string().regex(/^\d{8,18}$/),
   email: z.string().email(),
   dubaiOffice: z.string().min(10).max(220),
-  sharjahOffice: z.string().min(10).max(220),
-  mumbaiOffice: z.string().min(10).max(220),
+  sharjahOffice: z.string().optional(),
+  mumbaiOffice: z.string().optional(),
   sisterWebsite: httpsUrl,
 });
 export type SiteSettings = z.infer<typeof siteSettingsSchema>;

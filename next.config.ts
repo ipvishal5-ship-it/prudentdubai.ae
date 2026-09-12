@@ -1,4 +1,5 @@
 import type { NextConfig } from 'next';
+import path from 'node:path';
 
 const isDev = process.env.NODE_ENV !== 'production';
 
@@ -18,6 +19,7 @@ const contentSecurityPolicy = [
 ].join('; ');
 
 const nextConfig: NextConfig = {
+  turbopack: { root: path.resolve(process.cwd()) },
   poweredByHeader: false,
   reactStrictMode: true,
   async headers() {

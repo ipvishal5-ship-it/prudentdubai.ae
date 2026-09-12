@@ -10,7 +10,7 @@ export function isSameOrigin(request: Request) {
   const origin = request.headers.get('origin');
   if (!origin) return process.env.NODE_ENV !== 'production';
   try {
-    return new URL(origin).host === new URL(request.url).host;
+    return new URL(origin).origin === new URL(request.url).origin;
   } catch {
     return false;
   }
@@ -18,6 +18,11 @@ export function isSameOrigin(request: Request) {
 
 export function rateLimit(key: string, limit: number, windowMs: number) {
   const now = Date.now();
+  if (buckets.size > 10_000) {
+    for (const [bucketKey, bucket] of buckets) {
+      if (bucket.resetsAt <= now) buckets.delete(bucketKey);
+    }
+  }
   const current = buckets.get(key);
   if (!current || current.resetsAt <= now) {
     buckets.set(key, { count: 1, resetsAt: now + windowMs });

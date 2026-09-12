@@ -15,17 +15,31 @@ export const metadata: Metadata = {
   openGraph: { title: 'Prudent Dubai Properties', description: 'Your Dubai property partner for area selection, home categories, and direct buying support.', url: 'https://prudentdubai.ae', siteName: 'Prudent Dubai Properties', type: 'website', locale: 'en_AE' },
   twitter: { card: 'summary_large_image' },
   robots: { index: true, follow: true },
-  alternates: { canonical: 'https://prudentdubai.ae' },
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const site = await getSiteSettings();
   const schema = {
-    '@context': 'https://schema.org', '@type': 'Organization', name: 'Prudent Dubai Properties',
-    url: 'https://prudentdubai.ae', logo: 'https://prudentdubai.ae/brand/prudentlogo.png',
-    parentOrganization: { '@type': 'Organization', name: 'Prudent Dubai', url: site.sisterWebsite },
+    '@context': 'https://schema.org',
+    '@type': ['RealEstateAgent', 'Organization'],
+    name: 'Prudent Dubai Properties',
+    description: 'Advisory and consulting for property buyers, off-plan projects, and luxury residential developments in Dubai.',
+    url: 'https://prudentdubai.ae',
+    logo: 'https://prudentdubai.ae/brand/prudentlogo.png',
+    image: 'https://prudentdubai.ae/brand/og-image.png',
+    parentOrganization: { '@type': 'Organization', name: 'PrudentDubai', url: site.sisterWebsite },
     address: { '@type': 'PostalAddress', streetAddress: 'Westburry Tower, Business Bay', addressLocality: 'Dubai', addressCountry: 'AE' },
-    telephone: site.phone, email: site.email,
+    telephone: site.phone,
+    email: site.email,
+    contactPoint: [
+      {
+        '@type': 'ContactPoint',
+        telephone: site.phone,
+        contactType: 'sales',
+        areaServed: 'AE',
+        availableLanguage: ['English', 'Arabic', 'Hindi'],
+      },
+    ],
   };
   return <html lang="en" dir="ltr" suppressHydrationWarning><head><meta name="theme-color" content="#FAFAF9" /><script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(schema)}} /></head>
     <body><LanguageProvider><CurrencyProvider><MotionProvider /><Navbar /><main id="main-content">{children}</main><Footer /></CurrencyProvider></LanguageProvider></body></html>;

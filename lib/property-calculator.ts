@@ -3,11 +3,11 @@ export type PurchasePurpose = 'first-home' | 'investment';
 export type PropertyStatus = 'ready' | 'off-plan';
 
 export const OFFICIAL_DATA = {
-  eibor3m: 4.12642,
-  eiborDate: '9 September 2026',
+  eibor3m: 3.9631,
+  eiborDate: '4 September 2026',
   dldSaleFeePercent: 4,
   mortgageRegistrationPercent: 0.25,
-  verifiedOn: '11 September 2026',
+  verifiedOn: '12 September 2026',
 } as const;
 
 export function minimumDownPaymentPercent(
@@ -38,6 +38,7 @@ export function buyingCosts({
   loanAmount,
   bankFee,
   valuationFee,
+  propertyStatus = 'ready',
 }: {
   price: number;
   dldBuyerShare: 2 | 4;
@@ -46,13 +47,14 @@ export function buyingCosts({
   loanAmount: number;
   bankFee: number;
   valuationFee: number;
+  propertyStatus?: PropertyStatus;
 }) {
   const dldFee = price * dldBuyerShare / 100;
   const saleTrusteeFee = price >= 500_000 ? 4_200 : 2_100;
   const titleAndMapFees = 520;
   const agencyFee = includeAgency ? price * 0.02 * 1.05 : 0;
   const mortgageRegistrationFee = financed ? loanAmount * 0.0025 + 270 : 0;
-  const mortgageTrusteeFee = financed ? 4_200 : 0;
+  const mortgageTrusteeFee = financed ? (propertyStatus === 'off-plan' ? 5_250 : 4_200) : 0;
   const lenderFees = financed ? bankFee + valuationFee : 0;
   const total = dldFee + saleTrusteeFee + titleAndMapFees + agencyFee + mortgageRegistrationFee + mortgageTrusteeFee + lenderFees;
 

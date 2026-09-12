@@ -4,12 +4,15 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import type { Article } from '@/lib/data';
+import { useLanguage } from '@/components/LanguageContext';
+import ArticleCard from '@/components/ArticleCard';
 
 interface InsightsExplorerProps {
   articles: Article[];
 }
 
 export default function InsightsExplorer({ articles }: InsightsExplorerProps) {
+  const { t } = useLanguage();
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
@@ -44,8 +47,8 @@ export default function InsightsExplorer({ articles }: InsightsExplorerProps) {
     <>
       <section className="section insights-hero">
         <div className="container">
-          <h1 className="display">Research for real property decisions.</h1>
-          <p className="lede">Practical guides on buying costs, off-plan checks, contracts, service charges, and transfers, with links to official sources.</p>
+          <h1 className="display">{t('insights.heroTitle')}</h1>
+          <p className="lede">{t('insights.heroLede')}</p>
 
           <div className="insights-controls">
             <div className="insights-categories" role="tablist" aria-label="Article categories">
@@ -57,7 +60,7 @@ export default function InsightsExplorer({ articles }: InsightsExplorerProps) {
                   role="tab"
                   aria-selected={selectedCategory === cat}
                 >
-                  {cat}
+                  {cat === 'All' ? t('insights.allCategories') : cat}
                 </button>
               ))}
             </div>
@@ -66,10 +69,10 @@ export default function InsightsExplorer({ articles }: InsightsExplorerProps) {
               <input
                 type="search"
                 className="field-input insights-search-input"
-                placeholder="Search guides"
+                placeholder={t('insights.searchPlaceholder')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                aria-label="Search guides"
+                aria-label={t('insights.searchPlaceholder')}
               />
             </div>
           </div>
@@ -81,7 +84,7 @@ export default function InsightsExplorer({ articles }: InsightsExplorerProps) {
           {/* Featured Article Card */}
           {featured && (
             <div className="featured-article-wrap">
-              <span className="eyebrow featured-tag">Featured Guide</span>
+              <span className="eyebrow featured-tag">{t('insights.featured')}</span>
               <article className="featured-article-card">
                 {featured.imageUrl && (
                   <Link href={`/insights/${featured.slug}`} className="featured-image-link">
@@ -110,7 +113,7 @@ export default function InsightsExplorer({ articles }: InsightsExplorerProps) {
                       <span className="fine-print">Updated {featured.updatedAt}</span>
                     </div>
                     <Link className="button button-primary" href={`/insights/${featured.slug}`}>
-                      Read full guide →
+                      {t('insights.readFull')}
                     </Link>
                   </div>
                 </div>
@@ -121,7 +124,9 @@ export default function InsightsExplorer({ articles }: InsightsExplorerProps) {
           {/* Regular Articles Grid */}
           <div className="insights-grid-header">
             <h3>
-              {selectedCategory === 'All' ? 'Latest Guides' : `${selectedCategory} Guides`}{' '}
+              {selectedCategory === 'All'
+                ? t('insights.latest')
+                : `${selectedCategory} ${t('insights.guides')}`}{' '}
               <span className="count-tag">({filteredArticles.length})</span>
             </h3>
             {(selectedCategory !== 'All' || searchQuery) && (
@@ -132,49 +137,19 @@ export default function InsightsExplorer({ articles }: InsightsExplorerProps) {
                   setSearchQuery('');
                 }}
               >
-                Clear filters
+                {t('insights.clearFilters')}
               </button>
             )}
           </div>
 
           {gridArticles.length > 0 ? (
             <div className="card-grid">
-              {gridArticles.map((item) => (
-                <article className="article-card insight-card" key={item.id}>
-                  {item.imageUrl && (
-                    <Link href={`/insights/${item.slug}`} className="insight-card-image-wrap">
-                      <Image
-                        src={item.imageUrl}
-                        alt={item.title}
-                        width={420}
-                        height={240}
-                        className="insight-card-image"
-                      />
-                    </Link>
-                  )}
-                  <div className="insight-card-body">
-                    <div className="article-meta-row">
-                      <span className="category-pill">{item.category}</span>
-                      {item.readTime && <span className="read-time">{item.readTime}</span>}
-                    </div>
-                    <h3>
-                      <Link href={`/insights/${item.slug}`}>{item.title}</Link>
-                    </h3>
-                    <p>{item.excerpt}</p>
-                    <div className="article-card-footer">
-                      <span className="fine-print">Updated {item.updatedAt}</span>
-                      <Link className="button button-link" href={`/insights/${item.slug}`}>
-                        Read guide →
-                      </Link>
-                    </div>
-                  </div>
-                </article>
-              ))}
+              {gridArticles.map((item) => <ArticleCard article={item} key={item.id} />)}
             </div>
           ) : (
             <div className="insights-empty-state">
-              <h3>No guides match your search</h3>
-              <p className="lede">Try clearing your search query or selecting another category.</p>
+              <h3>{t('insights.noGuides')}</h3>
+              <p className="lede">{t('insights.noGuidesHint')}</p>
               <button
                 className="button button-secondary"
                 onClick={() => {
@@ -182,7 +157,7 @@ export default function InsightsExplorer({ articles }: InsightsExplorerProps) {
                   setSearchQuery('');
                 }}
               >
-                Show all guides
+                {t('insights.clearFilters')}
               </button>
             </div>
           )}

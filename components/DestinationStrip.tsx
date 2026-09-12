@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
+import Image from 'next/image';
 import Link from 'next/link';
 import { FEATURED_DESTINATIONS } from '@/lib/areas';
 import { T } from './LanguageContext';
@@ -8,7 +8,7 @@ export default function DestinationStrip() {
     <div className="destination-strip">
       {FEATURED_DESTINATIONS.map((area) => (
         <Link className="destination-card" href={`/communities?area=${encodeURIComponent(area.name)}#explore`} key={area.name}>
-          <img src={area.image} alt="" />
+          <Image src={area.image} alt="" width={420} height={280} />
           <span>
             <strong>{area.name}</strong>
             <em>{area.mood}</em>

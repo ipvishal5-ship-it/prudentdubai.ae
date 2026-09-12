@@ -39,9 +39,9 @@ export const PROPERTY_TYPES = [
 
 export const GROUP_VISUALS: Record<string, { image: string; mood: string; line: string; short: string }> = {
   'Central & waterfront': { image: AREA_PHOTOS.tower, mood: 'Skyline & sea', line: 'Towers, marina walks and landmark addresses.', short: 'Waterfront' },
-  'Family communities & villas': { image: AREA_PHOTOS.pool, mood: 'Parks & villas', line: 'Schools, golf, lagoons and quieter streets.', short: 'Family' },
-  'Popular apartment districts': { image: AREA_PHOTOS.apartment, mood: 'City living', line: 'Daily convenience, metro access and mixed communities.', short: 'Apartments' },
-  'Value & emerging districts': { image: AREA_PHOTOS.modern, mood: 'New chapters', line: 'Growing districts with a wider range of entry points.', short: 'Emerging' },
+  'Family communities & villas': { image: AREA_PHOTOS.pool, mood: 'Parks & villas', line: 'Schools, golf, lagoons and quieter streets.', short: 'Family & Villas' },
+  'Popular apartment districts': { image: AREA_PHOTOS.apartment, mood: 'City living', line: 'Daily convenience, metro access and mixed communities.', short: 'Urban & City' },
+  'Value & emerging districts': { image: AREA_PHOTOS.modern, mood: 'New chapters', line: 'Growing districts with a wider range of entry points.', short: 'High Growth' },
   'Established neighbourhoods': { image: AREA_PHOTOS.interior, mood: 'Settled streets', line: 'Older Dubai character and low-rise family pockets.', short: 'Established' },
 };
 

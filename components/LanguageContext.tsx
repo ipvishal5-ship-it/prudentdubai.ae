@@ -5,10 +5,12 @@ import { Locale, MessageKey, messages } from '@/lib/i18n';
 
 type LanguageValue = { locale: Locale; setLocale: (locale: Locale) => void; t: (key: MessageKey) => string };
 const LanguageContext = createContext<LanguageValue>({ locale: 'en', setLocale: () => {}, t: (key) => messages.en[key] });
+export const arabicEnabled = process.env.NEXT_PUBLIC_ENABLE_ARABIC === 'true';
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>('en');
   useEffect(() => {
+    if (!arabicEnabled) return;
     const saved = localStorage.getItem('pd_locale');
     if (saved !== 'ar') return;
     const frame = requestAnimationFrame(() => setLocaleState('ar'));
@@ -18,7 +20,11 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     document.documentElement.lang = locale;
     document.documentElement.dir = locale === 'ar' ? 'rtl' : 'ltr';
   }, [locale]);
-  const setLocale = (next: Locale) => { setLocaleState(next); localStorage.setItem('pd_locale', next); };
+  const setLocale = (next: Locale) => {
+    const supported = arabicEnabled ? next : 'en';
+    setLocaleState(supported);
+    localStorage.setItem('pd_locale', supported);
+  };
   return <LanguageContext.Provider value={{ locale, setLocale, t: (key) => messages[locale][key] }}>{children}</LanguageContext.Provider>;
 }
 

@@ -2,12 +2,10 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { KeyboardEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { KeyboardEvent, useCallback, useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { DUBAI_AREA_GROUPS, GROUP_VISUALS, TYPE_FILTERS, VISUAL_AREAS } from '@/lib/areas';
 import { useLanguage } from './LanguageContext';
-
-const SHORTLIST_KEY = 'pd_area_shortlist';
 
 function mapEmbedUrl(name: string) {
   return `https://maps.google.com/maps?q=${encodeURIComponent(`${name}, Dubai`)}&t=&z=14&ie=UTF8&iwloc=&output=embed`;
@@ -25,20 +23,11 @@ function getInitialType(searchParams: URLSearchParams): string {
   return 'all';
 }
 
-function getInitialShortlist(): string[] {
-  try {
-    const saved = localStorage.getItem(SHORTLIST_KEY);
-    if (saved) {
-      const parsed = JSON.parse(saved) as string[];
-      if (Array.isArray(parsed)) {
-        return parsed.filter((name) => VISUAL_AREAS.some((area) => area.name === name));
-      }
-    }
-  } catch {
-    // Ignore localStorage access errors
-  }
-  return [];
-}
+const HERO_PHOTOS = [
+  { id: 'tower', src: '/demo/dubai-tower.jpg', alt: 'Dubai Towers and Skyline' },
+  { id: 'villa', src: '/demo/pool-villa.jpg', alt: 'Waterfront Villa with Private Pool' },
+  { id: 'apartment', src: '/demo/city-apartment.jpg', alt: 'Prime Urban City Residences' },
+];
 
 export default function AreaExplorer() {
   const { t } = useLanguage();
@@ -47,30 +36,9 @@ export default function AreaExplorer() {
   const [group, setGroup] = useState('all');
   const [type, setType] = useState(() => getInitialType(params));
   const [activeName, setActiveName] = useState(() => getInitialArea(params));
-  const [shortlist, setShortlist] = useState<string[]>([]);
   const [mobileListOpen, setMobileListOpen] = useState(false);
+  const [activePhoto, setActivePhoto] = useState(0);
   const [mobileMapOpen, setMobileMapOpen] = useState(false);
-
-  // Track whether the localStorage read has completed (ref avoids re-render)
-  const hasMountedRef = useRef(false);
-
-  // Load shortlist from localStorage once on mount (client only).
-  // Syncing external state into React on mount is the exact contract useEffect is designed for.
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setShortlist(getInitialShortlist());
-    hasMountedRef.current = true;
-  }, []);
-
-  // Persist shortlist to localStorage whenever it changes (after mount)
-  useEffect(() => {
-    if (!hasMountedRef.current) return;
-    try {
-      localStorage.setItem(SHORTLIST_KEY, JSON.stringify(shortlist));
-    } catch {
-      // Ignore localStorage write errors
-    }
-  }, [shortlist]);
 
   const filtered = useMemo(() => {
     return VISUAL_AREAS.filter((area) => {
@@ -87,7 +55,6 @@ export default function AreaExplorer() {
     [filtered, activeName],
   );
 
-  const saved = shortlist.includes(active.name);
   const mapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${active.name}, Dubai`)}`;
   const mapSrc = mapEmbedUrl(active.name);
 
@@ -107,12 +74,14 @@ export default function AreaExplorer() {
     if (event.key === 'ArrowUp') { event.preventDefault(); move(-1); }
   }
 
-  function toggleSave() {
-    setShortlist((current) => (current.includes(active.name) ? current.filter((name) => name !== active.name) : [...current, active.name]));
-  }
+  const hasActiveFilters = Boolean(query || group !== 'all' || type !== 'all');
+  const resetFilters = useCallback(() => {
+    setQuery('');
+    setGroup('all');
+    setType('all');
+  }, []);
 
-  const contactHref = `/contact?area=${encodeURIComponent(active.name)}${shortlist.length ? `&areas=${encodeURIComponent(shortlist.join(', '))}` : ''}${type !== 'all' ? `&type=${encodeURIComponent(type)}` : ''}`;
-  const shortlistHref = `/contact?areas=${encodeURIComponent(shortlist.join(', '))}`;
+  const contactHref = `/contact?area=${encodeURIComponent(active.name)}${type !== 'all' ? `&type=${encodeURIComponent(type)}` : ''}`;
 
   return (
     <div className="studio" id="explore">
@@ -121,37 +90,139 @@ export default function AreaExplorer() {
           <p className="eyebrow">{t('areas.eyebrow')}</p>
           <h1 className="display">{t('areas.visualTitle')}</h1>
           <p className="lede">{t('areas.visualLede')}</p>
-          <label className="area-search">
-            <span className="sr-only">{t('areas.search')}</span>
-            <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t('areas.search')} />
-          </label>
+          <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginTop: 24, flexWrap: 'wrap' }}>
+            <label className="area-search" style={{ margin: 0, flex: 1, minWidth: 260 }}>
+              <span className="sr-only">{t('areas.search')}</span>
+              <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t('areas.search')} />
+            </label>
+            <Link className="button button-secondary" href="/calculator" style={{ minHeight: 54 }}>
+              {t('areas.calculator')}
+            </Link>
+          </div>
         </div>
-        <div className="area-hero-stack" aria-hidden="true">
-          <Image src="/demo/dubai-tower.jpg" alt="" width={900} height={650} sizes="(max-width: 640px) calc(100vw - 20px), (max-width: 1000px) calc(100vw - 40px), 48vw" preload />
-          <Image src="/demo/pool-villa.jpg" alt="" width={540} height={420} sizes="(max-width: 640px) 1px, (max-width: 1000px) 46vw, 24vw" />
-          <Image src="/demo/city-apartment.jpg" alt="" width={500} height={360} sizes="(max-width: 640px) 1px, (max-width: 1000px) 42vw, 22vw" />
+        <div className="area-hero-showcase">
+          {/* Expanding Trio Slat Gallery */}
+          <div className="area-hero-trio" role="region" aria-label="Dubai visual portfolio">
+            {HERO_PHOTOS.map((photo, idx) => {
+              const isActive = activePhoto === idx;
+              return (
+                <div
+                  key={photo.id}
+                  className={`area-hero-slat ${isActive ? 'active' : ''}`}
+                  onMouseEnter={() => setActivePhoto(idx)}
+                  onClick={() => setActivePhoto(idx)}
+                  role="button"
+                  tabIndex={0}
+                  aria-pressed={isActive}
+                  aria-label={photo.alt}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      setActivePhoto(idx);
+                    }
+                  }}
+                >
+                  <Image
+                    src={photo.src}
+                    alt={photo.alt}
+                    fill
+                    className="area-hero-slat-img"
+                    sizes="(max-width: 1000px) 48vw, 25vw"
+                    priority={idx === 0}
+                  />
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Desktop Pagination Dots */}
+          <div className="area-hero-nav" aria-hidden="true">
+            {HERO_PHOTOS.map((photo, idx) => (
+              <button
+                key={photo.id}
+                type="button"
+                className={`area-hero-dot ${activePhoto === idx ? 'active' : ''}`}
+                onClick={() => setActivePhoto(idx)}
+                aria-label={`Photo ${idx + 1}`}
+              />
+            ))}
+          </div>
         </div>
       </section>
 
-      <section className="area-match">
-        <div>
-          <h2>{t('areas.matchTitle')}</h2>
-          <p>{t('areas.matchBody')}</p>
-        </div>
-        <div className="studio-filters stacked">
-          <div className="studio-seg" role="group" aria-label={t('areas.mapTitle')}>
-            <button className={group === 'all' ? 'active' : ''} type="button" onClick={() => setGroup('all')}>{t('areas.allDubai')}</button>
-            {DUBAI_AREA_GROUPS.map((item) => (
-              <button key={item.title} className={group === item.title ? 'active' : ''} type="button" onClick={() => setGroup(item.title)}>
-                {GROUP_VISUALS[item.title].short}
-              </button>
-            ))}
+      <section className="area-match" id="area-filters">
+        <div className="area-match-head">
+          <div>
+            <h2>{t('areas.matchTitle')}</h2>
+            <p>{t('areas.matchBody')}</p>
           </div>
-          <div className="studio-seg quiet" role="group" aria-label={t('areas.typesTitle')}>
-            <button className={type === 'all' ? 'active' : ''} type="button" onClick={() => setType('all')}>{t('areas.anyType')}</button>
-            {TYPE_FILTERS.map((item) => (
-              <button key={item} className={type === item ? 'active' : ''} type="button" onClick={() => setType(item)}>{item}</button>
-            ))}
+          {hasActiveFilters ? (
+            <div className="filter-active-status">
+              <span className="filter-active-count">
+                <strong>{filtered.length}</strong> {t('areas.showingFiltered')}
+              </span>
+              <button type="button" onClick={resetFilters} className="filter-clear-btn" aria-label={t('areas.clearAll')}>
+                {t('areas.clearAll')} ✕
+              </button>
+            </div>
+          ) : (
+            <div className="filter-default-status">
+              <span>{t('areas.showingAll')}</span>
+            </div>
+          )}
+        </div>
+
+        <div className="filter-system">
+          {/* Row 1: Lifestyle / Location */}
+          <div className="filter-row">
+            <div className="filter-row-header">
+              <span className="filter-row-label">{t('areas.filterLifestyle')}</span>
+            </div>
+            <div className="filter-rail" role="group" aria-label={t('areas.mapTitle')}>
+              <button
+                className={`filter-pill ${group === 'all' ? 'active' : ''}`}
+                type="button"
+                onClick={() => setGroup('all')}
+              >
+                {t('areas.allDubai')}
+              </button>
+              {DUBAI_AREA_GROUPS.map((item) => (
+                <button
+                  key={item.title}
+                  className={`filter-pill ${group === item.title ? 'active' : ''}`}
+                  type="button"
+                  onClick={() => setGroup(item.title)}
+                >
+                  {GROUP_VISUALS[item.title].short}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Row 2: Property Type */}
+          <div className="filter-row">
+            <div className="filter-row-header">
+              <span className="filter-row-label">{t('areas.filterPropertyType')}</span>
+            </div>
+            <div className="filter-rail" role="group" aria-label={t('areas.typesTitle')}>
+              <button
+                className={`filter-pill ${type === 'all' ? 'active' : ''}`}
+                type="button"
+                onClick={() => setType('all')}
+              >
+                {t('areas.anyType')}
+              </button>
+              {TYPE_FILTERS.map((item) => (
+                <button
+                  key={item}
+                  className={`filter-pill ${type === item ? 'active' : ''}`}
+                  type="button"
+                  onClick={() => setType(item)}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -184,7 +255,7 @@ export default function AreaExplorer() {
             {filtered.map((area) => (
               <button
                 key={area.name}
-                className={`${area.name === active.name ? 'active' : ''}${shortlist.includes(area.name) ? ' saved' : ''}`}
+                className={area.name === active.name ? 'active' : ''}
                 type="button"
                 role="option"
                 aria-selected={area.name === active.name}
@@ -194,11 +265,6 @@ export default function AreaExplorer() {
                 <span>{area.types.join(' · ')}</span>
               </button>
             ))}
-            {shortlist.length > 0 && (
-              <Link className="studio-shortlist" href={shortlistHref}>
-                {t('areas.discussShortlist')} ({shortlist.length})
-              </Link>
-            )}
           </div>
 
           <div className="studio-stage">
@@ -211,7 +277,7 @@ export default function AreaExplorer() {
                 <p className="studio-meta">{active.types.join(' · ')}</p>
                 <div className="button-row">
                   <Link className="button button-primary" href={contactHref}>{t('areas.talkArea')}</Link>
-                  <button className="button button-secondary" type="button" onClick={toggleSave}>{saved ? t('areas.saved') : t('areas.save')}</button>
+                  <Link className="button button-secondary" href="/calculator">{t('areas.calculator')}</Link>
                 </div>
               </div>
             </article>
@@ -244,13 +310,10 @@ export default function AreaExplorer() {
                   referrerPolicy="no-referrer-when-downgrade"
                 />
               </div>
-              <p className="fine-print">{t('areas.mapNote')}</p>
             </aside>
           </div>
         </div>
       )}
-
-      <p className="fine-print studio-note">{t('areas.photoNote')}</p>
     </div>
   );
 }

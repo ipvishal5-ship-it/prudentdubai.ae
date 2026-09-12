@@ -75,7 +75,6 @@ export default async function HomePage() {
           <Link className="button button-secondary" href="/communities"><T id="home.viewAllAreas" /></Link>
         </div>
         <DestinationStrip />
-        <p className="fine-print" style={{ marginTop: 18 }}><T id="home.areasNote" /></p>
       </div>
     </section>
 

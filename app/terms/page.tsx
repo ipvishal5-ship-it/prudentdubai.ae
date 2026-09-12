@@ -1,3 +1,35 @@
 import type { Metadata } from 'next';
-export const metadata:Metadata={title:'Terms and Disclaimer'};
-export default function TermsPage(){return <section className="section"><div className="container article-layout"><span className="eyebrow">Legal information</span><h1 className="display">Terms and property information disclaimer</h1><p className="lede">Effective 30 August 2026</p><h2>General information</h2><p>This website provides general property information and a way to contact the Prudent Dubai team. It is not a contract, valuation, legal opinion, financial advice, tax advice or promise of investment performance.</p><h2>Listings and availability</h2><p>Published opportunities identify an information source and verification date. Prices, incentives, unit choice, views, sizes, payment schedules, completion dates and availability may change after that date. Obtain current written confirmation and review the relevant reservation and sale documents before paying or signing.</p><h2>No guaranteed outcome</h2><p>Property values, rents, yields, completion timing, financing and residency applications can change or be affected by third parties and authorities. No result is guaranteed by content on this website.</p><h2>Images and third-party material</h2><p>Images may illustrate a project, development or location and may not show the exact available unit. Third-party names and links are used for identification and reference; their inclusion does not by itself establish an agency, allocation or endorsement relationship.</p><h2>Independent review</h2><p>Buyers should conduct legal, technical and financial checks suitable for the transaction and obtain independent professional advice where appropriate.</p><h2>Website use</h2><p>Do not misuse the website, attempt unauthorised access, submit malicious content or rely on cached information as current. External websites have their own terms and privacy practices.</p></div></section>}
+import { T } from '@/components/LanguageContext';
+import { pageMetadata } from '@/lib/metadata';
+
+export const metadata: Metadata = pageMetadata('Terms and Disclaimer', 'Terms for using Prudent Dubai property information, calculators, links and enquiry services.', '/terms');
+
+export default function TermsPage() {
+  return (
+    <section className="section">
+      <div className="container article-layout">
+        <span className="eyebrow"><T id="terms.eyebrow" /></span>
+        <h1 className="display"><T id="terms.title" /></h1>
+        <p className="lede"><T id="terms.effective" /></p>
+
+        <h2><T id="terms.sec1Title" /></h2>
+        <p><T id="terms.sec1Text" /></p>
+
+        <h2><T id="terms.sec2Title" /></h2>
+        <p><T id="terms.sec2Text" /></p>
+
+        <h2><T id="terms.sec3Title" /></h2>
+        <p><T id="terms.sec3Text" /></p>
+
+        <h2><T id="terms.sec4Title" /></h2>
+        <p><T id="terms.sec4Text" /></p>
+
+        <h2><T id="terms.sec5Title" /></h2>
+        <p><T id="terms.sec5Text" /></p>
+
+        <h2><T id="terms.sec6Title" /></h2>
+        <p><T id="terms.sec6Text" /></p>
+      </div>
+    </section>
+  );
+}

@@ -3,6 +3,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getAllArticles, getArticle } from '@/lib/content';
+import { T } from '@/components/LanguageContext';
+import ArticleCard from '@/components/ArticleCard';
 
 export async function generateStaticParams() {
   const articles = await getAllArticles();
@@ -20,9 +22,12 @@ export async function generateMetadata({
   return {
     title: `${item.title} | Dubai Property Insights`,
     description: item.excerpt,
+    alternates: { canonical: `/insights/${item.slug}` },
     openGraph: {
       title: item.title,
       description: item.excerpt,
+      url: `/insights/${item.slug}`,
+      siteName: 'Prudent Dubai Properties',
       type: 'article',
       images: item.imageUrl ? [{ url: item.imageUrl }] : undefined,
     },
@@ -41,14 +46,46 @@ export default async function ArticlePage({
   const allArticles = await getAllArticles();
   const related = allArticles.filter((a) => a.slug !== item.slug).slice(0, 3);
 
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: item.title,
+    description: item.excerpt,
+    url: `https://prudentdubai.ae/insights/${item.slug}`,
+    image: item.imageUrl ? (item.imageUrl.startsWith('http') ? item.imageUrl : `https://prudentdubai.ae${item.imageUrl}`) : 'https://prudentdubai.ae/brand/og-image.png',
+    datePublished: item.publishedAt || item.updatedAt,
+    dateModified: item.updatedAt || item.publishedAt,
+    author: {
+      '@type': 'Organization',
+      name: item.author || 'Prudent Dubai Properties',
+      url: 'https://prudentdubai.ae',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Prudent Dubai Properties',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://prudentdubai.ae/brand/prudentlogo.png',
+      },
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `https://prudentdubai.ae/insights/${item.slug}`,
+    },
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
       <article className="section article-page-section">
         <div className="container article-layout">
           {/* Breadcrumb Navigation */}
           <nav className="article-breadcrumbs" aria-label="Breadcrumb">
             <Link href="/insights" className="button-link">
-              ← All Insights
+              <T id="insights.allInsights" />
             </Link>
             <span className="breadcrumb-separator">/</span>
             <span className="breadcrumb-current">{item.category}</span>
@@ -93,8 +130,8 @@ export default async function ArticlePage({
           {item.keyTakeaways && item.keyTakeaways.length > 0 && (
             <aside className="article-takeaways">
               <div className="takeaways-header">
-                <span className="takeaways-badge">Key Takeaways</span>
-                <h3>At a Glance</h3>
+                <span className="takeaways-badge"><T id="insights.takeaways" /></span>
+                <h3><T id="insights.atGlance" /></h3>
               </div>
               <ul className="takeaways-list">
                 {item.keyTakeaways.map((point, index) => (
@@ -113,11 +150,10 @@ export default async function ArticlePage({
 
           {/* Source Verification Citation Box */}
           <div className="source-box">
-            <span className="eyebrow">Regulatory Verification</span>
-            <strong>Primary official reference</strong>
+            <span className="eyebrow"><T id="insights.regulatory" /></span>
+            <strong><T id="insights.officialRef" /></strong>
             <p className="fine-print">
-              We cross-check all property figures against named public registry records. You can verify live regulations
-              directly with the issuing authority.
+              <T id="insights.verifyDesc" />
             </p>
             <a
               className="button button-secondary"
@@ -133,15 +169,12 @@ export default async function ArticlePage({
           {/* Advisory Contact Callout */}
           <section className="article-advisory-cta">
             <div className="advisory-cta-content">
-              <span className="eyebrow">Personal Advisory</span>
-              <h3>Need tailored property guidance in Dubai?</h3>
-              <p>
-                Whether you are evaluating service charges for a specific building, vetting an off-plan developer, or
-                preparing for transfer day, our advisors are here to help.
-              </p>
+              <span className="eyebrow"><T id="insights.personalAdvisory" /></span>
+              <h3><T id="insights.advisoryTitle" /></h3>
+              <p><T id="insights.advisoryDesc" /></p>
               <div className="button-row" style={{ marginTop: 20 }}>
                 <Link className="button button-primary" href="/contact">
-                  Discuss with our team
+                  <T id="insights.discussTeam" />
                 </Link>
                 <a
                   className="button button-secondary"
@@ -149,7 +182,7 @@ export default async function ArticlePage({
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  WhatsApp instant chat
+                  <T id="insights.whatsappChat" />
                 </a>
               </div>
             </div>
@@ -163,45 +196,15 @@ export default async function ArticlePage({
           <div className="container">
             <div className="section-heading">
               <div>
-                <span className="eyebrow">Continue reading</span>
-                <h2 className="section-title">Related Guides</h2>
+                <span className="eyebrow"><T id="insights.continueReading" /></span>
+                <h2 className="section-title"><T id="insights.relatedGuides" /></h2>
               </div>
               <Link className="button button-secondary" href="/insights">
-                View all insights
+                <T id="insights.viewAll" />
               </Link>
             </div>
             <div className="card-grid">
-              {related.map((rel) => (
-                <article className="article-card insight-card" key={rel.id}>
-                  {rel.imageUrl && (
-                    <Link href={`/insights/${rel.slug}`} className="insight-card-image-wrap">
-                      <Image
-                        src={rel.imageUrl}
-                        alt={rel.title}
-                        width={420}
-                        height={240}
-                        className="insight-card-image"
-                      />
-                    </Link>
-                  )}
-                  <div className="insight-card-body">
-                    <div className="article-meta-row">
-                      <span className="category-pill">{rel.category}</span>
-                      {rel.readTime && <span className="read-time">{rel.readTime}</span>}
-                    </div>
-                    <h3>
-                      <Link href={`/insights/${rel.slug}`}>{rel.title}</Link>
-                    </h3>
-                    <p>{rel.excerpt}</p>
-                    <div className="article-card-footer">
-                      <span className="fine-print">Updated {rel.updatedAt}</span>
-                      <Link className="button button-link" href={`/insights/${rel.slug}`}>
-                        Read guide →
-                      </Link>
-                    </div>
-                  </div>
-                </article>
-              ))}
+              {related.map((rel) => <ArticleCard article={rel} key={rel.id} />)}
             </div>
           </div>
         </section>

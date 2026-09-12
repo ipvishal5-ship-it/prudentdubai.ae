@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { useLanguage } from './LanguageContext';
+import { arabicEnabled, useLanguage } from './LanguageContext';
 import type { MessageKey } from '@/lib/i18n';
 
 const links = [
@@ -45,7 +45,7 @@ export default function Navbar() {
         </nav>
 
         <div className="nav-tools">
-          <div className="language-switch" aria-label={t('language.label')}>
+          {arabicEnabled && <div className="language-switch" aria-label={t('language.label')}>
             <button
               className={locale === 'en' ? 'active' : ''}
               onClick={() => setLocale('en')}
@@ -62,7 +62,7 @@ export default function Navbar() {
             >
               ع
             </button>
-          </div>
+          </div>}
 
           <Link className="button button-primary" href="/contact">
             {t('nav.talk')}

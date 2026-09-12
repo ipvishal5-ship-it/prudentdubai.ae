@@ -1,11 +1,9 @@
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import AreaExplorer from '@/components/AreaExplorer';
+import { pageMetadata } from '@/lib/metadata';
 
-export const metadata: Metadata = {
-  title: 'Explore Dubai areas',
-  description: 'Browse general information about Dubai neighbourhoods by district group and common residential property type.',
-};
+export const metadata: Metadata = pageMetadata('Dubai Areas & Neighbourhoods | PrudentDubai', 'Browse general information about Dubai neighbourhoods by district group and common residential property type.', '/communities');
 
 export default function CommunitiesPage() {
   return (

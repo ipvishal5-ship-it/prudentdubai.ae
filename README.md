@@ -1,6 +1,6 @@
 # Prudent Dubai Properties
 
-Production-focused Next.js website for the property division of the Prudent Dubai group.
+Production-focused Next.js website for the property division of PrudentDubai.
 
 ## Content integrity
 

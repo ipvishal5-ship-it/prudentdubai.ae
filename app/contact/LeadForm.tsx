@@ -2,8 +2,10 @@
 
 import { FormEvent, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { useLanguage } from '@/components/LanguageContext';
 
 export default function LeadForm({ whatsapp }: { whatsapp: string }) {
+  const { t } = useLanguage();
   const params = useSearchParams();
   const area = params.get('area') || '';
   const areas = params.get('areas') || '';
@@ -36,48 +38,108 @@ export default function LeadForm({ whatsapp }: { whatsapp: string }) {
       consent: form.get('consent') === 'on',
       website: form.get('website') || '',
     };
-    const response = await fetch('/api/inquiries', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
-    const result = await response.json() as { error?: string };
-    if (response.ok) {
+    try {
+      const response = await fetch('/api/inquiries', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      const result = (await response.json()) as { error?: string };
+      if (!response.ok) throw new Error(result.error);
       setStatus('success');
-      setMessage('Thank you. Your enquiry was sent to the Prudent team.');
+      setMessage(t('contact.form.success'));
       event.currentTarget.reset();
-    } else {
+    } catch (error) {
       setStatus('error');
-      setMessage(result.error || 'Unable to send the enquiry.');
+      setMessage(error instanceof Error && error.message ? error.message : t('contact.form.error'));
     }
   }
 
   return (
     <form className="lead-form" onSubmit={submit}>
-      <span className="eyebrow">Requirement brief</span>
-      <h2 className="section-title" style={{ fontSize: '2rem' }}>What are you looking for?</h2>
-      <div className="hp-field"><label>Website<input name="website" tabIndex={-1} autoComplete="off" /></label></div>
-      <div className="form-pair">
-        <label className="field-label">Name<input className="field-input" name="name" required maxLength={100} autoComplete="name" /></label>
-        <label className="field-label">Email<input className="field-input" name="email" required type="email" maxLength={160} autoComplete="email" /></label>
+      <span className="eyebrow">{t('contact.form.eyebrow')}</span>
+      <h2 className="section-title" style={{ fontSize: '2rem' }}>
+        {t('contact.form.title')}
+      </h2>
+      <div className="hp-field">
+        <label>
+          Website<input name="website" tabIndex={-1} autoComplete="off" />
+        </label>
       </div>
       <div className="form-pair">
-        <label className="field-label">Phone / WhatsApp<input className="field-input" name="phone" required maxLength={30} autoComplete="tel" /></label>
-        <label className="field-label">Country of residence<input className="field-input" name="country" maxLength={80} autoComplete="country-name" /></label>
+        <label className="field-label">
+          {t('contact.form.name')}
+          <input className="field-input" name="name" required maxLength={100} autoComplete="name" />
+        </label>
+        <label className="field-label">
+          {t('contact.form.email')}
+          <input className="field-input" name="email" required type="email" maxLength={160} autoComplete="email" />
+        </label>
       </div>
       <div className="form-pair">
-        <label className="field-label">Purpose
+        <label className="field-label">
+          {t('contact.form.phone')}
+          <input className="field-input" name="phone" required maxLength={30} autoComplete="tel" />
+        </label>
+        <label className="field-label">
+          {t('contact.form.country')}
+          <input className="field-input" name="country" maxLength={80} autoComplete="country-name" />
+        </label>
+      </div>
+      <div className="form-pair">
+        <label className="field-label">
+          {t('contact.form.purpose')}
           <select className="field-input" name="interest" required defaultValue={interestDefault}>
-            <option value="" disabled>Select one</option>
-            <option>Buy a home</option>
-            <option>Property investment</option>
-            <option>Off-plan enquiry</option>
-            <option>Ready property</option>
-            <option>General enquiry</option>
+            <option value="" disabled>
+              {t('contact.form.selectOne')}
+            </option>
+            <option value="Buy a home">{t('contact.form.purposeHome')}</option>
+            <option value="Property investment">{t('contact.form.purposeInvest')}</option>
+            <option value="Off-plan enquiry">{t('contact.form.purposeOffPlan')}</option>
+            <option value="Ready property">{t('contact.form.purposeReady')}</option>
+            <option value="General enquiry">{t('contact.form.purposeGeneral')}</option>
           </select>
         </label>
-        <label className="field-label">Approximate budget<input className="field-input" name="budget" maxLength={80} placeholder="For example: AED 1.5M" /></label>
+        <label className="field-label">
+          {t('contact.form.budget')}
+          <input
+            className="field-input"
+            name="budget"
+            maxLength={80}
+            placeholder={t('contact.form.budgetPlaceholder')}
+          />
+        </label>
       </div>
-      <label className="field-label">Useful context<textarea className="field-input field-textarea" name="message" maxLength={1200} defaultValue={seeded} placeholder="Preferred areas, property type, timing or a project name" /></label>
-      <label className="check-label"><input type="checkbox" name="consent" required />I agree that Prudent Dubai may use these details to respond to this enquiry. I have not included sensitive identity or financial documents.</label>
-      <button className="button button-primary" disabled={status === 'busy'}>{status === 'busy' ? 'Sending…' : 'Send enquiry'}</button>
-      {message && <p className={status === 'success' ? 'form-success' : 'form-error'} role="status">{message}{status === 'error' && <> <a href={`https://wa.me/${whatsapp}`} target="_blank" rel="noopener noreferrer">Use WhatsApp instead.</a></>}</p>}
+      <label className="field-label">
+        {t('contact.form.message')}
+        <textarea
+          className="field-input field-textarea"
+          name="message"
+          maxLength={1200}
+          defaultValue={seeded}
+          placeholder={t('contact.form.messagePlaceholder')}
+        />
+      </label>
+      <label className="check-label">
+        <input type="checkbox" name="consent" required />
+        {t('contact.form.consent')}
+      </label>
+      <button className="button button-primary" disabled={status === 'busy'}>
+        {status === 'busy' ? t('contact.form.sending') : t('contact.form.send')}
+      </button>
+      {message && (
+        <p className={status === 'success' ? 'form-success' : 'form-error'} role="status">
+          {message}
+          {status === 'error' && (
+            <>
+              {' '}
+              <a href={`https://wa.me/${whatsapp}`} target="_blank" rel="noopener noreferrer">
+                {t('contact.form.whatsappFallback')}
+              </a>
+            </>
+          )}
+        </p>
+      )}
     </form>
   );
 }

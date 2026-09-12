@@ -1,7 +1,75 @@
-import type { Metadata } from 'next';import Link from 'next/link';
-export const metadata:Metadata={title:'Off-plan Property Guide',description:'A practical, source-led guide to reviewing off-plan property in Dubai.'};
-export default function OffPlanPage(){return <>
-  <section className="section page-intro"><div className="container"><span className="eyebrow">Off-plan property</span><h1 className="display">Understand the project before the payment plan.</h1><p className="lede">Off-plan property is bought before completion. Review the developer, project record, payment route, contract, and total cost before you reserve.</p></div></section>
-  <section className="section section-soft"><div className="container"><h2 className="section-title">Four checks before you reserve.</h2><p className="lede section-intro-copy">Each check answers a different part of the buying decision.</p><div className="process"><article className="process-step"><h3>Project and developer</h3><p>Confirm both through official sources.</p></article><article className="process-step"><h3>Payment route</h3><p>Verify the account and payment instructions.</p></article><article className="process-step"><h3>Contract terms</h3><p>Review delay, default, transfer, and cancellation clauses.</p></article><article className="process-step"><h3>Total cost</h3><p>Include fees, service charges, finance, and resale limits.</p></article></div></div></section>
-  <section className="section"><div className="container"><div className="info-grid"><article className="info-card"><h3>Check the DLD record</h3><p>Review the current project and developer information.</p><a className="button button-link" href="https://dubailand.gov.ae/en/open-data/real-estate-data/" target="_blank" rel="noopener noreferrer">Open DLD data ↗</a></article><article className="info-card"><h3>Confirm the handover date</h3><p>Use the latest project documents, not a website promise.</p></article><article className="info-card"><h3>Request a relevant shortlist</h3><p>Share your budget, preferred area, purpose, and timing.</p><Link className="button button-link" href="/contact">Create a brief →</Link></article></div></div></section>
-  </>}
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { T } from '@/components/LanguageContext';
+import { pageMetadata } from '@/lib/metadata';
+
+export const metadata: Metadata = pageMetadata('Off-plan Property Guide', 'A practical, source-led guide to reviewing off-plan property in Dubai.', '/off-plan');
+
+export default function OffPlanPage() {
+  return (
+    <>
+      <section className="section page-intro">
+        <div className="container">
+          <span className="eyebrow"><T id="offplan.eyebrow" /></span>
+          <h1 className="display"><T id="offplan.title" /></h1>
+          <p className="lede"><T id="offplan.lede" /></p>
+        </div>
+      </section>
+
+      <section className="section section-soft">
+        <div className="container">
+          <h2 className="section-title"><T id="offplan.checksTitle" /></h2>
+          <p className="lede section-intro-copy"><T id="offplan.checksLede" /></p>
+          <div className="process">
+            <article className="process-step">
+              <h3><T id="offplan.check1Title" /></h3>
+              <p><T id="offplan.check1Body" /></p>
+            </article>
+            <article className="process-step">
+              <h3><T id="offplan.check2Title" /></h3>
+              <p><T id="offplan.check2Body" /></p>
+            </article>
+            <article className="process-step">
+              <h3><T id="offplan.check3Title" /></h3>
+              <p><T id="offplan.check3Body" /></p>
+            </article>
+            <article className="process-step">
+              <h3><T id="offplan.check4Title" /></h3>
+              <p><T id="offplan.check4Body" /></p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="container">
+          <div className="info-grid">
+            <article className="info-card">
+              <h3><T id="offplan.dldTitle" /></h3>
+              <p><T id="offplan.dldBody" /></p>
+              <a
+                className="button button-link"
+                href="https://dubailand.gov.ae/en/open-data/real-estate-data/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <T id="offplan.dldButton" />
+              </a>
+            </article>
+            <article className="info-card">
+              <h3><T id="offplan.handoverTitle" /></h3>
+              <p><T id="offplan.handoverBody" /></p>
+            </article>
+            <article className="info-card">
+              <h3><T id="offplan.shortlistTitle" /></h3>
+              <p><T id="offplan.shortlistBody" /></p>
+              <Link className="button button-link" href="/contact">
+                <T id="offplan.briefButton" />
+              </Link>
+            </article>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}

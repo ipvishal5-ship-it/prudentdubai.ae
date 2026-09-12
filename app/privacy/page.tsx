@@ -1,3 +1,39 @@
-import type { Metadata } from 'next';import Link from 'next/link';
-export const metadata:Metadata={title:'Privacy Policy'};
-export default function PrivacyPage(){return <section className="section"><div className="container article-layout"><span className="eyebrow">Legal information</span><h1 className="display">Privacy policy</h1><p className="lede">Effective 30 August 2026</p><h2>Information we collect</h2><p>When you submit an enquiry, we collect the contact details and property requirements you choose to provide. Server and hosting providers may also process essential technical logs used to operate and protect the website.</p><h2>How we use it</h2><p>We use enquiry information to respond, understand your requirements, prevent abuse and maintain necessary business records. We do not ask for identity documents, payment-card data or bank statements through the public form.</p><h2>Sharing and retention</h2><p>Information may be processed by service providers used for hosting, communications or lead management, subject to their contractual and security controls. We retain it only as long as reasonably required for the enquiry, legal obligations and legitimate business records.</p><h2>Your choices</h2><p>You may ask us to correct or delete enquiry information, subject to records we must retain. Contact <a href="mailto:info@prudentdubai.com">info@prudentdubai.com</a>.</p><h2>International enquiries</h2><p>Our operations and service providers may process information in the UAE and other locations. Do not submit sensitive documents until you have confirmed an appropriate secure channel with the team.</p><Link className="button button-link" href="/contact">Contact us →</Link></div></section>}
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { T } from '@/components/LanguageContext';
+import { pageMetadata } from '@/lib/metadata';
+
+export const metadata: Metadata = pageMetadata('Privacy Policy', 'How Prudent Dubai collects, uses, protects and retains information submitted through this website.', '/privacy');
+
+export default function PrivacyPage() {
+  return (
+    <section className="section">
+      <div className="container article-layout">
+        <span className="eyebrow"><T id="privacy.eyebrow" /></span>
+        <h1 className="display"><T id="privacy.title" /></h1>
+        <p className="lede"><T id="privacy.effective" /></p>
+
+        <h2><T id="privacy.sec1Title" /></h2>
+        <p><T id="privacy.sec1Text" /></p>
+
+        <h2><T id="privacy.sec2Title" /></h2>
+        <p><T id="privacy.sec2Text" /></p>
+
+        <h2><T id="privacy.sec3Title" /></h2>
+        <p><T id="privacy.sec3Text" /></p>
+
+        <h2><T id="privacy.sec4Title" /></h2>
+        <p>
+          <T id="privacy.sec4Text" />
+        </p>
+
+        <h2><T id="privacy.sec5Title" /></h2>
+        <p><T id="privacy.sec5Text" /></p>
+
+        <Link className="button button-link" href="/contact">
+          <T id="privacy.contactUs" />
+        </Link>
+      </div>
+    </section>
+  );
+}

@@ -3,10 +3,35 @@ import { getAllArticles } from '@/lib/content';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = 'https://prudentdubai.ae';
-  const staticRoutes = ['', '/communities', '/off-plan', '/insights', '/about', '/contact', '/calculator', '/privacy', '/terms'];
+  const now = new Date();
+
+  const routeConfig: { path: string; priority: number; changeFrequency: 'daily' | 'weekly' | 'monthly' | 'yearly' }[] = [
+    { path: '', priority: 1.0, changeFrequency: 'weekly' },
+    { path: '/communities', priority: 0.9, changeFrequency: 'weekly' },
+    { path: '/off-plan', priority: 0.8, changeFrequency: 'weekly' },
+    { path: '/calculator', priority: 0.8, changeFrequency: 'monthly' },
+    { path: '/insights', priority: 0.8, changeFrequency: 'daily' },
+    { path: '/about', priority: 0.8, changeFrequency: 'monthly' },
+    { path: '/contact', priority: 0.7, changeFrequency: 'monthly' },
+    { path: '/privacy', priority: 0.3, changeFrequency: 'yearly' },
+    { path: '/terms', priority: 0.3, changeFrequency: 'yearly' },
+  ];
+
   const articles = await getAllArticles();
+
   return [
-    ...staticRoutes.map((route) => ({ url: `${base}${route}`, changeFrequency: 'weekly' as const, priority: route === '' ? 1 : 0.7 })),
-    ...articles.map((item) => ({ url: `${base}/insights/${item.slug}`, lastModified: item.updatedAt, changeFrequency: 'monthly' as const, priority: 0.6 })),
+    ...routeConfig.map((item) => ({
+      url: `${base}${item.path}`,
+      lastModified: now,
+      changeFrequency: item.changeFrequency,
+      priority: item.priority,
+    })),
+    ...articles.map((item) => ({
+      url: `${base}/insights/${item.slug}`,
+      lastModified: new Date(item.updatedAt || now),
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
+    })),
   ];
 }
+
