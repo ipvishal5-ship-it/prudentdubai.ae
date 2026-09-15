@@ -5,14 +5,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = 'https://prudentdubai.ae';
   const now = new Date();
 
-  const routeConfig: { path: string; priority: number; changeFrequency: 'daily' | 'weekly' | 'monthly' | 'yearly' }[] = [
+  const routeConfig: {
+    path: string;
+    priority: number;
+    changeFrequency: 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never';
+  }[] = [
     { path: '', priority: 1.0, changeFrequency: 'weekly' },
-    { path: '/communities', priority: 0.9, changeFrequency: 'weekly' },
-    { path: '/off-plan', priority: 0.8, changeFrequency: 'weekly' },
-    { path: '/calculator', priority: 0.8, changeFrequency: 'monthly' },
-    { path: '/insights', priority: 0.8, changeFrequency: 'daily' },
+    { path: '/communities', priority: 0.95, changeFrequency: 'weekly' },
+    { path: '/calculator', priority: 0.95, changeFrequency: 'weekly' },
+    { path: '/off-plan', priority: 0.9, changeFrequency: 'weekly' },
+    { path: '/insights', priority: 0.85, changeFrequency: 'daily' },
     { path: '/about', priority: 0.8, changeFrequency: 'monthly' },
-    { path: '/contact', priority: 0.7, changeFrequency: 'monthly' },
+    { path: '/contact', priority: 0.8, changeFrequency: 'monthly' },
     { path: '/privacy', priority: 0.3, changeFrequency: 'yearly' },
     { path: '/terms', priority: 0.3, changeFrequency: 'yearly' },
   ];
@@ -30,8 +34,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${base}/insights/${item.slug}`,
       lastModified: new Date(item.updatedAt || now),
       changeFrequency: 'monthly' as const,
-      priority: 0.7,
+      priority: 0.75,
     })),
   ];
 }
-
