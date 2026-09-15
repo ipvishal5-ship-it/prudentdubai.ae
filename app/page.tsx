@@ -3,7 +3,8 @@ import Link from 'next/link';
 import { T } from '@/components/LanguageContext';
 import { getAllArticles } from '@/lib/content';
 import DestinationStrip from '@/components/DestinationStrip';
-import { PROPERTY_TYPES } from '@/lib/areas';
+import PropertyTypeTiles from '@/components/PropertyTypeTiles';
+import ArticleCard from '@/components/ArticleCard';
 
 export default async function HomePage() {
   const articles = await getAllArticles();
@@ -21,7 +22,7 @@ export default async function HomePage() {
           <p className="fine-print" style={{ marginTop: 18 }}><T id="home.disclaimer" /></p>
         </div>
         <div className="hero-visual">
-          <img src="/demo/dubai-tower.jpg" alt="Dubai towers shown for location context" draggable={false} />
+          <img src="/areas/downtown-dubai.jpg" alt="Downtown Dubai skyline and Burj Khalifa shown for location context" draggable={false} />
         </div>
       </div>
     </section>
@@ -52,16 +53,7 @@ export default async function HomePage() {
             <p className="lede"><T id="home.helpBody" /></p>
           </div>
         </div>
-        <div className="type-mosaic type-mosaic-tight">
-          {PROPERTY_TYPES.filter((item) => item.filter).map((item) => (
-            <Link className="type-tile" href={`/communities?type=${encodeURIComponent(item.filter)}#explore`} key={item.title}>
-              <img src={item.image} alt="" />
-              <span>
-                <strong>{item.title}</strong>
-              </span>
-            </Link>
-          ))}
-        </div>
+        <PropertyTypeTiles />
       </div>
     </section>
 
@@ -102,29 +94,7 @@ export default async function HomePage() {
         </div>
         <div className="card-grid">
           {articles.slice(0, 3).map((item) => (
-            <article className="article-card insight-card" key={item.id}>
-              {item.imageUrl && (
-                <Link href={`/insights/${item.slug}`} className="insight-card-image-wrap">
-                  <img src={item.imageUrl} alt={item.title} className="insight-card-image" loading="lazy" />
-                </Link>
-              )}
-              <div className="insight-card-body">
-                <div className="article-meta-row">
-                  <span className="category-pill">{item.category}</span>
-                  {item.readTime && <span className="read-time">{item.readTime}</span>}
-                </div>
-                <h3>
-                  <Link href={`/insights/${item.slug}`}>{item.title}</Link>
-                </h3>
-                <p>{item.excerpt}</p>
-                <div className="article-card-footer">
-                  <span className="fine-print">Updated {item.updatedAt}</span>
-                  <Link className="button button-link" href={`/insights/${item.slug}`}>
-                    <T id="home.read" /> <span className="directional">→</span>
-                  </Link>
-                </div>
-              </div>
-            </article>
+            <ArticleCard article={item} key={item.id} />
           ))}
         </div>
       </div>

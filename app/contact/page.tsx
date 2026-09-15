@@ -50,7 +50,7 @@ export default async function ContactPage() {
             </div>
           </aside>
 
-          <Suspense fallback={<div className="lead-form"><p>Loading form…</p></div>}>
+          <Suspense fallback={<div className="lead-form"><p><T id="contact.loadingForm" /></p></div>}>
             <LeadForm whatsapp={site.whatsapp} />
           </Suspense>
         </div>

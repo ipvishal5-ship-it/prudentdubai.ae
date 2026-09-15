@@ -16,6 +16,9 @@ export default async function Footer() {
             <p style={{ marginTop: 20 }}>
               <T id="footer.summary" />
             </p>
+            <p className="fine-print" style={{ marginTop: 14, color: 'var(--muted)', fontSize: '0.82rem', lineHeight: 1.5 }}>
+              <T id="footer.compliance" />
+            </p>
           </div>
           <nav className="footer-links" aria-label="Explore">
             <h3><T id="footer.explore" /></h3>

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import FloatingWhatsApp from '@/components/FloatingWhatsApp';
 import { CurrencyProvider } from '@/components/CurrencyContext';
 import { LanguageProvider } from '@/components/LanguageContext';
 import MotionProvider from '@/components/MotionProvider';
@@ -14,6 +15,14 @@ export const metadata: Metadata = {
   icons: { icon: '/brand/smalllogo.png', apple: '/brand/smalllogo.png' },
   openGraph: { title: 'Prudent Dubai Properties', description: 'Your Dubai property partner for area selection, home categories, and direct buying support.', url: 'https://prudentdubai.ae', siteName: 'Prudent Dubai Properties', type: 'website', locale: 'en_AE' },
   twitter: { card: 'summary_large_image' },
+  alternates: {
+    canonical: 'https://prudentdubai.ae',
+    languages: {
+      'en-AE': 'https://prudentdubai.ae',
+      'ar-AE': 'https://prudentdubai.ae',
+      'x-default': 'https://prudentdubai.ae',
+    },
+  },
   robots: { index: true, follow: true },
 };
 
@@ -110,6 +119,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <Navbar />
             <main id="main-content">{children}</main>
             <Footer />
+            <FloatingWhatsApp />
           </CurrencyProvider>
         </LanguageProvider>
       </body>

@@ -6,7 +6,7 @@ import { pageMetadata } from '@/lib/metadata';
 
 export const metadata: Metadata = pageMetadata(
   'About PrudentDubai | Dubai Real Estate & Business Advisory',
-  'Strategic Dubai real estate advisory, off-plan analysis, corporate tax structuring, and UAE Golden Visa solutions by PrudentDubai.',
+  'Strategic Dubai real estate advisory, off-plan analysis, prime property acquisition, and portfolio structuring by PrudentDubai.',
   '/about'
 );
 
@@ -110,14 +110,14 @@ export default async function AboutPage() {
         <div className="container">
           <div className="about-ecosystem-banner">
             <div className="ecosystem-copy">
-              <span className="eyebrow" style={{ color: 'var(--gold-deep)', letterSpacing: '0.08em', fontWeight: 800 }}>GROUP SYNERGY</span>
+              <span className="eyebrow" style={{ color: 'var(--gold-deep)', letterSpacing: '0.08em', fontWeight: 800 }}><T id="about.groupSynergy" /></span>
               <h2 style={{ marginTop: 8, color: '#ffffff' }}><T id="about.ecosystemTitle" /></h2>
               <p style={{ marginTop: 12, color: 'rgba(255, 255, 255, 0.85)', lineHeight: 1.6 }}><T id="about.ecosystemBody" /></p>
             </div>
             <div className="ecosystem-action">
               <a
                 className="button button-primary"
-                href={site.sisterWebsite}
+                href={`${site.sisterWebsite}?utm_source=prudentdubai.ae&utm_medium=referral`}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ whiteSpace: 'nowrap', padding: '14px 28px' }}
@@ -167,23 +167,26 @@ export default async function AboutPage() {
               <p className="lede"><T id="about.officesLede" /></p>
             </div>
             <div className="hq-card">
-              <div className="hq-badge">DUBAI OFFICE</div>
+              <div className="hq-badge"><T id="about.dubaiOfficeBadge" /></div>
               <h3 className="hq-office-title"><T id="about.dubai" /></h3>
               <p className="hq-address">{site.dubaiOffice}</p>
               <div className="hq-contacts">
                 <a href={`mailto:${site.email}`} className="hq-contact-pill">
-                  <span className="hq-contact-label">Email:</span> {site.email}
+                  <span className="hq-contact-label"><T id="about.emailLabel" /></span> {site.email}
                 </a>
                 <span className="hq-contact-divider" aria-hidden="true">|</span>
                 <a href={`tel:${site.phone.replace(/\s/g, '')}`} className="hq-contact-pill">
-                  <span className="hq-contact-label">Phone:</span> {site.phone}
+                  <span className="hq-contact-label"><T id="about.phoneLabel" /></span> {site.phone}
                 </a>
+              </div>
+              <div className="hq-compliance-note" style={{ marginTop: 20, paddingTop: 16, borderTop: '1px solid var(--line)', fontSize: '0.88rem', color: '#64748b', maxWidth: 560 }}>
+                <strong style={{ color: 'var(--ink)' }}><T id="about.complianceBadge" />:</strong> <T id="about.complianceNote" />
               </div>
             </div>
             <div className="hq-actions">
               <a
                 className="button button-secondary"
-                href={site.sisterWebsite}
+                href={`${site.sisterWebsite}?utm_source=prudentdubai.ae&utm_medium=referral`}
                 target="_blank"
                 rel="noopener noreferrer"
               >

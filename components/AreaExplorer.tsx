@@ -4,7 +4,16 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { KeyboardEvent, useCallback, useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { DUBAI_AREA_GROUPS, GROUP_VISUALS, TYPE_FILTERS, VISUAL_AREAS } from '@/lib/areas';
+import {
+  DUBAI_AREA_GROUPS,
+  GROUP_VISUALS,
+  GROUP_TRANSLATIONS,
+  TYPE_FILTERS,
+  VISUAL_AREAS,
+  DUBAI_AREA_ARABIC,
+  getLocalizedArea,
+  localizeType,
+} from '@/lib/areas';
 import { useLanguage } from './LanguageContext';
 
 function mapEmbedUrl(name: string) {
@@ -24,13 +33,13 @@ function getInitialType(searchParams: URLSearchParams): string {
 }
 
 const HERO_PHOTOS = [
-  { id: 'tower', src: '/demo/dubai-tower.jpg', alt: 'Dubai Towers and Skyline' },
-  { id: 'villa', src: '/demo/pool-villa.jpg', alt: 'Waterfront Villa with Private Pool' },
-  { id: 'apartment', src: '/demo/city-apartment.jpg', alt: 'Prime Urban City Residences' },
+  { id: 'tower', src: '/areas/downtown-dubai.jpg', alt: 'Downtown Dubai & Burj Khalifa Skyline', altAr: 'وسط مدينة دبي وأفق برج خليفة' },
+  { id: 'villa', src: '/areas/palm-jumeirah.jpg', alt: 'Palm Jumeirah Waterfront Villa with Private Beach', altAr: 'فيلا نخلة جميرا الفاخرة على الواجهة البحرية' },
+  { id: 'apartment', src: '/areas/dubai-marina.jpg', alt: 'Dubai Marina Waterfront Promenade & Yachts', altAr: 'دبي مارينا مع ممشى اليخوت والأبراج الفاخرة' },
 ];
 
 export default function AreaExplorer() {
-  const { t } = useLanguage();
+  const { locale, t } = useLanguage();
   const params = useSearchParams();
   const [query, setQuery] = useState('');
   const [group, setGroup] = useState('all');
@@ -42,7 +51,11 @@ export default function AreaExplorer() {
 
   const filtered = useMemo(() => {
     return VISUAL_AREAS.filter((area) => {
-      const matchesQuery = !query || area.name.toLowerCase().includes(query.toLowerCase());
+      const arName = DUBAI_AREA_ARABIC[area.name]?.nameAr || '';
+      const matchesQuery =
+        !query ||
+        area.name.toLowerCase().includes(query.toLowerCase()) ||
+        arName.includes(query);
       const matchesGroup = group === 'all' || area.group === group;
       const matchesType = type === 'all' || area.types.includes(type);
       return matchesQuery && matchesGroup && matchesType;
@@ -52,8 +65,18 @@ export default function AreaExplorer() {
   // Derive active area — if current activeName is filtered out, fall back to first result
   const active = useMemo(
     () => filtered.find((area) => area.name === activeName) ?? filtered[0] ?? VISUAL_AREAS[0],
-    [filtered, activeName],
+    [filtered, activeName]
   );
+
+  const localizedActive = useMemo(() => getLocalizedArea(active, locale), [active, locale]);
+  const activeTypesLocalized = useMemo(
+    () => active.types.map((tp) => localizeType(tp, locale)).join(' · '),
+    [active.types, locale]
+  );
+  const activeGroupShort =
+    locale === 'ar'
+      ? GROUP_TRANSLATIONS[active.group]?.shortAr ?? GROUP_VISUALS[active.group].short
+      : GROUP_VISUALS[active.group].short;
 
   const mapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${active.name}, Dubai`)}`;
   const mapSrc = mapEmbedUrl(active.name);
@@ -70,8 +93,14 @@ export default function AreaExplorer() {
   }
 
   function onListKey(event: KeyboardEvent<HTMLDivElement>) {
-    if (event.key === 'ArrowDown') { event.preventDefault(); move(1); }
-    if (event.key === 'ArrowUp') { event.preventDefault(); move(-1); }
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      move(1);
+    }
+    if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      move(-1);
+    }
   }
 
   const hasActiveFilters = Boolean(query || group !== 'all' || type !== 'all');
@@ -105,6 +134,7 @@ export default function AreaExplorer() {
           <div className="area-hero-trio" role="region" aria-label="Dubai visual portfolio">
             {HERO_PHOTOS.map((photo, idx) => {
               const isActive = activePhoto === idx;
+              const photoAlt = locale === 'ar' ? photo.altAr : photo.alt;
               return (
                 <div
                   key={photo.id}
@@ -114,7 +144,7 @@ export default function AreaExplorer() {
                   role="button"
                   tabIndex={0}
                   aria-pressed={isActive}
-                  aria-label={photo.alt}
+                  aria-label={photoAlt}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                       e.preventDefault();
@@ -124,7 +154,7 @@ export default function AreaExplorer() {
                 >
                   <Image
                     src={photo.src}
-                    alt={photo.alt}
+                    alt={photoAlt}
                     fill
                     className="area-hero-slat-img"
                     sizes="(max-width: 1000px) 48vw, 25vw"
@@ -186,16 +216,22 @@ export default function AreaExplorer() {
               >
                 {t('areas.allDubai')}
               </button>
-              {DUBAI_AREA_GROUPS.map((item) => (
-                <button
-                  key={item.title}
-                  className={`filter-pill ${group === item.title ? 'active' : ''}`}
-                  type="button"
-                  onClick={() => setGroup(item.title)}
-                >
-                  {GROUP_VISUALS[item.title].short}
-                </button>
-              ))}
+              {DUBAI_AREA_GROUPS.map((item) => {
+                const shortLabel =
+                  locale === 'ar'
+                    ? GROUP_TRANSLATIONS[item.title]?.shortAr ?? GROUP_VISUALS[item.title].short
+                    : GROUP_VISUALS[item.title].short;
+                return (
+                  <button
+                    key={item.title}
+                    className={`filter-pill ${group === item.title ? 'active' : ''}`}
+                    type="button"
+                    onClick={() => setGroup(item.title)}
+                  >
+                    {shortLabel}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
@@ -219,7 +255,7 @@ export default function AreaExplorer() {
                   type="button"
                   onClick={() => setType(item)}
                 >
-                  {item}
+                  {localizeType(item, locale)}
                 </button>
               ))}
             </div>
@@ -231,7 +267,9 @@ export default function AreaExplorer() {
         <div className="empty-state">
           <h2>{t('areas.noMatch')}</h2>
           <p>{t('areas.noMatchBody')}</p>
-          <button className="button button-primary" type="button" onClick={() => { setQuery(''); setGroup('all'); setType('all'); }}>{t('areas.reset')}</button>
+          <button className="button button-primary" type="button" onClick={resetFilters}>
+            {t('areas.reset')}
+          </button>
         </div>
       ) : (
         <div className="studio-board" id="area-board">
@@ -243,41 +281,66 @@ export default function AreaExplorer() {
             aria-expanded={mobileListOpen}
           >
             <span>
-              <strong>{active.name}</strong>
-              <em>{active.types.join(' · ')}</em>
+              <strong>{localizedActive.name}</strong>
+              <em>{activeTypesLocalized}</em>
             </span>
             <span className="picker-chevron">{mobileListOpen ? '▲' : '▼'}</span>
           </button>
 
           {/* Desktop sidebar / Mobile dropdown */}
-          <div className={`studio-list${mobileListOpen ? ' mobile-open' : ''}`} role="listbox" aria-label={t('areas.mapTitle')} tabIndex={0} onKeyDown={onListKey}>
-            <p className="studio-count">{filtered.length} {t('areas.count')}</p>
-            {filtered.map((area) => (
-              <button
-                key={area.name}
-                className={area.name === active.name ? 'active' : ''}
-                type="button"
-                role="option"
-                aria-selected={area.name === active.name}
-                onClick={() => handleSelectArea(area.name)}
-              >
-                <strong>{area.name}</strong>
-                <span>{area.types.join(' · ')}</span>
-              </button>
-            ))}
+          <div
+            className={`studio-list${mobileListOpen ? ' mobile-open' : ''}`}
+            role="listbox"
+            aria-label={t('areas.mapTitle')}
+            tabIndex={0}
+            onKeyDown={onListKey}
+          >
+            <p className="studio-count">
+              {filtered.length} {t('areas.count')}
+            </p>
+            {filtered.map((area) => {
+              const displayName =
+                locale === 'ar' ? DUBAI_AREA_ARABIC[area.name]?.nameAr ?? area.name : area.name;
+              const displayTypes = area.types.map((tp) => localizeType(tp, locale)).join(' · ');
+              return (
+                <button
+                  key={area.name}
+                  className={area.name === active.name ? 'active' : ''}
+                  type="button"
+                  role="option"
+                  aria-selected={area.name === active.name}
+                  onClick={() => handleSelectArea(area.name)}
+                >
+                  <strong>{displayName}</strong>
+                  <span>{displayTypes}</span>
+                </button>
+              );
+            })}
           </div>
 
           <div className="studio-stage">
             <article className="studio-feature">
-              <Image key={active.image + active.name} src={active.image} alt="" width={1200} height={760} sizes="(max-width: 1000px) calc(100vw - 20px), 66vw" />
+              <Image
+                key={active.image + active.name}
+                src={active.image}
+                alt=""
+                width={1200}
+                height={760}
+                sizes="(max-width: 1000px) calc(100vw - 20px), 66vw"
+              />
               <div className="studio-feature-copy">
-                <p className="eyebrow">{GROUP_VISUALS[active.group].short}</p>
-                <h2>{active.name}</h2>
-                <p>{active.summary}</p>
-                <p className="studio-meta">{active.types.join(' · ')}</p>
+                <div className="drawer-pill-handle" aria-hidden="true" />
+                <p className="eyebrow">{activeGroupShort}</p>
+                <h2>{localizedActive.name}</h2>
+                <p>{localizedActive.summary}</p>
+                <p className="studio-meta">{activeTypesLocalized}</p>
                 <div className="button-row">
-                  <Link className="button button-primary" href={contactHref}>{t('areas.talkArea')}</Link>
-                  <Link className="button button-secondary" href="/calculator">{t('areas.calculator')}</Link>
+                  <Link className="button button-primary" href={contactHref}>
+                    {t('areas.talkArea')}
+                  </Link>
+                  <Link className="button button-secondary" href="/calculator">
+                    {t('areas.calculator')}
+                  </Link>
                 </div>
               </div>
             </article>
@@ -289,7 +352,9 @@ export default function AreaExplorer() {
               onClick={() => setMobileMapOpen((v) => !v)}
               aria-expanded={mobileMapOpen}
             >
-              <span>{t('areas.mapLabel')}: {active.name}</span>
+              <span>
+                {t('areas.mapLabel')}: {localizedActive.name}
+              </span>
               <span>{mobileMapOpen ? '▲' : '▼'}</span>
             </button>
 
@@ -297,9 +362,11 @@ export default function AreaExplorer() {
               <div className="studio-map-head">
                 <div>
                   <p className="eyebrow">{t('areas.mapLabel')}</p>
-                  <h3>{active.name}</h3>
+                  <h3>{localizedActive.name}</h3>
                 </div>
-                <a className="button button-secondary" href={mapsLink} target="_blank" rel="noopener noreferrer">{t('areas.openMaps')}</a>
+                <a className="button button-secondary" href={mapsLink} target="_blank" rel="noopener noreferrer">
+                  {t('areas.openMaps')}
+                </a>
               </div>
               <div className="studio-map-frame">
                 <iframe

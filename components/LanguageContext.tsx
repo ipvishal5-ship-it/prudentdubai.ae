@@ -5,7 +5,7 @@ import { Locale, MessageKey, messages } from '@/lib/i18n';
 
 type LanguageValue = { locale: Locale; setLocale: (locale: Locale) => void; t: (key: MessageKey) => string };
 const LanguageContext = createContext<LanguageValue>({ locale: 'en', setLocale: () => {}, t: (key) => messages.en[key] });
-export const arabicEnabled = process.env.NEXT_PUBLIC_ENABLE_ARABIC === 'true';
+export const arabicEnabled = true;
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>('en');

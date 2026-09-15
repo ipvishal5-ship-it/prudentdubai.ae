@@ -12,7 +12,7 @@ interface InsightsExplorerProps {
 }
 
 export default function InsightsExplorer({ articles }: InsightsExplorerProps) {
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
@@ -25,7 +25,16 @@ export default function InsightsExplorer({ articles }: InsightsExplorerProps) {
     return ['All', ...Array.from(cats)];
   }, [articles]);
 
-  // Filter articles by category and search query
+  const getCategoryLabel = (cat: string) => {
+    if (cat === 'All') return t('insights.allCategories');
+    if (locale === 'ar') {
+      const art = articles.find((a) => a.category === cat);
+      if (art?.categoryAr) return art.categoryAr;
+    }
+    return cat;
+  };
+
+  // Filter articles by category and search query (matching both English and Arabic)
   const filteredArticles = useMemo(() => {
     return articles.filter((article) => {
       const matchesCategory =
@@ -35,13 +44,23 @@ export default function InsightsExplorer({ articles }: InsightsExplorerProps) {
         !query ||
         article.title.toLowerCase().includes(query) ||
         article.excerpt.toLowerCase().includes(query) ||
-        article.category.toLowerCase().includes(query);
+        article.category.toLowerCase().includes(query) ||
+        (article.titleAr && article.titleAr.includes(query)) ||
+        (article.excerptAr && article.excerptAr.includes(query)) ||
+        (article.categoryAr && article.categoryAr.includes(query));
       return matchesCategory && matchesSearch;
     });
   }, [articles, selectedCategory, searchQuery]);
 
   const featured = selectedCategory === 'All' && !searchQuery.trim() ? filteredArticles[0] : null;
   const gridArticles = featured ? filteredArticles.slice(1) : filteredArticles;
+
+  const featuredTitle = (locale === 'ar' && featured?.titleAr) ? featured.titleAr : featured?.title;
+  const featuredExcerpt = (locale === 'ar' && featured?.excerptAr) ? featured.excerptAr : featured?.excerpt;
+  const featuredCategory = (locale === 'ar' && featured?.categoryAr) ? featured.categoryAr : featured?.category;
+  const featuredReadTime = (locale === 'ar' && featured?.readTimeAr) ? featured.readTimeAr : featured?.readTime;
+  const featuredAuthor = (locale === 'ar' && featured?.authorAr) ? featured.authorAr : featured?.author;
+  const featuredUpdated = locale === 'ar' && featured ? `تحديث ${featured.updatedAt}` : `Updated ${featured?.updatedAt}`;
 
   return (
     <>
@@ -60,7 +79,7 @@ export default function InsightsExplorer({ articles }: InsightsExplorerProps) {
                   role="tab"
                   aria-selected={selectedCategory === cat}
                 >
-                  {cat === 'All' ? t('insights.allCategories') : cat}
+                  {getCategoryLabel(cat)}
                 </button>
               ))}
             </div>
@@ -90,7 +109,7 @@ export default function InsightsExplorer({ articles }: InsightsExplorerProps) {
                   <Link href={`/insights/${featured.slug}`} className="featured-image-link">
                     <Image
                       src={featured.imageUrl}
-                      alt={featured.title}
+                      alt={featuredTitle || ''}
                       width={680}
                       height={420}
                       className="featured-image"
@@ -100,17 +119,17 @@ export default function InsightsExplorer({ articles }: InsightsExplorerProps) {
                 )}
                 <div className="featured-content">
                   <div className="article-meta-row">
-                    <span className="category-pill">{featured.category}</span>
-                    {featured.readTime && <span className="read-time">{featured.readTime}</span>}
+                    <span className="category-pill">{featuredCategory}</span>
+                    {featuredReadTime && <span className="read-time">{featuredReadTime}</span>}
                   </div>
                   <h2>
-                    <Link href={`/insights/${featured.slug}`}>{featured.title}</Link>
+                    <Link href={`/insights/${featured.slug}`}>{featuredTitle}</Link>
                   </h2>
-                  <p>{featured.excerpt}</p>
+                  <p>{featuredExcerpt}</p>
                   <div className="article-card-footer">
                     <div className="author-date">
-                      {featured.author && <strong>{featured.author}</strong>}
-                      <span className="fine-print">Updated {featured.updatedAt}</span>
+                      {featuredAuthor && <strong>{featuredAuthor}</strong>}
+                      <span className="fine-print">{featuredUpdated}</span>
                     </div>
                     <Link className="button button-primary" href={`/insights/${featured.slug}`}>
                       {t('insights.readFull')}
@@ -126,7 +145,9 @@ export default function InsightsExplorer({ articles }: InsightsExplorerProps) {
             <h3>
               {selectedCategory === 'All'
                 ? t('insights.latest')
-                : `${selectedCategory} ${t('insights.guides')}`}{' '}
+                : (locale === 'ar'
+                    ? `أدلة ${getCategoryLabel(selectedCategory)}`
+                    : `${selectedCategory} ${t('insights.guides')}`)}{' '}
               <span className="count-tag">({filteredArticles.length})</span>
             </h3>
             {(selectedCategory !== 'All' || searchQuery) && (

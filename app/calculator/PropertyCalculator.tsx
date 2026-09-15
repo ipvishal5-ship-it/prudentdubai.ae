@@ -14,7 +14,10 @@ import {
 import { useLanguage } from '@/components/LanguageContext';
 
 const money = new Intl.NumberFormat('en-AE', { maximumFractionDigits: 0 });
-const formatMoney = (value: number) => `AED ${money.format(Math.round(Number.isFinite(value) ? value : 0))}`;
+const formatMoney = (value: number, locale: string = 'en') => {
+  const formatted = money.format(Math.round(Number.isFinite(value) ? value : 0));
+  return locale === 'ar' ? `${formatted} د.إ` : `AED ${formatted}`;
+};
 const formatPercent = (value: number) => `${(Number.isFinite(value) ? value : 0).toFixed(2)}%`;
 const numeric = (value: string, minimum = 0) => Math.max(minimum, Number(value) || 0);
 
@@ -191,7 +194,7 @@ function ProfileFields({
 }
 
 function BuyingCosts() {
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
   const [price, setPrice] = useState(2_000_000);
   const [financed, setFinanced] = useState(true);
   const [profile, setProfile] = useState<BuyerProfile>('expat');
@@ -210,6 +213,7 @@ function BuyingCosts() {
     [price, dldBuyerShare, includeAgency, financed, loanAmount, bankFee, valuationFee, status]
   );
   const cashRequired = downPayment + result.total;
+  const currencySuffix = locale === 'ar' ? 'د.إ' : 'AED';
 
   return (
     <div className="pc-workspace">
@@ -221,7 +225,7 @@ function BuyingCosts() {
             <p>{t('calc.panelCostsLede')}</p>
           </div>
         </div>
-        <NumberField id="cost-price" label={t('calc.price')} value={price} onChange={setPrice} min={100_000} suffix="AED" />
+        <NumberField id="cost-price" label={t('calc.price')} value={price} onChange={setPrice} min={100_000} suffix={currencySuffix} />
         <Choice
           label={t('calc.paymentMethod')}
           value={financed ? 'mortgage' : 'cash'}
@@ -262,7 +266,7 @@ function BuyingCosts() {
               label={t('calc.bankFee')}
               value={bankFee}
               onChange={setBankFee}
-              suffix="AED"
+              suffix={currencySuffix}
               hint={t('calc.bankFeeHint')}
             />
             <NumberField
@@ -270,7 +274,7 @@ function BuyingCosts() {
               label={t('calc.valuationFee')}
               value={valuationFee}
               onChange={setValuationFee}
-              suffix="AED"
+              suffix={currencySuffix}
               hint={t('calc.valuationFeeHint')}
             />
           </div>
@@ -279,29 +283,42 @@ function BuyingCosts() {
       <div className="pc-output-panel" aria-live="polite">
         <Result
           label={t('calc.estimatedCash')}
-          value={formatMoney(cashRequired)}
+          value={formatMoney(cashRequired, locale)}
           detail={financed ? `${downPercent}% ${t('calc.cashDetailFinanced')}` : t('calc.cashDetailCash')}
           primary
         />
         <div className="pc-summary-grid">
-          <Result label={t('calc.buyingCostsTotal')} value={formatMoney(result.total)} />
-          <Result label={financed ? t('calc.downPayment') : t('calc.price')} value={formatMoney(downPayment)} />
+          <Result label={t('calc.buyingCostsTotal')} value={formatMoney(result.total, locale)} />
+          <Result label={financed ? t('calc.downPayment') : t('calc.price')} value={formatMoney(downPayment, locale)} />
         </div>
         <div className="pc-breakdown">
           <h3>{t('calc.costBreakdown')}</h3>
-          <Row label={`${t('calc.dldSaleReg')} (${dldBuyerShare}%)`} value={formatMoney(result.dldFee)} />
-          <Row label={t('calc.saleTrustee')} value={formatMoney(result.saleTrusteeFee)} />
-          <Row label={t('calc.titleMapFees')} value={formatMoney(result.titleAndMapFees)} />
-          {result.agencyFee > 0 && <Row label={t('calc.agencyFeeRow')} value={formatMoney(result.agencyFee)} />}
+          <Row label={`${t('calc.dldSaleReg')} (${dldBuyerShare}%)`} value={formatMoney(result.dldFee, locale)} />
+          <Row label={t('calc.saleTrustee')} value={formatMoney(result.saleTrusteeFee, locale)} />
+          <Row label={t('calc.titleMapFees')} value={formatMoney(result.titleAndMapFees, locale)} />
+          {result.agencyFee > 0 && <Row label={t('calc.agencyFeeRow')} value={formatMoney(result.agencyFee, locale)} />}
           {result.mortgageRegistrationFee > 0 && (
-            <Row label={t('calc.mortgageRegRow')} value={formatMoney(result.mortgageRegistrationFee)} />
+            <Row label={t('calc.mortgageRegRow')} value={formatMoney(result.mortgageRegistrationFee, locale)} />
           )}
           {result.mortgageTrusteeFee > 0 && (
-            <Row label={t('calc.mortgageTrusteeRow')} value={formatMoney(result.mortgageTrusteeFee)} />
+            <Row label={t('calc.mortgageTrusteeRow')} value={formatMoney(result.mortgageTrusteeFee, locale)} />
           )}
-          {result.lenderFees > 0 && <Row label={t('calc.lenderFeesRow')} value={formatMoney(result.lenderFees)} />}
-          <Row label={t('calc.totalBuyingCostsRow')} value={formatMoney(result.total)} total />
+          {result.lenderFees > 0 && <Row label={t('calc.lenderFeesRow')} value={formatMoney(result.lenderFees, locale)} />}
+          <Row label={t('calc.totalBuyingCostsRow')} value={formatMoney(result.total, locale)} total />
         </div>
+        <a
+          className="button button-secondary pc-whatsapp-btn"
+          href={`https://wa.me/971555541538?text=${encodeURIComponent(
+            locale === 'ar'
+              ? `مرحباً، أود استشارة فريق برودنت بخصوص شراء عقار بقيمة ${formatMoney(price, 'ar')}، مع إجمالي تكاليف ورسوم تقدر بـ ${formatMoney(result.total, 'ar')}.`
+              : `Hello Prudent Dubai, I am inquiring about purchasing a property of ${formatMoney(price, 'en')}. The estimated total purchase cost with DLD fees is ${formatMoney(result.total, 'en')}. Please advise on options.`
+          )}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ width: '100%', marginTop: 20, marginBottom: 12, justifyContent: 'center', gap: 8, display: 'inline-flex' }}
+        >
+          <span>💬</span> {t('calc.shareWhatsapp')}
+        </a>
         <p className="pc-disclaimer">{t('calc.dldDisclaimer')}</p>
       </div>
     </div>
@@ -309,7 +326,7 @@ function BuyingCosts() {
 }
 
 function MortgageCalculator() {
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
   const [price, setPrice] = useState(2_000_000);
   const [profile, setProfile] = useState<BuyerProfile>('expat');
   const [purpose, setPurpose] = useState<PurchasePurpose>('first-home');
@@ -335,7 +352,7 @@ function MortgageCalculator() {
             <p>{t('calc.mortgageRepaymentLede')}</p>
           </div>
         </div>
-        <NumberField id="mortgage-price" label={t('calc.price')} value={price} onChange={setPrice} min={100_000} suffix="AED" />
+        <NumberField id="mortgage-price" label={t('calc.price')} value={price} onChange={setPrice} min={100_000} suffix={locale === 'ar' ? 'د.إ' : 'AED'} />
         <ProfileFields
           price={price}
           profile={profile}
@@ -391,15 +408,15 @@ function MortgageCalculator() {
       <div className="pc-output-panel" aria-live="polite">
         <Result
           label={t('calc.monthlyPayment')}
-          value={formatMoney(payment)}
-          detail={`at ${rate.toFixed(2)}% over ${years} ${t('calc.years')}`}
+          value={formatMoney(payment, locale)}
+          detail={locale === 'ar' ? `بفائدة ${rate.toFixed(2)}% على مدى ${years} ${t('calc.years')}` : `at ${rate.toFixed(2)}% over ${years} ${t('calc.years')}`}
           primary
         />
         <div className="pc-summary-grid">
-          <Result label={t('calc.downPayment')} value={formatMoney(downPayment)} detail={`${downPercent}%`} />
-          <Result label={t('calc.loanAmount')} value={formatMoney(principal)} detail={`${100 - downPercent}% LTV`} />
-          <Result label={t('calc.totalInterest')} value={formatMoney(totalRepayment - principal)} />
-          <Result label={t('calc.totalRepayment')} value={formatMoney(totalRepayment)} />
+          <Result label={t('calc.downPayment')} value={formatMoney(downPayment, locale)} detail={`${downPercent}%`} />
+          <Result label={t('calc.loanAmount')} value={formatMoney(principal, locale)} detail={locale === 'ar' ? `نسبة التمويل ${100 - downPercent}% (LTV)` : `${100 - downPercent}% LTV`} />
+          <Result label={t('calc.totalInterest')} value={formatMoney(totalRepayment - principal, locale)} />
+          <Result label={t('calc.totalRepayment')} value={formatMoney(totalRepayment, locale)} />
         </div>
         <div className="pc-rate-line">
           <span>
@@ -412,6 +429,19 @@ function MortgageCalculator() {
             {t('calc.modelledRate')} <strong>{rate.toFixed(2)}%</strong>
           </span>
         </div>
+        <a
+          className="button button-secondary pc-whatsapp-btn"
+          href={`https://wa.me/971555541538?text=${encodeURIComponent(
+            locale === 'ar'
+              ? `مرحباً، أود مناقشة تمويل عقار بقيمة ${formatMoney(price, 'ar')}، بدفعة أولى ${formatMoney(downPayment, 'ar')} (${downPercent}%)، وقسط شهري متوقع ${formatMoney(payment, 'ar')} على مدى ${years} سنوات.`
+              : `Hello Prudent Dubai, I calculated mortgage terms for a property of ${formatMoney(price, 'en')}, Down payment: ${formatMoney(downPayment, 'en')} (${downPercent}%), Estimated monthly payment: ${formatMoney(payment, 'en')} over ${years} years. Please advise on options.`
+          )}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ width: '100%', marginTop: 20, marginBottom: 12, justifyContent: 'center', gap: 8, display: 'inline-flex' }}
+        >
+          <span>💬</span> {t('calc.shareWhatsapp')}
+        </a>
         <p className="pc-disclaimer">{t('calc.mortgageDisclaimer')}</p>
       </div>
     </div>
@@ -419,7 +449,7 @@ function MortgageCalculator() {
 }
 
 function YieldCalculator() {
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
   const [price, setPrice] = useState(1_500_000);
   const [annualRent, setAnnualRent] = useState(90_000);
   const [serviceCharges, setServiceCharges] = useState(0);
@@ -430,6 +460,7 @@ function YieldCalculator() {
     () => rentalYield({ price, annualRent, serviceCharges, maintenance, vacancyPercent, managementPercent }),
     [price, annualRent, serviceCharges, maintenance, vacancyPercent, managementPercent]
   );
+  const currencySuffix = locale === 'ar' ? 'د.إ' : 'AED';
 
   return (
     <div className="pc-workspace">
@@ -441,20 +472,20 @@ function YieldCalculator() {
             <p>{t('calc.rentalYieldLede')}</p>
           </div>
         </div>
-        <NumberField id="yield-price" label={t('calc.price')} value={price} onChange={setPrice} min={1} suffix="AED" />
+        <NumberField id="yield-price" label={t('calc.price')} value={price} onChange={setPrice} min={1} suffix={currencySuffix} />
         <NumberField
           id="annual-rent"
           label={t('calc.annualRent')}
           value={annualRent}
           onChange={setAnnualRent}
-          suffix="AED"
+          suffix={currencySuffix}
         />
         <NumberField
           id="service-charge"
           label={t('calc.serviceCharges')}
           value={serviceCharges}
           onChange={setServiceCharges}
-          suffix="AED"
+          suffix={currencySuffix}
           hint={t('calc.serviceChargesHint')}
         />
         <NumberField
@@ -462,7 +493,7 @@ function YieldCalculator() {
           label={t('calc.maintenanceBudget')}
           value={maintenance}
           onChange={setMaintenance}
-          suffix="AED"
+          suffix={currencySuffix}
         />
         <div className="pc-inline-fields">
           <NumberField
@@ -494,17 +525,30 @@ function YieldCalculator() {
         />
         <div className="pc-summary-grid">
           <Result label={t('calc.grossYield')} value={formatPercent(result.grossYield)} />
-          <Result label={t('calc.netAnnualIncome')} value={formatMoney(result.netIncome)} />
+          <Result label={t('calc.netAnnualIncome')} value={formatMoney(result.netIncome, locale)} />
         </div>
         <div className="pc-breakdown">
           <h3>{t('calc.annualIncomeCosts')}</h3>
-          <Row label={t('calc.grossAnnualRent')} value={formatMoney(annualRent)} />
-          <Row label={`${t('calc.vacancyAllowance')} (${vacancyPercent}%)`} value={`− ${formatMoney(result.vacancyCost)}`} />
-          <Row label={t('calc.serviceCharges')} value={`− ${formatMoney(serviceCharges)}`} />
-          <Row label={`${t('calc.managementFee')} (${managementPercent}%)`} value={`− ${formatMoney(result.managementCost)}`} />
-          <Row label={t('calc.maintenanceBudget')} value={`− ${formatMoney(maintenance)}`} />
-          <Row label={t('calc.netAnnualIncome')} value={formatMoney(result.netIncome)} total />
+          <Row label={t('calc.grossAnnualRent')} value={formatMoney(annualRent, locale)} />
+          <Row label={`${t('calc.vacancyAllowance')} (${vacancyPercent}%)`} value={`− ${formatMoney(result.vacancyCost, locale)}`} />
+          <Row label={t('calc.serviceCharges')} value={`− ${formatMoney(serviceCharges, locale)}`} />
+          <Row label={`${t('calc.managementFee')} (${managementPercent}%)`} value={`− ${formatMoney(result.managementCost, locale)}`} />
+          <Row label={t('calc.maintenanceBudget')} value={`− ${formatMoney(maintenance, locale)}`} />
+          <Row label={t('calc.netAnnualIncome')} value={formatMoney(result.netIncome, locale)} total />
         </div>
+        <a
+          className="button button-secondary pc-whatsapp-btn"
+          href={`https://wa.me/971555541538?text=${encodeURIComponent(
+            locale === 'ar'
+              ? `مرحباً، أرغب في تقييم عائد إيجاري لعقار بقيمة ${formatMoney(price, 'ar')} مع إيجار سنوي متوقع ${formatMoney(annualRent, 'ar')} (عائد صافي ${result.netYield.toFixed(2)}%).`
+              : `Hello Prudent Dubai, I calculated rental yield for a property of ${formatMoney(price, 'en')} with annual rent of ${formatMoney(annualRent, 'en')} (estimated net yield: ${result.netYield.toFixed(2)}%). Please advise on high-yielding properties.`
+          )}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ width: '100%', marginTop: 20, marginBottom: 12, justifyContent: 'center', gap: 8, display: 'inline-flex' }}
+        >
+          <span>💬</span> {t('calc.shareWhatsapp')}
+        </a>
         <p className="pc-disclaimer">{t('calc.yieldDisclaimer')}</p>
       </div>
     </div>

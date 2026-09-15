@@ -20,30 +20,307 @@ export type VisualArea = DubaiArea & {
 };
 
 export const AREA_PHOTOS = {
-  tower: '/demo/dubai-tower.jpg',
-  apartment: '/demo/city-apartment.jpg',
-  villa: '/demo/villa-exterior.jpg',
-  pool: '/demo/pool-villa.jpg',
-  modern: '/demo/modern-villa.jpg',
-  interior: '/demo/villa-interior.jpg',
+  tower: '/areas/downtown-dubai.jpg',
+  apartment: '/areas/business-bay.jpg',
+  villa: '/areas/palm-jumeirah.jpg',
+  pool: '/areas/dubai-hills.jpg',
+  modern: '/areas/damac-lagoons.jpg',
+  interior: '/areas/arabian-ranches.jpg',
 } as const;
 
+export const AREA_SPECIFIC_PHOTOS: Record<string, string> = {
+  'Downtown Dubai': '/areas/downtown-dubai.jpg',
+  'Palm Jumeirah': '/areas/palm-jumeirah.jpg',
+  'Dubai Marina': '/areas/dubai-marina.jpg',
+  'Dubai Hills Estate': '/areas/dubai-hills.jpg',
+  'Dubai Creek Harbour': '/areas/creek-harbour.jpg',
+  'Business Bay': '/areas/business-bay.jpg',
+  'Bluewaters Island': '/areas/bluewaters-island.jpg',
+  'Arabian Ranches': '/areas/arabian-ranches.jpg',
+  'Emaar Beachfront': '/areas/emaar-beachfront.jpg',
+  'DIFC': '/areas/difc.jpg',
+  'Jumeirah Beach Residence (JBR)': '/areas/jbr.jpg',
+  'DAMAC Lagoons': '/areas/damac-lagoons.jpg',
+  'DAMAC Hills': '/areas/dubai-hills.jpg',
+  'DAMAC Hills 2': '/areas/damac-lagoons.jpg',
+  'DAMAC Islands': '/areas/damac-lagoons.jpg',
+  'Tilal Al Ghaf': '/areas/damac-lagoons.jpg',
+  'Dubai Islands': '/areas/emaar-beachfront.jpg',
+  'Emirates Hills': '/areas/dubai-hills.jpg',
+  'The Meadows': '/areas/arabian-ranches.jpg',
+  'The Lakes': '/areas/dubai-hills.jpg',
+  'The Springs': '/areas/arabian-ranches.jpg',
+  'The Valley': '/areas/damac-lagoons.jpg',
+  'Town Square': '/areas/damac-lagoons.jpg',
+  'City Walk': '/areas/difc.jpg',
+  'Jumeirah': '/areas/palm-jumeirah.jpg',
+  'Umm Suqeim': '/areas/jbr.jpg',
+  'Jumeirah Lake Towers (JLT)': '/areas/dubai-marina.jpg',
+  'Jumeirah Village Circle (JVC)': '/areas/damac-lagoons.jpg',
+  'Jumeirah Village Triangle (JVT)': '/areas/arabian-ranches.jpg',
+};
+
 export const PROPERTY_TYPES = [
-  { title: 'Apartments', filter: 'Apartment', image: AREA_PHOTOS.apartment, body: 'Studios to multi-bedroom homes in towers and mid-rise communities across Dubai.' },
-  { title: 'Villas', filter: 'Villa', image: AREA_PHOTOS.villa, body: 'Detached and semi-detached family homes in master-planned and established neighbourhoods.' },
-  { title: 'Townhouses', filter: 'Townhouse', image: AREA_PHOTOS.modern, body: 'Courtyard and linked homes suited to families who want more space with community amenities.' },
-  { title: 'Penthouses', filter: 'Penthouse', image: AREA_PHOTOS.tower, body: 'Larger-format residences for buyers who prioritise space, outlook and premium finishes.' },
-  { title: 'Off-plan', filter: '', image: AREA_PHOTOS.interior, body: 'New projects purchased before completion, often with staged payment schedules.' },
-  { title: 'Ready property', filter: '', image: AREA_PHOTOS.pool, body: 'Completed homes and resale units where handover or transfer can happen sooner.' },
+  { title: 'Apartments', titleAr: 'شقق', filter: 'Apartment', image: '/areas/business-bay.jpg', body: 'Studios to multi-bedroom homes in towers and mid-rise communities across Dubai.' },
+  { title: 'Villas', titleAr: 'فلل', filter: 'Villa', image: '/areas/palm-jumeirah.jpg', body: 'Detached and semi-detached family homes in master-planned and established neighbourhoods.' },
+  { title: 'Townhouses', titleAr: 'تاون هاوس', filter: 'Townhouse', image: '/areas/damac-lagoons.jpg', body: 'Courtyard and linked homes suited to families who want more space with community amenities.' },
+  { title: 'Penthouses', titleAr: 'بنتهاوس', filter: 'Penthouse', image: '/areas/downtown-dubai.jpg', body: 'Larger-format residences for buyers who prioritise space, outlook and premium finishes.' },
+  { title: 'Off-plan', titleAr: 'قيد الإنشاء', filter: '', image: '/areas/creek-harbour.jpg', body: 'New projects purchased before completion, often with staged payment schedules.' },
+  { title: 'Ready property', titleAr: 'عقارات جاهزة', filter: '', image: '/areas/dubai-hills.jpg', body: 'Completed homes and resale units where handover or transfer can happen sooner.' },
 ] as const;
 
-export const GROUP_VISUALS: Record<string, { image: string; mood: string; line: string; short: string }> = {
-  'Central & waterfront': { image: AREA_PHOTOS.tower, mood: 'Skyline & sea', line: 'Towers, marina walks and landmark addresses.', short: 'Waterfront' },
-  'Family communities & villas': { image: AREA_PHOTOS.pool, mood: 'Parks & villas', line: 'Schools, golf, lagoons and quieter streets.', short: 'Family & Villas' },
-  'Popular apartment districts': { image: AREA_PHOTOS.apartment, mood: 'City living', line: 'Daily convenience, metro access and mixed communities.', short: 'Urban & City' },
-  'Value & emerging districts': { image: AREA_PHOTOS.modern, mood: 'New chapters', line: 'Growing districts with a wider range of entry points.', short: 'High Growth' },
-  'Established neighbourhoods': { image: AREA_PHOTOS.interior, mood: 'Settled streets', line: 'Older Dubai character and low-rise family pockets.', short: 'Established' },
+export const GROUP_VISUALS: Record<string, { image: string; mood: string; moodAr: string; line: string; short: string }> = {
+  'Central & waterfront': { image: '/areas/dubai-marina.jpg', mood: 'Skyline & sea', moodAr: 'أفق وبحر', line: 'Towers, marina walks and landmark addresses.', short: 'Waterfront' },
+  'Family communities & villas': { image: '/areas/dubai-hills.jpg', mood: 'Parks & villas', moodAr: 'حدائق وفلل', line: 'Schools, golf, lagoons and quieter streets.', short: 'Family & Villas' },
+  'Popular apartment districts': { image: '/areas/business-bay.jpg', mood: 'City living', moodAr: 'حياة المدينة', line: 'Daily convenience, metro access and mixed communities.', short: 'Urban & City' },
+  'Value & emerging districts': { image: '/areas/damac-lagoons.jpg', mood: 'New chapters', moodAr: 'وجهات صاعدة', line: 'Growing districts with a wider range of entry points.', short: 'High Growth' },
+  'Established neighbourhoods': { image: '/areas/arabian-ranches.jpg', mood: 'Settled streets', moodAr: 'أحياء عريقة', line: 'Older Dubai character and low-rise family pockets.', short: 'Established' },
 };
+
+export const GROUP_TRANSLATIONS: Record<string, { shortEn: string; shortAr: string }> = {
+  'Central & waterfront': { shortEn: 'Waterfront', shortAr: 'واجهة بحرية' },
+  'Family communities & villas': { shortEn: 'Family & Villas', shortAr: 'عائلية وفلل' },
+  'Popular apartment districts': { shortEn: 'Urban & City', shortAr: 'شقق سكنية' },
+  'Value & emerging districts': { shortEn: 'High Growth', shortAr: 'مناطق واعدة' },
+  'Established neighbourhoods': { shortEn: 'Established', shortAr: 'أحياء عريقة' },
+};
+
+export const TYPE_TRANSLATIONS: Record<string, { en: string; ar: string }> = {
+  Apartment: { en: 'Apartments', ar: 'شقق سكنية' },
+  Villa: { en: 'Villas', ar: 'فلل فاخرة' },
+  Townhouse: { en: 'Townhouses', ar: 'تاون هاوس' },
+  Penthouse: { en: 'Penthouses', ar: 'بنتهاوس' },
+  'Off-plan': { en: 'Off-plan', ar: 'قيد الإنشاء' },
+  'Ready property': { en: 'Ready property', ar: 'عقار جاهز' },
+};
+
+export const DUBAI_AREA_ARABIC: Record<string, { nameAr: string; summaryAr: string }> = {
+  'Downtown Dubai': {
+    nameAr: 'داون تاون دبي',
+    summaryAr: 'منطقة معالم دبي البارزة وتضم شققاً فاخرة وفنادق عالمية وأنشطة سياحية وترفيهية متواصلة.',
+  },
+  'Business Bay': {
+    nameAr: 'الخليج التجاري',
+    summaryAr: 'حي سكني وتجاري حيوي متكامل بجوار داون تاون دبي وعلى طول قناة دبي المائية.',
+  },
+  'Dubai Marina': {
+    nameAr: 'دبي مارينا',
+    summaryAr: 'منطقة واجهة بحرية رائدة ومفضلة تضم أبراجاً سكنية شاهقة وممشى مارينا الشهير.',
+  },
+  'Jumeirah Beach Residence (JBR)': {
+    nameAr: 'جميرا بيتش ريزيدنس (JBR)',
+    summaryAr: 'أبراج شاطئية بإطلالات ساحلية مباشرة مع ممشى تسوق ومطاعم شاطئية حيوية.',
+  },
+  'Palm Jumeirah': {
+    nameAr: 'نخلة جميرا',
+    summaryAr: 'الجزيرة الأيقونية الأشهر عالمياً وتضم شققاً وفللاً فاخرة مطلة على البحر وشواطئ خاصة.',
+  },
+  'Bluewaters Island': {
+    nameAr: 'جزيرة بلوواترز',
+    summaryAr: 'مجتمع جزيرة هادئ وفاخر يجمع بين السكن العصري والإطلالات البحرية الخلابة وعين دبي.',
+  },
+  'Dubai Creek Harbour': {
+    nameAr: 'خور دبي',
+    summaryAr: 'مخطط رئيسي واعد على الواجهة المائية يوفر إطلالات مميزة على أفق دبي ومحمية رأس الخور.',
+  },
+  'Dubai Islands': {
+    nameAr: 'جزر دبي',
+    summaryAr: 'وجهة جزر سياحية وسكنية ناشئة بإطلالات بحرية جديدة ومنتجعات وفلل شاطئية فاخرة.',
+  },
+  'Emaar Beachfront': {
+    nameAr: 'إعمار بيتشفرونت',
+    summaryAr: 'أبراج سكنية حصرية على شاطئ خاص تقع بين دبي مارينا ونخلة جميرا.',
+  },
+  'Dubai Hills Estate': {
+    nameAr: 'دبي هيلز استيت',
+    summaryAr: 'مجتمع متكامل يضم ملعب جولف عالمي وحدائق شاسعة ومدارس ومول دبي هيلز مع شقق وفلل.',
+  },
+  'Arabian Ranches': {
+    nameAr: 'المرابع العربية',
+    summaryAr: 'مجتمع فلل عائلي عريق يشتهر بالمساحات الخضراء والبحيرات والمدارس الرائدة والهدوء.',
+  },
+  'DAMAC Hills': {
+    nameAr: 'داماك هيلز',
+    summaryAr: 'مجتمع متكامل يحيط بملعب ترامب الدولي للجولف ويضم فللاً وتاون هاوس وشققاً عصرية.',
+  },
+  'DAMAC Hills 2': {
+    nameAr: 'داماك هيلز 2',
+    summaryAr: 'مجتمع فلل وتاون هاوس يقدم خيارات بقيمة اقتصادية ومرافق ترفيهية ورياضية متعددة.',
+  },
+  'DAMAC Lagoons': {
+    nameAr: 'داماك لاغونز',
+    summaryAr: 'مجتمع فلل وتاون هاوس مستوحى من مدن البحر الأبيض المتوسط مع بحيرات زرقاء كريستالية.',
+  },
+  'DAMAC Islands': {
+    nameAr: 'داماك آيلاندز',
+    summaryAr: 'مجتمع استوائي فاخر للفلل يركز على نمط الحياة الشاطئية والمسطحات المائية الساحرة.',
+  },
+  'The Springs': {
+    nameAr: 'الينابيع (ذا سبرينجز)',
+    summaryAr: 'مجتمع تاون هاوس هادئ يتميز بالمساحات الخضراء والبحيرات والخدمات العائلية المريحة.',
+  },
+  'The Meadows': {
+    nameAr: 'السهول (ذا ميدوز)',
+    summaryAr: 'حي فلل هادئ وراقٍ يضم بحيرات واسعة وشوارع مشجرة مناسبة للعائلات.',
+  },
+  'The Lakes': {
+    nameAr: 'البحيرات (ذا ليكس)',
+    summaryAr: 'حي فلل عريق يحيط بالبحيرات الهادئة ويتمتع بأجواء مجتمعية ناضجة وموقع مميز.',
+  },
+  'Emirates Hills': {
+    nameAr: 'تلال الإمارات',
+    summaryAr: 'أرقى مجمع فلل وقصور فاخرة في دبي بإطلالات بانورامية على ملعب الجولف وأفق المدينة.',
+  },
+  'Tilal Al Ghaf': {
+    nameAr: 'تلال الغاف',
+    summaryAr: 'مجتمع رائد يلتف حول بحيرة لاجون الغاف مع شواطئ رملية وفلل وتاون هاوس فائقة الفخامة.',
+  },
+  'The Valley': {
+    nameAr: 'ذا فالي (إعمار)',
+    summaryAr: 'مجتمع فلل وتاون هاوس عصري من إعمار مصمم للمعيشة العائلية بمساحات خضراء واسعة.',
+  },
+  'Town Square': {
+    nameAr: 'تاون سكوير',
+    summaryAr: 'مجتمع متكامل يقدم شققاً وتاون هاوس بأسعار مناسبة مع حدائق مركزية ومرافق متكاملة.',
+  },
+  'Jumeirah Village Circle (JVC)': {
+    nameAr: 'قرية جميرا الدائرية (JVC)',
+    summaryAr: 'مجتمع كبير ومتنوع يشهد إقبالاً استثمارياً وسكنياً واسعاً بفضل العوائد المجزية والأسعار المناسبة.',
+  },
+  'Jumeirah Village Triangle (JVT)': {
+    nameAr: 'مثلث قرية جميرا (JVT)',
+    summaryAr: 'منطقة سكنية هادئة تضم تاون هاوس وفللاً مستقلة ومشاريع شقق منخفضة الارتفاع.',
+  },
+  'Jumeirah Lake Towers (JLT)': {
+    nameAr: 'أبراج بحيرات جميرا (JLT)',
+    summaryAr: 'مجمعات أبراج تحيط ببحيرات خلابة وحدائق، تتصل مباشرة بالمترو مع مطاعم وشركات حيوية.',
+  },
+  'Al Furjan': {
+    nameAr: 'الفرجان',
+    summaryAr: 'مجتمع سكني عائلي متصل بمحطة المترو ويضم شققاً وتاون هاوس وفللاً قريبة من ابن بطوطة.',
+  },
+  'Dubai Silicon Oasis': {
+    nameAr: 'واحة دبي للسيليكون',
+    summaryAr: 'منطقة حرة ومجتمع تقني متكامل يضم شققاً سكنية ومجمعات تاون هاوس ومدارس متميزة.',
+  },
+  'Dubai Sports City': {
+    nameAr: 'مدينة دبي الرياضية',
+    summaryAr: 'مجتمع سكني بأسعار تنافسية يركز على المرافق الرياضية والملاعب ومجمعات الشقق والفلل.',
+  },
+  'Motor City': {
+    nameAr: 'موتور سيتي',
+    summaryAr: 'حي سكني عريق يتميز بشقق فسيحة وممرات مشجرة وممشى تجاري متكامل.',
+  },
+  'Arjan': {
+    nameAr: 'أرجان',
+    summaryAr: 'منطقة سكنية سريعة التطور تضم شققاً جديدة وعوائد إيجارية مرتفعة بالقرب من حديقة الزهور.',
+  },
+  'City Walk': {
+    nameAr: 'سيتي ووك',
+    summaryAr: 'وجهة حضرية عصرية راقية تمزج بين الشقق منخفضة الارتفاع ومتاجر الأزياء والمطاعم العالمية.',
+  },
+  'Mohammed Bin Rashid City': {
+    nameAr: 'مدينة محمد بن راشد (MBR City)',
+    summaryAr: 'وجهة سكنية فاخرة تضم ديستريكت ون وشوبا هارتلاند مع بحيرات كريستالية وفلل فاخرة.',
+  },
+  'Meydan': {
+    nameAr: 'ميدان',
+    summaryAr: 'موقع استراتيجي قريب من وسط المدينة يضم مضمار ميدان وشققاً وفللاً راقية.',
+  },
+  'DIFC': {
+    nameAr: 'مركز دبي المالي العالمي (DIFC)',
+    summaryAr: 'المركز المالي الإقليمي الرائد مع شقق وبنتهاوس فاخرة ومطاعم عالمية حائزة على جوائز.',
+  },
+  'Dubai South': {
+    nameAr: 'دبي الجنوب',
+    summaryAr: 'مدينة مطار آل مكتوم الدولي وإكسبو دبي، وتوفر خيارات واعدة للشقق والفلل والتاون هاوس.',
+  },
+  'Expo City Dubai': {
+    nameAr: 'مدينة إكسبو دبي',
+    summaryAr: 'وجهة مستقبلية مستدامة تحول موقع إكسبو 2020 إلى مجتمع سكني وابتكاري متكامل.',
+  },
+  'Discovery Gardens': {
+    nameAr: 'ديسكفري جاردنز',
+    summaryAr: 'مجتمع شقق سكنية بأسعار معقولة يشتهر بالمسطحات الخضراء وقربه من المترو وابن بطوطة.',
+  },
+  'International City': {
+    nameAr: 'المدينة العالمية',
+    summaryAr: 'منطقة شقق واسعة تتميز بأحيائها المعمارية المتنوعة وأسعارها الاقتصادية.',
+  },
+  'Dubai Production City (IMPZ)': {
+    nameAr: 'مدينة دبي للإنتاج (IMPZ)',
+    summaryAr: 'منطقة شقق بأسعار مناسبة بالقرب من سيتي سنتر معيصم ومحاور الطرق السريعة.',
+  },
+  'Dubai Land Residence Complex': {
+    nameAr: 'مجمع دبي لاند السكني',
+    summaryAr: 'مجمع شقق متنامٍ يقدم خيارات ميسورة التكلفة مع سهولة الوصول إلى طريق العين وطريق الإمارات.',
+  },
+  'Majan': {
+    nameAr: 'مجان',
+    summaryAr: 'منطقة سكنية ناشئة تضم مشاريع شقق حديثة وتتوسط دبي لاند بالقرب من شارع الشيخ محمد بن زايد.',
+  },
+  'Liwan': {
+    nameAr: 'ليوان',
+    summaryAr: 'مجتمع شقق هادئ بأسعار تنافسية يقع عند تقاطع طريق دبي-العين وطريق الشيخ محمد بن زايد.',
+  },
+  'Dubailand': {
+    nameAr: 'دبي لاند',
+    summaryAr: 'منطقة واسعة ومتنوعة تحتضن مجمعات فلل وتاون هاوس وترفيه متنامية.',
+  },
+  'Jumeirah': {
+    nameAr: 'جميرا',
+    summaryAr: 'المنطقة الساحلية التقليدية الأشهر في دبي وتضم فللاً فاخرة مطلة وقريبة من الشواطئ والمطاعم.',
+  },
+  'Umm Suqeim': {
+    nameAr: 'أم سقيم',
+    summaryAr: 'منطقة شاطئية عريقة تتميز بالفلل الهادئة وقربها من برج العرب وشواطئ كايت بيتش.',
+  },
+  'Al Barsha': {
+    nameAr: 'البرشاء',
+    summaryAr: 'منطقة مركزية متصلة تشتهر بمول الإمارات وتضم فللاً عائلية وشققاً سكنية مخدومة.',
+  },
+  'Al Wasl': {
+    nameAr: 'الوصل',
+    summaryAr: 'حي راقٍ يقع بين جميرا ووسط المدينة ويضم مجمعات سكنية فاخرة ومتاجر تجارية مميزة.',
+  },
+  'Al Safa': {
+    nameAr: 'الصفا',
+    summaryAr: 'حي فلل عائلي هادئ بجوار حديقة الصفا وقناة دبي المائية وشارع الشيخ زايد.',
+  },
+  'Mirdif': {
+    nameAr: 'مردف',
+    summaryAr: 'مجتمع عائلي عريق يفضله المواطنون والمقيمون ويضم فللاً وشققاً قريبة من حديقة مشرف ومردف سيتي سنتر.',
+  },
+  'Deira': {
+    nameAr: 'ديرة',
+    summaryAr: 'قلب دبي التجاري التاريخي الذي يجمع بين الأسواق التراثية وإطلالات خور دبي الأصيلة.',
+  },
+  'Bur Dubai': {
+    nameAr: 'بر دبي',
+    summaryAr: 'المنطقة التاريخية التراثية على ضفاف الخور وتضم أحياء القنصليات والمتاحف والأسواق القديمة.',
+  },
+};
+
+export function getLocalizedArea(area: VisualArea, locale: string): VisualArea {
+  if (locale === 'ar') {
+    const ar = DUBAI_AREA_ARABIC[area.name];
+    const groupVisual = GROUP_VISUALS[area.group];
+    return {
+      ...area,
+      name: ar ? ar.nameAr : area.name,
+      summary: ar ? ar.summaryAr : area.summary,
+      mood: groupVisual?.moodAr || area.mood,
+    };
+  }
+  return area;
+}
+
+export function localizeType(typeName: string, locale: string): string {
+  if (locale === 'ar' && TYPE_TRANSLATIONS[typeName]) {
+    return TYPE_TRANSLATIONS[typeName].ar;
+  }
+  return typeName;
+}
 
 export const BUYER_PURPOSES = [
   { title: 'Home to live in', body: 'School access, commute, building quality and long-term fit matter most.' },
@@ -196,6 +473,9 @@ function kmToDowntown(lat: number, lng: number) {
 }
 
 function photoFor(area: DubaiArea, group: string, index: number) {
+  if (AREA_SPECIFIC_PHOTOS[area.name]) {
+    return AREA_SPECIFIC_PHOTOS[area.name];
+  }
   const photos = area.types.includes('Villa')
     ? [AREA_PHOTOS.villa, AREA_PHOTOS.pool, AREA_PHOTOS.modern]
     : area.types.includes('Townhouse')
