@@ -58,6 +58,9 @@ const articleBlank = (): Article => ({
   updatedAt: new Date().toISOString().slice(0, 10),
   sourceLabel: '',
   sourceUrl: 'https://',
+  imageUrl: '',
+  author: 'Prudent Dubai Advisory Team',
+  readTime: '5 min read',
 });
 
 export default function AdminStudio() {
@@ -114,11 +117,15 @@ export default function AdminStudio() {
 
     const item = tab === 'properties' ? property : article;
     if (!item) return;
+    const itemToSave =
+      tab === 'articles' && article
+        ? { ...article, imageUrl: article.imageUrl?.trim() ? article.imageUrl.trim() : undefined }
+        : item;
     setMessage('Saving…');
     const response = await fetch('/api/admin/content', {
       method: 'PUT',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ type: tab === 'properties' ? 'property' : 'article', item }),
+      body: JSON.stringify({ type: tab === 'properties' ? 'property' : 'article', item: itemToSave }),
     });
     const result = (await response.json()) as { error?: string };
     setMessage(response.ok ? 'Saved. Published content is now live.' : result.error || 'Could not save.');
@@ -565,6 +572,22 @@ function PropertyFields({ value, change }: { value: Property; change: (value: Pr
         onChange={(v) => set('highlights', v.split('\n').map((s) => s.trim()).filter(Boolean))}
       />
       <Field label="Image URL (/areas/... or authorised HTTPS image)" value={value.imageUrl} onChange={(v) => set('imageUrl', v)} />
+      {value.imageUrl && (
+        <div style={{ marginBottom: 14 }}>
+          <span style={{ fontSize: 12, color: '#64748b', display: 'block', marginBottom: 4 }}>
+            Property Image Preview:
+          </span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={value.imageUrl}
+            alt="Property Preview"
+            style={{ width: '100%', maxHeight: 180, objectFit: 'cover', borderRadius: 8, border: '1px solid #cbd5e1' }}
+            onError={(e) => {
+              (e.currentTarget as HTMLElement).style.display = 'none';
+            }}
+          />
+        </div>
+      )}
       <div className="form-pair">
         <Field label="Source name" value={value.sourceLabel} onChange={(v) => set('sourceLabel', v)} />
         <Field label="Last verified" type="date" value={value.verifiedAt} onChange={(v) => set('verifiedAt', v)} />
@@ -602,6 +625,32 @@ function ArticleFields({ value, change }: { value: Article; change: (value: Arti
         value={value.body.join('\n\n')}
         onChange={(v) => set('body', v.split(/\n\s*\n/).map((s) => s.trim()).filter(Boolean))}
       />
+      <Field
+        label="Featured Image URL (/insights/... or authorized HTTPS image e.g. https://images.unsplash.com/...)"
+        value={value.imageUrl || ''}
+        onChange={(v) => set('imageUrl', v)}
+        required={false}
+      />
+      {value.imageUrl && (
+        <div style={{ marginBottom: 14 }}>
+          <span style={{ fontSize: 12, color: '#64748b', display: 'block', marginBottom: 4 }}>
+            Article Image Preview:
+          </span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={value.imageUrl}
+            alt="Article Preview"
+            style={{ width: '100%', maxHeight: 180, objectFit: 'cover', borderRadius: 8, border: '1px solid #cbd5e1' }}
+            onError={(e) => {
+              (e.currentTarget as HTMLElement).style.display = 'none';
+            }}
+          />
+        </div>
+      )}
+      <div className="form-pair">
+        <Field label="Author" value={value.author || ''} onChange={(v) => set('author', v)} required={false} />
+        <Field label="Read Time (e.g. 5 min read)" value={value.readTime || ''} onChange={(v) => set('readTime', v)} required={false} />
+      </div>
       <div className="form-pair">
         <Field label="Published date" type="date" value={value.publishedAt} onChange={(v) => set('publishedAt', v)} />
         <Field label="Updated date" type="date" value={value.updatedAt} onChange={(v) => set('updatedAt', v)} />

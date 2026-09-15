@@ -23,7 +23,7 @@ export function formatPrice(aed: number, currency: Currency = 'AED', locale: 'en
 
 const httpsUrl = z.string().url().refine((value) => value.startsWith('https://'), 'Use an HTTPS URL');
 const webImage = z.string().refine(
-  (value) => /^\/[a-zA-Z0-9/_\-.]+$/.test(value) || (z.string().url().safeParse(value).success && value.startsWith('https://')),
+  (value) => !value || /^\/[a-zA-Z0-9/_\-.]+$/.test(value) || (z.string().url().safeParse(value).success && value.startsWith('https://')),
   'Use a local /path or an HTTPS URL',
 );
 

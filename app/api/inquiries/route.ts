@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
+import nodemailer from 'nodemailer';
 import { leadSchema } from '@/lib/data';
 import { isSameOrigin, rateLimit, requestIp } from '@/lib/request-security';
 import { validateEmailAddress } from '@/lib/email-validator';
@@ -53,42 +54,99 @@ async function dispatchWebhookNotification(leadData: Record<string, unknown>) {
 }
 
 async function dispatchEmailNotification(leadData: Record<string, unknown>) {
-  const resendApiKey = process.env.RESEND_API_KEY;
-  const notifyEmail = process.env.LEAD_NOTIFICATION_EMAIL || 'info@prudentdubai.ae';
-  if (!resendApiKey) return;
+  const rawNotifyEmail = process.env.LEAD_NOTIFICATION_EMAIL || 'info@prudentdubai.com';
+  const recipients = Array.from(new Set(rawNotifyEmail.split(',').map((e) => e.trim()).filter(Boolean)));
 
-  try {
-    await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        authorization: `Bearer ${resendApiKey}`,
-      },
-      body: JSON.stringify({
-        from: 'PrudentDubai Leads <no-reply@prudentdubai.ae>',
-        to: [notifyEmail],
+  const htmlContent = `
+    <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #ffffff;">
+      <div style="border-bottom: 2px solid #0f172a; padding-bottom: 12px; margin-bottom: 20px;">
+        <h2 style="color: #0f172a; margin: 0; font-size: 20px;">🏢 New Property Inquiry — Prudent Dubai</h2>
+        <p style="color: #64748b; font-size: 13px; margin: 4px 0 0 0;">Received on prudentdubai.com</p>
+      </div>
+      <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+        <tr><td style="padding: 10px 0; font-weight: 600; color: #475569; width: 120px;">Name:</td><td style="padding: 10px 0; color: #0f172a; font-weight: 600;">${leadData.name}</td></tr>
+        <tr style="border-top: 1px solid #f1f5f9;"><td style="padding: 10px 0; font-weight: 600; color: #475569;">Email:</td><td style="padding: 10px 0; color: #0284c7;"><a href="mailto:${leadData.email}" style="color: #0284c7; text-decoration: none;">${leadData.email}</a></td></tr>
+        <tr style="border-top: 1px solid #f1f5f9;"><td style="padding: 10px 0; font-weight: 600; color: #475569;">Phone:</td><td style="padding: 10px 0; color: #0f172a;"><a href="tel:${leadData.phone}" style="color: #0f172a; text-decoration: none; font-weight: 600;">${leadData.phone}</a></td></tr>
+        <tr style="border-top: 1px solid #f1f5f9;"><td style="padding: 10px 0; font-weight: 600; color: #475569;">Country:</td><td style="padding: 10px 0; color: #0f172a;">${leadData.country}</td></tr>
+        <tr style="border-top: 1px solid #f1f5f9;"><td style="padding: 10px 0; font-weight: 600; color: #475569;">Purpose:</td><td style="padding: 10px 0; color: #0f172a;">${leadData.interest}</td></tr>
+        <tr style="border-top: 1px solid #f1f5f9;"><td style="padding: 10px 0; font-weight: 600; color: #475569;">Budget:</td><td style="padding: 10px 0; color: #0f172a;">${leadData.budget || 'Not specified'}</td></tr>
+        <tr style="border-top: 1px solid #f1f5f9;"><td style="padding: 10px 0; font-weight: 600; color: #475569; vertical-align: top;">Message:</td><td style="padding: 10px 0; color: #334155; line-height: 1.5;">${leadData.message || 'None'}</td></tr>
+      </table>
+      <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #e2e8f0; font-size: 12px; color: #94a3b8;">
+        Received: ${leadData.receivedAt} | IP: ${leadData.ip}
+      </div>
+    </div>
+  `;
+
+  // 1. Hostinger / Custom SMTP
+  const smtpUser = process.env.SMTP_USER;
+  const smtpPass = process.env.SMTP_PASS;
+
+  if (smtpUser && smtpPass) {
+    try {
+      const host = process.env.SMTP_HOST || 'smtp.hostinger.com';
+      const port = Number(process.env.SMTP_PORT) || 465;
+      const secure = process.env.SMTP_SECURE !== 'false';
+
+      const transporter = nodemailer.createTransport({
+        host,
+        port,
+        secure,
+        auth: {
+          user: smtpUser,
+          pass: smtpPass,
+        },
+      });
+
+      const info = await transporter.sendMail({
+        from: process.env.SMTP_FROM || `"Prudent Dubai Real Estate" <${smtpUser}>`,
+        to: recipients,
         subject: `New Lead: ${leadData.name} - ${leadData.interest}`,
-        html: `
-          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px;">
-            <h2 style="color: #0f172a; margin-top: 0;">New Property Inquiry</h2>
-            <table style="width: 100%; border-collapse: collapse;">
-              <tr><td style="padding: 8px 0; font-weight: bold; color: #475569;">Name:</td><td style="padding: 8px 0; color: #0f172a;">${leadData.name}</td></tr>
-              <tr><td style="padding: 8px 0; font-weight: bold; color: #475569;">Email:</td><td style="padding: 8px 0; color: #0f172a;">${leadData.email}</td></tr>
-              <tr><td style="padding: 8px 0; font-weight: bold; color: #475569;">Phone:</td><td style="padding: 8px 0; color: #0f172a;">${leadData.phone}</td></tr>
-              <tr><td style="padding: 8px 0; font-weight: bold; color: #475569;">Country:</td><td style="padding: 8px 0; color: #0f172a;">${leadData.country}</td></tr>
-              <tr><td style="padding: 8px 0; font-weight: bold; color: #475569;">Purpose:</td><td style="padding: 8px 0; color: #0f172a;">${leadData.interest}</td></tr>
-              <tr><td style="padding: 8px 0; font-weight: bold; color: #475569;">Budget:</td><td style="padding: 8px 0; color: #0f172a;">${leadData.budget || 'Not specified'}</td></tr>
-              <tr><td style="padding: 8px 0; font-weight: bold; color: #475569;">Message:</td><td style="padding: 8px 0; color: #0f172a;">${leadData.message || 'None'}</td></tr>
-            </table>
-            <hr style="margin: 20px 0; border: none; border-top: 1px solid #e2e8f0;" />
-            <p style="font-size: 12px; color: #94a3b8; margin: 0;">Received at: ${leadData.receivedAt} | IP: ${leadData.ip}</p>
-          </div>
-        `,
-      }),
-    });
-  } catch (err) {
-    console.warn('Resend email notification failed:', err);
+        html: htmlContent,
+      });
+
+      console.info('[Lead System] Email sent successfully via Hostinger SMTP to:', recipients.join(', '), info.messageId);
+      return;
+    } catch (err) {
+      console.warn('[Lead System] Hostinger SMTP delivery error:', err);
+    }
   }
+
+  // 2. Resend API Fallback
+  const resendApiKey = process.env.RESEND_API_KEY;
+  if (resendApiKey) {
+    try {
+      const fromEmail = process.env.RESEND_FROM_EMAIL || 'PrudentDubai Leads <onboarding@resend.dev>';
+      const response = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          authorization: `Bearer ${resendApiKey}`,
+        },
+        body: JSON.stringify({
+          from: fromEmail,
+          to: recipients,
+          subject: `New Lead: ${leadData.name} - ${leadData.interest}`,
+          html: htmlContent,
+        }),
+      });
+
+      if (!response.ok) {
+        const errText = await response.text();
+        console.warn('[Lead System] Resend email dispatch failed:', response.status, errText);
+      } else {
+        console.info('[Lead System] Email notification dispatched successfully via Resend to:', recipients.join(', '));
+      }
+      return;
+    } catch (err) {
+      console.warn('[Lead System] Resend email notification failed:', err);
+    }
+  }
+
+  // 3. Fallback notice
+  console.info(
+    `[Lead System] Lead stored safely on disk in data/inquiries.json. Outbound email skipped: Neither Hostinger SMTP (SMTP_USER/SMTP_PASS) nor RESEND_API_KEY is configured in .env.local.`
+  );
 }
 
 export async function POST(request: Request) {
