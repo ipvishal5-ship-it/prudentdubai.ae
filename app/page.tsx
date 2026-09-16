@@ -22,11 +22,7 @@ export default async function HomePage() {
           <p className="fine-print" style={{ marginTop: 18 }}><T id="home.disclaimer" /></p>
         </div>
         <div className="hero-visual">
-          <img
-            src="/hero-luxury-dubai.jpg"
-            alt="Ultra-luxury Dubai penthouse terrace with skyline and Burj Khalifa views"
-            draggable={false}
-          />
+          <img src="/areas/downtown-dubai.jpg" alt="Downtown Dubai skyline and Burj Khalifa shown for location context" draggable={false} />
         </div>
       </div>
     </section>
