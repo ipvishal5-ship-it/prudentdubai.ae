@@ -911,7 +911,7 @@ function AnalyticsView({ leads }: { leads: LeadRecord[] }) {
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <span style={{ color: '#16a34a', fontSize: '1.2rem' }}>●</span>
               <strong style={{ minWidth: 160 }}>Hostinger SMTP:</strong>
-              <span style={{ color: '#334155' }}>Connected (vikas@prudentdubai.com)</span>
+              <span style={{ color: '#334155' }}>Connected (info@prudentspaces.ae)</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <span style={{ color: '#16a34a', fontSize: '1.2rem' }}>●</span>

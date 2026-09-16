@@ -71,7 +71,7 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      {/* 4. Why Investors Choose PrudentDubai */}
+      {/* 4. Why Investors Choose Prudent Spaces */}
       <section className="section section-soft">
         <div className="container">
           <div className="editorial-grid editorial-grid-balanced">
@@ -105,7 +105,7 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      {/* 5. PrudentDubai.com Group Ecosystem Banner */}
+      {/* 5. Corporate Ecosystem Banner */}
       <section className="section">
         <div className="container">
           <div className="about-ecosystem-banner">
@@ -115,15 +115,13 @@ export default async function AboutPage() {
               <p style={{ marginTop: 12, color: 'rgba(255, 255, 255, 0.85)', lineHeight: 1.6 }}><T id="about.ecosystemBody" /></p>
             </div>
             <div className="ecosystem-action">
-              <a
+              <Link
                 className="button button-primary"
-                href={`${site.sisterWebsite}?utm_source=prudentspaces.ae&utm_medium=referral`}
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/contact"
                 style={{ whiteSpace: 'nowrap', padding: '14px 28px' }}
               >
                 <T id="about.visitSister" />
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -184,14 +182,6 @@ export default async function AboutPage() {
               </div>
             </div>
             <div className="hq-actions">
-              <a
-                className="button button-secondary"
-                href={`${site.sisterWebsite}?utm_source=prudentspaces.ae&utm_medium=referral`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <T id="about.visitSister" />
-              </a>
               <Link className="button button-primary" href="/contact">
                 <T id="about.talkTeam" />
               </Link>

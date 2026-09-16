@@ -54,7 +54,7 @@ async function dispatchWebhookNotification(leadData: Record<string, unknown>) {
 }
 
 async function dispatchEmailNotification(leadData: Record<string, unknown>) {
-  const rawNotifyEmail = process.env.LEAD_NOTIFICATION_EMAIL || 'info@prudentdubai.com';
+  const rawNotifyEmail = process.env.LEAD_NOTIFICATION_EMAIL || 'info@prudentspaces.ae';
   const recipients = Array.from(new Set(rawNotifyEmail.split(',').map((e) => e.trim()).filter(Boolean)));
 
   const htmlContent = `

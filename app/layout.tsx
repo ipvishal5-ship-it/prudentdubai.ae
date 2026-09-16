@@ -56,7 +56,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         url: 'https://prudentspaces.ae',
         logo: 'https://prudentspaces.ae/brand/prudentlogo.png',
         image: 'https://prudentspaces.ae/brand/og-image.png',
-        parentOrganization: { '@type': 'Organization', name: 'PrudentDubai', url: site.sisterWebsite },
         priceRange: 'AED 1,000,000 - AED 100,000,000+',
         currenciesAccepted: 'AED, USD, EUR, GBP',
         paymentAccepted: 'Bank Transfer, Cheque, Mortgage',
