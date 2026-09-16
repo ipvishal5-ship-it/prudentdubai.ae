@@ -27,13 +27,6 @@ export default async function HomePage() {
             alt="Ultra-luxury Dubai penthouse terrace with skyline and Burj Khalifa views"
             draggable={false}
           />
-          <div className="hero-note">
-            <span className="hero-note-tag">✦ 0% Agency Fee</span>
-            <strong>Direct Developer Access</strong>
-            <p style={{ margin: 0, fontSize: '0.86rem', color: '#475569', lineHeight: 1.45 }}>
-              VIP access to Emaar, Nakheel & Sobha launches with full DLD escrow protection.
-            </p>
-          </div>
         </div>
       </div>
     </section>
