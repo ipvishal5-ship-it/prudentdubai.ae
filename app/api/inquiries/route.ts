@@ -34,7 +34,7 @@ async function dispatchWebhookNotification(leadData: Record<string, unknown>) {
   if (!webhookUrl) return;
 
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 7_000);
+  const timeout = setTimeout(() => controller.abort(), 10_000);
   try {
     await fetch(webhookUrl, {
       method: 'POST',
@@ -45,6 +45,7 @@ async function dispatchWebhookNotification(leadData: Record<string, unknown>) {
       body: JSON.stringify(leadData),
       signal: controller.signal,
       cache: 'no-store',
+      redirect: 'follow',
     });
   } catch (err) {
     console.warn('Lead webhook notification failed:', err);
