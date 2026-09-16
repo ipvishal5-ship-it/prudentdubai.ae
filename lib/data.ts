@@ -27,30 +27,6 @@ const webImage = z.string().refine(
   'Use a local /path or an HTTPS URL',
 );
 
-export const propertySchema = z.object({
-  id: z.string().min(3).max(80),
-  slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
-  status: z.enum(['draft', 'published']),
-  name: z.string().min(3).max(140),
-  developer: z.string().min(2).max(100),
-  location: z.string().min(2).max(120),
-  propertyType: z.enum(['Apartment', 'Villa', 'Townhouse', 'Penthouse', 'Plot', 'Commercial']),
-  marketType: z.enum(['Off-plan', 'Ready']),
-  priceAED: z.number().int().positive().max(1_000_000_000),
-  bedrooms: z.string().min(1).max(40),
-  areaSqft: z.string().min(1).max(60),
-  handover: z.string().min(2).max(80),
-  paymentPlan: z.string().min(2).max(160),
-  summary: z.string().min(20).max(500),
-  highlights: z.array(z.string().min(2).max(160)).max(8),
-  imageUrl: webImage,
-  sourceLabel: z.string().min(2).max(100),
-  sourceUrl: httpsUrl,
-  verifiedAt: z.string().date(),
-  featured: z.boolean().default(false),
-  demo: z.boolean().default(false),
-});
-export type Property = z.infer<typeof propertySchema>;
 
 export const articleSchema = z.object({
   id: z.string().min(3).max(80),

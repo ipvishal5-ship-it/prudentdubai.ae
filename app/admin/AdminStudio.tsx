@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { FormEvent, useEffect, useState } from 'react';
-import type { Article, Property } from '@/lib/data';
+import type { Article } from '@/lib/data';
 
 type LeadRecord = {
   id: string;
@@ -19,32 +19,8 @@ type LeadRecord = {
   notes?: string;
 };
 
-type Data = { properties: Property[]; articles: Article[] };
-type Tab = 'leads' | 'analytics' | 'articles' | 'properties';
-
-const propertyBlank = (): Property => ({
-  id: crypto.randomUUID(),
-  slug: '',
-  status: 'draft',
-  name: '',
-  developer: '',
-  location: '',
-  propertyType: 'Apartment',
-  marketType: 'Off-plan',
-  priceAED: 1,
-  bedrooms: '1',
-  areaSqft: '',
-  handover: '',
-  paymentPlan: '',
-  summary: '',
-  highlights: [],
-  imageUrl: 'https://',
-  sourceLabel: '',
-  sourceUrl: 'https://',
-  verifiedAt: new Date().toISOString().slice(0, 10),
-  featured: false,
-  demo: false,
-});
+type Data = { articles: Article[] };
+type Tab = 'leads' | 'analytics' | 'articles';
 
 const articleBlank = (): Article => ({
   id: crypto.randomUUID(),
@@ -64,11 +40,10 @@ const articleBlank = (): Article => ({
 });
 
 export default function AdminStudio() {
-  const [data, setData] = useState<Data>({ properties: [], articles: [] });
+  const [data, setData] = useState<Data>({ articles: [] });
   const [leads, setLeads] = useState<LeadRecord[]>([]);
   const [tab, setTab] = useState<Tab>('leads');
   const [statusFilter, setStatusFilter] = useState<'all' | 'new' | 'contacted' | 'meeting' | 'closed' | 'archived'>('all');
-  const [property, setProperty] = useState<Property | null>(null);
   const [article, setArticle] = useState<Article | null>(null);
   const [activeLead, setActiveLead] = useState<LeadRecord | null>(null);
   const [leadQuery, setLeadQuery] = useState('');
@@ -116,28 +91,23 @@ export default function AdminStudio() {
       return;
     }
 
-    const item = tab === 'properties' ? property : article;
-    if (!item) return;
-    const itemToSave =
-      tab === 'articles' && article
-        ? { ...article, imageUrl: article.imageUrl?.trim() ? article.imageUrl.trim() : undefined }
-        : item;
+    if (!article) return;
+    const itemToSave = { ...article, imageUrl: article.imageUrl?.trim() ? article.imageUrl.trim() : undefined };
     setMessage('Saving…');
     const response = await fetch('/api/admin/content', {
       method: 'PUT',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ type: tab === 'properties' ? 'property' : 'article', item: itemToSave }),
+      body: JSON.stringify({ type: 'article', item: itemToSave }),
     });
     const result = (await response.json()) as { error?: string };
     setMessage(response.ok ? 'Saved. Published content is now live.' : result.error || 'Could not save.');
     if (response.ok) {
       await load();
-      setProperty(null);
       setArticle(null);
     }
   }
 
-  async function remove(type: 'property' | 'article' | 'lead', id: string) {
+  async function remove(type: 'article' | 'lead', id: string) {
     if (!window.confirm('Delete this item permanently?')) return;
     if (type === 'lead') {
       const response = await fetch('/api/admin/inquiries', {
@@ -217,7 +187,7 @@ export default function AdminStudio() {
     );
   });
 
-  const editing = tab === 'properties' ? property : tab === 'articles' ? article : activeLead;
+  const editing = tab === 'articles' ? article : activeLead;
 
   return (
     <main className="admin-shell">
@@ -250,7 +220,6 @@ export default function AdminStudio() {
             className={tab === 'leads' ? 'active' : ''}
             onClick={() => {
               setTab('leads');
-              setProperty(null);
               setArticle(null);
             }}
           >
@@ -260,7 +229,6 @@ export default function AdminStudio() {
             className={tab === 'analytics' ? 'active' : ''}
             onClick={() => {
               setTab('analytics');
-              setProperty(null);
               setArticle(null);
               setActiveLead(null);
             }}
@@ -271,7 +239,6 @@ export default function AdminStudio() {
             className={tab === 'articles' ? 'active' : ''}
             onClick={() => {
               setTab('articles');
-              setProperty(null);
               setActiveLead(null);
             }}
           >
@@ -288,7 +255,7 @@ export default function AdminStudio() {
             <section className="admin-panel">
               <div className="admin-list-heading">
                 <h2>
-                  {tab === 'leads' ? 'Received Enquiries' : tab === 'properties' ? 'Property Opportunities' : 'Editorial Insights'}
+                  {tab === 'leads' ? 'Received Enquiries' : 'Editorial Insights'}
                 </h2>
                 {tab === 'leads' ? (
                   <input
@@ -300,7 +267,7 @@ export default function AdminStudio() {
                 ) : (
                   <button
                     className="button button-primary"
-                    onClick={() => (tab === 'properties' ? setProperty(propertyBlank()) : setArticle(articleBlank()))}
+                    onClick={() => setArticle(articleBlank())}
                   >
                     Add new
                   </button>
@@ -380,22 +347,7 @@ export default function AdminStudio() {
                   </article>
                 ))}
 
-              {tab === 'properties' &&
-                data.properties.map((item) => (
-                  <article className="content-list-item" key={item.id}>
-                    <div>
-                      <span className={`status status-${item.status}`}>{item.status}</span>
-                      <h3>{item.name}</h3>
-                      <p>/{item.slug || 'url-not-set'}</p>
-                    </div>
-                    <div className="row-actions">
-                      <button onClick={() => setProperty(item)}>Edit</button>
-                      <button className="danger" onClick={() => remove('property', item.id)}>
-                        Delete
-                      </button>
-                    </div>
-                  </article>
-                ))}
+
 
               {tab === 'articles' &&
                 data.articles.map((item) => (
@@ -432,14 +384,11 @@ export default function AdminStudio() {
                   <h2>
                     {tab === 'leads'
                       ? 'Lead Monitor & Status'
-                      : tab === 'properties'
-                      ? 'Property Editor'
                       : 'Insight Editor'}
                   </h2>
                   <button
                     type="button"
                     onClick={() => {
-                      setProperty(null);
                       setArticle(null);
                       setActiveLead(null);
                     }}
@@ -585,7 +534,6 @@ export default function AdminStudio() {
                   </div>
                 )}
 
-                {property && tab === 'properties' && <PropertyFields value={property} change={setProperty} />}
                 {article && tab === 'articles' && <ArticleFields value={article} change={setArticle} />}
                 {tab !== 'leads' && (
                   <button className="button button-primary" type="submit">
@@ -632,90 +580,7 @@ function TextArea({ label, value, onChange }: { label: string; value: string; on
   );
 }
 
-function PropertyFields({ value, change }: { value: Property; change: (value: Property) => void }) {
-  const set = <K extends keyof Property>(key: K, item: Property[K]) => change({ ...value, [key]: item });
-  return (
-    <>
-      <div className="form-pair">
-        <Field label="Project / property name" value={value.name} onChange={(v) => set('name', v)} />
-        <Field label="URL slug" value={value.slug} onChange={(v) => set('slug', v)} />
-      </div>
-      <div className="form-pair">
-        <Field label="Developer / seller" value={value.developer} onChange={(v) => set('developer', v)} />
-        <Field label="Location" value={value.location} onChange={(v) => set('location', v)} />
-      </div>
-      <div className="form-pair">
-        <label className="field-label">
-          Status
-          <select className="field-input" value={value.status} onChange={(e) => set('status', e.target.value as Property['status'])}>
-            <option value="draft">Draft</option>
-            <option value="published">Published</option>
-          </select>
-        </label>
-        <label className="field-label">
-          Market type
-          <select className="field-input" value={value.marketType} onChange={(e) => set('marketType', e.target.value as Property['marketType'])}>
-            <option>Off-plan</option>
-            <option>Ready</option>
-          </select>
-        </label>
-      </div>
-      <div className="form-pair">
-        <label className="field-label">
-          Property type
-          <select className="field-input" value={value.propertyType} onChange={(e) => set('propertyType', e.target.value as Property['propertyType'])}>
-            {['Apartment', 'Villa', 'Townhouse', 'Penthouse', 'Plot', 'Commercial'].map((v) => (
-              <option key={v}>{v}</option>
-            ))}
-          </select>
-        </label>
-        <Field label="Starting price (AED)" type="number" value={value.priceAED} onChange={(v) => set('priceAED', Number(v))} />
-      </div>
-      <div className="form-pair">
-        <Field label="Bedrooms" value={value.bedrooms} onChange={(v) => set('bedrooms', v)} />
-        <Field label="Area range (sq ft)" value={value.areaSqft} onChange={(v) => set('areaSqft', v)} />
-      </div>
-      <div className="form-pair">
-        <Field label="Handover / availability" value={value.handover} onChange={(v) => set('handover', v)} />
-        <Field label="Payment plan" value={value.paymentPlan} onChange={(v) => set('paymentPlan', v)} />
-      </div>
-      <TextArea label="Factual summary" value={value.summary} onChange={(v) => set('summary', v)} />
-      <TextArea
-        label="Highlights (one per line)"
-        value={value.highlights.join('\n')}
-        onChange={(v) => set('highlights', v.split('\n').map((s) => s.trim()).filter(Boolean))}
-      />
-      <Field label="Image URL (/areas/... or authorised HTTPS image)" value={value.imageUrl} onChange={(v) => set('imageUrl', v)} />
-      {value.imageUrl && (
-        <div style={{ marginBottom: 14 }}>
-          <span style={{ fontSize: 12, color: '#64748b', display: 'block', marginBottom: 4 }}>
-            Property Image Preview:
-          </span>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={value.imageUrl}
-            alt="Property Preview"
-            style={{ width: '100%', maxHeight: 180, objectFit: 'cover', borderRadius: 8, border: '1px solid #cbd5e1' }}
-            onError={(e) => {
-              (e.currentTarget as HTMLElement).style.display = 'none';
-            }}
-          />
-        </div>
-      )}
-      <div className="form-pair">
-        <Field label="Source name" value={value.sourceLabel} onChange={(v) => set('sourceLabel', v)} />
-        <Field label="Last verified" type="date" value={value.verifiedAt} onChange={(v) => set('verifiedAt', v)} />
-      </div>
-      <Field label="Source URL (HTTPS)" value={value.sourceUrl} onChange={(v) => set('sourceUrl', v)} />
-      <label className="check-label">
-        <input type="checkbox" checked={value.featured} onChange={(e) => set('featured', e.target.checked)} /> Feature on homepage
-      </label>
-      <label className="check-label">
-        <input type="checkbox" checked={value.demo} onChange={(e) => set('demo', e.target.checked)} /> Mark clearly as demonstration content
-      </label>
-    </>
-  );
-}
+
 
 function ArticleFields({ value, change }: { value: Article; change: (value: Article) => void }) {
   const set = <K extends keyof Article>(key: K, item: Article[K]) => change({ ...value, [key]: item });
