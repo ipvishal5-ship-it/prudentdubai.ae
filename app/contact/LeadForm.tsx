@@ -3,7 +3,7 @@
 import { FormEvent, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useLanguage } from '@/components/LanguageContext';
-import { COUNTRIES, DEFAULT_COUNTRY, findCountry, validatePhoneNumber } from '@/lib/phone-country';
+import { COUNTRIES, findCountry, validatePhoneNumber } from '@/lib/phone-country';
 import { validateEmailAddress } from '@/lib/email-validator';
 
 export default function LeadForm({ whatsapp }: { whatsapp: string }) {

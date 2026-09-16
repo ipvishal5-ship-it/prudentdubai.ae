@@ -2,8 +2,20 @@ import 'server-only';
 
 const buckets = new Map<string, { count: number; resetsAt: number }>();
 
-export function requestIp(request: Request) {
-  return request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
+export function requestIp(request: Request): string {
+  const cf = request.headers.get('cf-connecting-ip');
+  if (cf && /^[\da-fA-F.:]+$/.test(cf.trim())) return cf.trim();
+
+  const real = request.headers.get('x-real-ip');
+  if (real && /^[\da-fA-F.:]+$/.test(real.trim())) return real.trim();
+
+  const forwarded = request.headers.get('x-forwarded-for');
+  if (forwarded) {
+    const candidate = forwarded.split(',')[0]?.trim();
+    if (candidate && /^[\da-fA-F.:]+$/.test(candidate)) return candidate;
+  }
+
+  return 'unknown';
 }
 
 export function isSameOrigin(request: Request) {

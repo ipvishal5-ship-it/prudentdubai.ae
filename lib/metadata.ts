@@ -43,7 +43,6 @@ export function pageMetadata(
       canonical: url,
       languages: {
         'en-AE': url,
-        'ar-AE': url,
         'x-default': url,
       },
     },
@@ -54,7 +53,6 @@ export function pageMetadata(
       siteName: 'Prudent Spaces',
       type: 'website',
       locale: 'en_AE',
-      alternateLocale: ['ar_AE'],
       images: [
         {
           url: ogImage,
