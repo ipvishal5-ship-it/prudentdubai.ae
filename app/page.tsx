@@ -28,9 +28,10 @@ export default async function HomePage() {
             draggable={false}
           />
           <div className="hero-note">
-            <strong>Bespoke Advisory</strong>
-            <p style={{ margin: 0, fontSize: '0.88rem', color: '#64748b' }}>
-              Prime off-plan & ready portfolios across Dubai's most coveted destinations.
+            <span className="hero-note-tag">✦ 0% Agency Fee</span>
+            <strong>Direct Developer Access</strong>
+            <p style={{ margin: 0, fontSize: '0.86rem', color: '#475569', lineHeight: 1.45 }}>
+              VIP access to Emaar, Nakheel & Sobha launches with full DLD escrow protection.
             </p>
           </div>
         </div>

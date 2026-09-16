@@ -381,15 +381,30 @@ h3 {
   z-index: 2;
   inset-inline-start: -30px;
   bottom: 36px;
-  width: 270px;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  width: 295px;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgba(197, 160, 89, 0.45);
-  border-radius: 18px;
-  padding: 18px 20px;
-  box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.25);
+  border-radius: 20px;
+  padding: 16px 20px;
+  box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.25);
   animation: floatBadge 4s ease-in-out infinite alternate;
+}
+
+.hero-note-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(197, 160, 89, 0.15);
+  color: #936f27;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 3px 9px;
+  border-radius: 999px;
+  margin-bottom: 6px;
 }
 
 @keyframes floatBadge {
