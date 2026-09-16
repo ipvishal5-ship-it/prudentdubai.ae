@@ -22,6 +22,12 @@ const nextConfig: NextConfig = {
   turbopack: { root: path.resolve(process.cwd()) },
   poweredByHeader: false,
   reactStrictMode: true,
+  async redirects() {
+    return [
+      { source: '/properties', destination: '/communities', permanent: true },
+      { source: '/properties/:slug*', destination: '/communities', permanent: true },
+    ];
+  },
   async headers() {
     return [{ source: '/(.*)', headers: [
       { key: 'Content-Security-Policy', value: contentSecurityPolicy },
