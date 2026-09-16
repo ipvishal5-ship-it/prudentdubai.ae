@@ -1,36 +1,43 @@
 # Prudent Spaces
 
-Production-focused Next.js website for Prudent Spaces (`prudentspaces.ae`), the luxury Dubai property advisory division.
+Production-focused Next.js website for Prudent Spaces (`prudentspaces.ae`), the premier Dubai luxury real estate and community advisory platform.
 
-## Content integrity
+## Architecture & Focus
 
-- Public property inventory starts empty. Demonstration records are never presented as live listings.
-- Every published property requires an HTTPS source, source name and verification date.
-- Draft records are visible only in the private Content Studio.
-- Editorial articles require a named primary source and review date.
+Prudent Spaces operates as an independent advisory service rather than a transactional portal:
+- **Dubai Communities (`/communities`)**: Comprehensive guides and investment data across premier Dubai areas (Downtown, Palm Jumeirah, Business Bay, Dubai Marina, Dubai Creek Harbour, Dubai Hills Estate, and Damac Lagoons).
+- **Off-Plan Advisory (`/off-plan`)**: Structural advisory on developer track records, escrow accounts, handover schedules, and RERA compliance.
+- **Mortgage & Investment Calculator (`/calculator`)**: Precise DLD transfer fees, registration trustee costs, UAE Central Bank LTV down payments, and net rental yield formulas.
+- **Market Insights (`/insights`)**: Authoritative editorial guides on Dubai real estate laws (Mollak, Law No. 8 of 2007 Escrow, Service Charges).
+- Legacy `/properties` routes are permanently 301-redirected to `/communities`.
 
-## Content Studio
+## Content Studio (`/admin`)
 
-1. Copy `.env.example` to `.env.local` and replace every example secret.
+The private Admin Studio provides lead pipeline management and editorial publishing:
+1. Copy `.env.example` to `.env.local` and configure secrets.
 2. Run `npm run dev` and open `/admin`.
-3. Add or edit a property or insight. Keep it as `draft` until its source is checked.
-4. Change status to `published` when it is ready for the public website.
+3. **Leads & Inquiries**: Monitor client submissions, filter by pipeline status (`New`, `Contacted`, `Meeting Scheduled`, `Closed`, `Archived`), record internal agent notes, and export CSVs.
+4. **Market Insights**: Draft and publish verified advisory articles with citations.
 
-The included file store writes atomically to `content/*.json`. It is suitable for a persistent Node.js server. Serverless filesystems such as Vercel functions are ephemeral; before a serverless production deployment, connect the same content schemas to a persistent CMS or database. Do not enable admin editing on an ephemeral host.
+The included local file store writes atomically to `content/*.json` and `data/*.json`. For production deployments, live customer inquiries are streamed directly to your configured `LEAD_WEBHOOK_URL` (e.g. Google Sheets) and email alerts.
 
-## Enquiries
+## Enquiries & Real-Time Sync
 
-The public form validates input server-side, uses a honeypot, same-origin checks and request throttling. It sends accepted enquiries to `LEAD_WEBHOOK_URL`. When no destination is configured it fails honestly and directs the visitor to WhatsApp; it never displays a false success message.
-
-The webhook should belong to an approved CRM, automation or email service. Keep its URL and secret server-side.
+The public enquiry system features:
+- Server-side Zod validation, honeypot spam protection, and format verification.
+- Rate-limiting per client IP and same-origin CSRF validation.
+- Real-time webhook dispatch (`LEAD_WEBHOOK_URL`) to your private Google Sheet.
+- Automated email notification to `info@prudentspaces.ae` (via Hostinger SMTP or Resend).
+- Direct WhatsApp routing for immediate broker response.
 
 ## Development
 
 ```bash
 npm install
 npm run lint
+npm run test:calculator
 npm run build
 npm run dev
 ```
 
-Before launch, obtain company approval for legal pages, configure the lead destination, add verified property records, and test the full editor and enquiry flows on the chosen host.
+Before final marketing campaigns, verify Google Search Console indexing, complete domain DNS delegation in Hostinger, and obtain final company sign-off on Privacy/Terms.
