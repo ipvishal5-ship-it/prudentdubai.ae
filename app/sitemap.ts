@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next';
 import { getAllArticles } from '@/lib/content';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const base = 'https://prudentdubai.ae';
+  const base = 'https://prudentspaces.ae';
   const now = new Date();
 
   const routeConfig: {

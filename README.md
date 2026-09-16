@@ -1,6 +1,6 @@
-# Prudent Dubai Properties
+# Prudent Spaces
 
-Production-focused Next.js website for the property division of PrudentDubai.
+Production-focused Next.js website for Prudent Spaces (`prudentspaces.ae`), the luxury Dubai property advisory division.
 
 ## Content integrity
 

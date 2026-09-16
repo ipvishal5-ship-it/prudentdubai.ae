@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-const BASE_URL = 'https://prudentdubai.ae';
+const BASE_URL = 'https://prudentspaces.ae';
 const DEFAULT_OG_IMAGE = `${BASE_URL}/brand/og-image.png`;
 
 export const DEFAULT_KEYWORDS = [
@@ -15,7 +15,8 @@ export const DEFAULT_KEYWORDS = [
   'Palm Jumeirah villas',
   'Dubai land department fees',
   'property investment UAE',
-  'Prudent Dubai Properties',
+  'Prudent Spaces',
+  'Prudent Spaces Dubai',
 ];
 
 export function pageMetadata(
@@ -35,9 +36,9 @@ export function pageMetadata(
     description,
     keywords,
     category: 'Real Estate',
-    authors: [{ name: 'Prudent Dubai Advisory Team', url: `${BASE_URL}/about` }],
-    creator: 'Prudent Dubai Properties',
-    publisher: 'Prudent Dubai Properties',
+    authors: [{ name: 'Prudent Spaces Advisory Team', url: `${BASE_URL}/about` }],
+    creator: 'Prudent Spaces',
+    publisher: 'Prudent Spaces',
     alternates: {
       canonical: url,
       languages: {
@@ -50,7 +51,7 @@ export function pageMetadata(
       title,
       description,
       url,
-      siteName: 'Prudent Dubai Properties',
+      siteName: 'Prudent Spaces',
       type: 'website',
       locale: 'en_AE',
       alternateLocale: ['ar_AE'],
@@ -59,7 +60,7 @@ export function pageMetadata(
           url: ogImage,
           width: 1200,
           height: 630,
-          alt: `${title} - Prudent Dubai Properties`,
+          alt: `${title} - Prudent Spaces`,
           type: 'image/png',
         },
       ],
@@ -69,8 +70,8 @@ export function pageMetadata(
       title,
       description,
       images: [ogImage],
-      site: '@prudentdubai',
-      creator: '@prudentdubai',
+      site: '@prudentspaces',
+      creator: '@prudentspaces',
     },
     robots: {
       index: true,

@@ -5,8 +5,8 @@ import { T } from '@/components/LanguageContext';
 import { pageMetadata } from '@/lib/metadata';
 
 export const metadata: Metadata = pageMetadata(
-  'About PrudentDubai | Dubai Real Estate & Business Advisory',
-  'Strategic Dubai real estate advisory, off-plan analysis, prime property acquisition, and portfolio structuring by PrudentDubai.',
+  'About Prudent Spaces | Dubai Real Estate & Property Advisory',
+  'Strategic Dubai real estate advisory, off-plan analysis, prime property acquisition, and portfolio structuring by Prudent Spaces.',
   '/about'
 );
 
@@ -117,7 +117,7 @@ export default async function AboutPage() {
             <div className="ecosystem-action">
               <a
                 className="button button-primary"
-                href={`${site.sisterWebsite}?utm_source=prudentdubai.ae&utm_medium=referral`}
+                href={`${site.sisterWebsite}?utm_source=prudentspaces.ae&utm_medium=referral`}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ whiteSpace: 'nowrap', padding: '14px 28px' }}
@@ -186,7 +186,7 @@ export default async function AboutPage() {
             <div className="hq-actions">
               <a
                 className="button button-secondary"
-                href={`${site.sisterWebsite}?utm_source=prudentdubai.ae&utm_medium=referral`}
+                href={`${site.sisterWebsite}?utm_source=prudentspaces.ae&utm_medium=referral`}
                 target="_blank"
                 rel="noopener noreferrer"
               >

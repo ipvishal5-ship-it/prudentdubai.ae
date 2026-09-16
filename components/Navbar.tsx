@@ -8,8 +8,11 @@ import { arabicEnabled, useLanguage } from './LanguageContext';
 import type { MessageKey } from '@/lib/i18n';
 
 const links = [
-  ['nav.areas', '/communities'], ['nav.offPlan', '/off-plan'],
-  ['nav.insights', '/insights'], ['nav.about', '/about'], ['nav.contact', '/contact'],
+  ['nav.areas', '/communities'],
+  ['nav.offPlan', '/off-plan'],
+  ['nav.insights', '/insights'],
+  ['nav.about', '/about'],
+  ['nav.contact', '/contact'],
 ] as const;
 
 export default function Navbar() {
@@ -20,10 +23,10 @@ export default function Navbar() {
   return (
     <header className="site-header">
       <div className="container nav">
-        <Link href="/" className="brand" aria-label="Prudent Dubai Properties home">
+        <Link href="/" className="brand" aria-label="Prudent Spaces home">
           <Image
             src="/brand/prudentlogo.png"
-            alt="Prudent Dubai Properties"
+            alt="Prudent Spaces"
             width={172}
             height={49}
             priority
@@ -45,24 +48,26 @@ export default function Navbar() {
         </nav>
 
         <div className="nav-tools">
-          {arabicEnabled && <div className="language-switch" aria-label={t('language.label')}>
-            <button
-              className={locale === 'en' ? 'active' : ''}
-              onClick={() => setLocale('en')}
-              lang="en"
-              aria-label="English"
-            >
-              EN
-            </button>
-            <button
-              className={locale === 'ar' ? 'active' : ''}
-              onClick={() => setLocale('ar')}
-              lang="ar"
-              aria-label="العربية"
-            >
-              ع
-            </button>
-          </div>}
+          {arabicEnabled && (
+            <div className="language-switch" aria-label={t('language.label')}>
+              <button
+                className={locale === 'en' ? 'active' : ''}
+                onClick={() => setLocale('en')}
+                lang="en"
+                aria-label="English"
+              >
+                EN
+              </button>
+              <button
+                className={locale === 'ar' ? 'active' : ''}
+                onClick={() => setLocale('ar')}
+                lang="ar"
+                aria-label="العربية"
+              >
+                ع
+              </button>
+            </div>
+          )}
 
           <Link className="button button-primary" href="/contact">
             {t('nav.talk')}

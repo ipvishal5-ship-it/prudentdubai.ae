@@ -311,7 +311,7 @@ function BuyingCosts() {
           href={`https://wa.me/971555541538?text=${encodeURIComponent(
             locale === 'ar'
               ? `مرحباً، أود استشارة فريق برودنت بخصوص شراء عقار بقيمة ${formatMoney(price, 'ar')}، مع إجمالي تكاليف ورسوم تقدر بـ ${formatMoney(result.total, 'ar')}.`
-              : `Hello Prudent Dubai, I am inquiring about purchasing a property of ${formatMoney(price, 'en')}. The estimated total purchase cost with DLD fees is ${formatMoney(result.total, 'en')}. Please advise on options.`
+              : `Hello Prudent Spaces, I am inquiring about purchasing a property of ${formatMoney(price, 'en')}. The estimated total purchase cost with DLD fees is ${formatMoney(result.total, 'en')}. Please advise on options.`
           )}`}
           target="_blank"
           rel="noopener noreferrer"
@@ -434,7 +434,7 @@ function MortgageCalculator() {
           href={`https://wa.me/971555541538?text=${encodeURIComponent(
             locale === 'ar'
               ? `مرحباً، أود مناقشة تمويل عقار بقيمة ${formatMoney(price, 'ar')}، بدفعة أولى ${formatMoney(downPayment, 'ar')} (${downPercent}%)، وقسط شهري متوقع ${formatMoney(payment, 'ar')} على مدى ${years} سنوات.`
-              : `Hello Prudent Dubai, I calculated mortgage terms for a property of ${formatMoney(price, 'en')}, Down payment: ${formatMoney(downPayment, 'en')} (${downPercent}%), Estimated monthly payment: ${formatMoney(payment, 'en')} over ${years} years. Please advise on options.`
+              : `Hello Prudent Spaces, I calculated mortgage terms for a property of ${formatMoney(price, 'en')}, Down payment: ${formatMoney(downPayment, 'en')} (${downPercent}%), Estimated monthly payment: ${formatMoney(payment, 'en')} over ${years} years. Please advise on options.`
           )}`}
           target="_blank"
           rel="noopener noreferrer"
@@ -541,7 +541,7 @@ function YieldCalculator() {
           href={`https://wa.me/971555541538?text=${encodeURIComponent(
             locale === 'ar'
               ? `مرحباً، أرغب في تقييم عائد إيجاري لعقار بقيمة ${formatMoney(price, 'ar')} مع إيجار سنوي متوقع ${formatMoney(annualRent, 'ar')} (عائد صافي ${result.netYield.toFixed(2)}%).`
-              : `Hello Prudent Dubai, I calculated rental yield for a property of ${formatMoney(price, 'en')} with annual rent of ${formatMoney(annualRent, 'en')} (estimated net yield: ${result.netYield.toFixed(2)}%). Please advise on high-yielding properties.`
+              : `Hello Prudent Spaces, I calculated rental yield for a property of ${formatMoney(price, 'en')} with annual rent of ${formatMoney(annualRent, 'en')} (estimated net yield: ${result.netYield.toFixed(2)}%). Please advise on high-yielding properties.`
           )}`}
           target="_blank"
           rel="noopener noreferrer"

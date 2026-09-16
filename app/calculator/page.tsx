@@ -22,10 +22,10 @@ export default function CalculatorPage() {
     '@graph': [
       {
         '@type': 'SoftwareApplication',
-        name: 'Prudent Dubai Property & Mortgage Calculator',
+        name: 'Prudent Spaces Property & Mortgage Calculator',
         operatingSystem: 'All',
         applicationCategory: 'FinanceApplication',
-        url: 'https://prudentdubai.ae/calculator',
+        url: 'https://prudentspaces.ae/calculator',
         offers: {
           '@type': 'Offer',
           price: '0',
@@ -70,13 +70,13 @@ export default function CalculatorPage() {
             '@type': 'ListItem',
             position: 1,
             name: 'Home',
-            item: 'https://prudentdubai.ae',
+            item: 'https://prudentspaces.ae',
           },
           {
             '@type': 'ListItem',
             position: 2,
             name: 'Property Calculator',
-            item: 'https://prudentdubai.ae/calculator',
+            item: 'https://prudentspaces.ae/calculator',
           },
         ],
       },

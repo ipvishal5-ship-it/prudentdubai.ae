@@ -6,7 +6,7 @@
     "handover": "Illustrative: Q4 2028", "paymentPlan": "Illustrative: 20 / 50 / 30",
     "summary": "Demonstration apartment entry created to preview the website layout, filters and enquiry journey. This is not a live project or available unit.",
     "highlights": ["Canal-side concept", "Apartment layout example", "Replace with authorised project facts"],
-    "imageUrl": "/areas/business-bay.jpg", "sourceLabel": "DEMO ONLY: replace with an authorised source", "sourceUrl": "https://prudentdubai.ae/terms",
+    "imageUrl": "/areas/business-bay.jpg", "sourceLabel": "DEMO ONLY: replace with an authorised source", "sourceUrl": "https://prudentspaces.ae/terms",
     "verifiedAt": "2026-08-30", "featured": true, "demo": true
   },
   {
@@ -16,7 +16,7 @@
     "handover": "Illustrative: Ready", "paymentPlan": "Illustrative: full payment on transfer",
     "summary": "Demonstration ready-apartment entry for testing search, price sorting and comparison. It does not represent a real listing or current availability.",
     "highlights": ["Central-city concept", "Ready-property example", "Replace image and facts before launch"],
-    "imageUrl": "/areas/downtown-dubai.jpg", "sourceLabel": "DEMO ONLY: replace with an authorised source", "sourceUrl": "https://prudentdubai.ae/terms",
+    "imageUrl": "/areas/downtown-dubai.jpg", "sourceLabel": "DEMO ONLY: replace with an authorised source", "sourceUrl": "https://prudentspaces.ae/terms",
     "verifiedAt": "2026-08-30", "featured": true, "demo": true
   },
   {
@@ -26,7 +26,7 @@
     "handover": "Illustrative: Ready", "paymentPlan": "Illustrative: mortgage subject to approval",
     "summary": "Demonstration family-villa record used to show the premium visual treatment and comparison tools. No property is being offered through this entry.",
     "highlights": ["Family-home concept", "Private pool example", "Independent inspection recommended for real homes"],
-    "imageUrl": "/areas/dubai-hills.jpg", "sourceLabel": "DEMO ONLY: replace with an authorised source", "sourceUrl": "https://prudentdubai.ae/terms",
+    "imageUrl": "/areas/dubai-hills.jpg", "sourceLabel": "DEMO ONLY: replace with an authorised source", "sourceUrl": "https://prudentspaces.ae/terms",
     "verifiedAt": "2026-08-30", "featured": true, "demo": true
   },
   {
@@ -36,7 +36,7 @@
     "handover": "Illustrative: Q2 2029", "paymentPlan": "Illustrative: 10 / 60 / 30",
     "summary": "Demonstration townhouse record created solely for the property explorer. All commercial details must be replaced with authorised data.",
     "highlights": ["Courtyard-home concept", "Three-bedroom example", "Not a reservation or sales offer"],
-    "imageUrl": "/areas/damac-lagoons.jpg", "sourceLabel": "DEMO ONLY: replace with an authorised source", "sourceUrl": "https://prudentdubai.ae/terms",
+    "imageUrl": "/areas/damac-lagoons.jpg", "sourceLabel": "DEMO ONLY: replace with an authorised source", "sourceUrl": "https://prudentspaces.ae/terms",
     "verifiedAt": "2026-08-30", "featured": false, "demo": true
   },
   {
@@ -46,7 +46,7 @@
     "handover": "Illustrative: Q1 2029", "paymentPlan": "Illustrative: 20 / 40 / 40",
     "summary": "Demonstration premium-residence entry for validating high-budget filtering and comparison. It is not connected to a real project.",
     "highlights": ["Waterfront concept", "Large-format residence example", "Confirm real unit plans independently"],
-    "imageUrl": "/areas/creek-harbour.jpg", "sourceLabel": "DEMO ONLY: replace with an authorised source", "sourceUrl": "https://prudentdubai.ae/terms",
+    "imageUrl": "/areas/creek-harbour.jpg", "sourceLabel": "DEMO ONLY: replace with an authorised source", "sourceUrl": "https://prudentspaces.ae/terms",
     "verifiedAt": "2026-08-30", "featured": false, "demo": true
   },
   {
@@ -56,7 +56,7 @@
     "handover": "Illustrative: Ready", "paymentPlan": "Illustrative: full payment on transfer",
     "summary": "Demonstration luxury-villa entry used to test the upper price range and visual hierarchy. It is not a live property listing.",
     "highlights": ["Pool-villa concept", "Five-bedroom example", "Replace with licensed listing material"],
-    "imageUrl": "/areas/palm-jumeirah.jpg", "sourceLabel": "DEMO ONLY: replace with an authorised source", "sourceUrl": "https://prudentdubai.ae/terms",
+    "imageUrl": "/areas/palm-jumeirah.jpg", "sourceLabel": "DEMO ONLY: replace with an authorised source", "sourceUrl": "https://prudentspaces.ae/terms",
     "verifiedAt": "2026-08-30", "featured": false, "demo": true
   }
 ]

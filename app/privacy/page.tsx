@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { T } from '@/components/LanguageContext';
 import { pageMetadata } from '@/lib/metadata';
 
-export const metadata: Metadata = pageMetadata('Privacy Policy', 'How Prudent Dubai collects, uses, protects and retains information submitted through this website.', '/privacy');
+export const metadata: Metadata = pageMetadata('Privacy Policy', 'How Prudent Spaces collects, uses, protects and retains information submitted through this website.', '/privacy');
 
 export default function PrivacyPage() {
   return (

@@ -9,8 +9,8 @@ export default function FloatingWhatsApp() {
   const isRtl = locale === 'ar';
   
   const text = isRtl
-    ? 'مرحباً برودنت دبي، أرغب في الاستفسار عن العقارات والفرص الاستثمارية في دبي.'
-    : 'Hello Prudent Dubai, I would like to enquire about property advisory and investment opportunities in Dubai.';
+    ? 'مرحباً برودنت سبيسز، أرغب في الاستفسار عن العقارات والفرص الاستثمارية في دبي.'
+    : 'Hello Prudent Spaces, I would like to enquire about property advisory and investment opportunities in Dubai.';
 
   const href = `https://wa.me/${rawNumber}?text=${encodeURIComponent(text)}`;
 

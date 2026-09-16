@@ -60,8 +60,8 @@ async function dispatchEmailNotification(leadData: Record<string, unknown>) {
   const htmlContent = `
     <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #ffffff;">
       <div style="border-bottom: 2px solid #0f172a; padding-bottom: 12px; margin-bottom: 20px;">
-        <h2 style="color: #0f172a; margin: 0; font-size: 20px;">🏢 New Property Inquiry — Prudent Dubai</h2>
-        <p style="color: #64748b; font-size: 13px; margin: 4px 0 0 0;">Received on prudentdubai.com</p>
+        <h2 style="color: #0f172a; margin: 0; font-size: 20px;">🏢 New Property Inquiry — Prudent Spaces</h2>
+        <p style="color: #64748b; font-size: 13px; margin: 4px 0 0 0;">Received on prudentspaces.ae</p>
       </div>
       <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
         <tr><td style="padding: 10px 0; font-weight: 600; color: #475569; width: 120px;">Name:</td><td style="padding: 10px 0; color: #0f172a; font-weight: 600;">${leadData.name}</td></tr>
@@ -99,7 +99,7 @@ async function dispatchEmailNotification(leadData: Record<string, unknown>) {
       });
 
       const info = await transporter.sendMail({
-        from: process.env.SMTP_FROM || `"Prudent Dubai Real Estate" <${smtpUser}>`,
+        from: process.env.SMTP_FROM || `"Prudent Spaces Real Estate" <${smtpUser}>`,
         to: recipients,
         subject: `New Lead: ${leadData.name} - ${leadData.interest}`,
         html: htmlContent,
@@ -116,7 +116,7 @@ async function dispatchEmailNotification(leadData: Record<string, unknown>) {
   const resendApiKey = process.env.RESEND_API_KEY;
   if (resendApiKey) {
     try {
-      const fromEmail = process.env.RESEND_FROM_EMAIL || 'PrudentDubai Leads <onboarding@resend.dev>';
+      const fromEmail = process.env.RESEND_FROM_EMAIL || 'Prudent Spaces Leads <onboarding@resend.dev>';
       const response = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: {
@@ -196,7 +196,7 @@ export async function POST(request: Request) {
     ip: clientIp,
     userAgent: request.headers.get('user-agent') || 'Unknown',
     receivedAt: new Date().toISOString(),
-    source: 'prudentdubai.ae',
+    source: 'prudentspaces.ae',
   };
 
   // 6. Save lead to local disk storage (Zero lead loss guarantee)

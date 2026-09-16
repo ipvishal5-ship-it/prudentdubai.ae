@@ -11,7 +11,7 @@ export default async function Footer() {
         <div className="footer-grid">
           <div className="footer-brand">
             <div className="brand">
-              <Image src="/brand/prudentlogo.png" alt="PrudentDubai" width={160} height={46} />
+              <Image src="/brand/prudentlogo.png" alt="Prudent Spaces" width={160} height={46} />
             </div>
             <p style={{ marginTop: 20 }}>
               <T id="footer.summary" />

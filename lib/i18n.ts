@@ -109,7 +109,7 @@ export const messages = {
     'areas.panelBody': 'Share your preferred areas and property type. Property-specific information should be checked against current authorised sources.',
 
     // About Page
-    'about.eyebrow': 'About PrudentDubai',
+    'about.eyebrow': 'About Prudent Spaces',
     'about.title': 'Your Strategic Partner for Dubai Real Estate & Corporate Investment.',
     'about.lede': 'Combining deep Dubai real estate market intelligence with corporate advisory, business setup, and residency solutions.',
     'about.approachTitle': 'A More Focused Way to Invest',
@@ -126,7 +126,7 @@ export const messages = {
     'about.pillar4Title': 'Financial & Legal Due Diligence',
     'about.pillar4Body': 'Independent mortgage calculations, Title Deed verifications, and CBUAE banking compliance.',
 
-    'about.whyTitle': 'Why High-Net-Worth Investors Trust PrudentDubai',
+    'about.whyTitle': 'Why High-Net-Worth Investors Trust Prudent Spaces',
     'about.why1Title': 'Conflict-Free Guidance',
     'about.why1Body': 'Unbiased buyer-side representation focused on long-term capital appreciation, yields, and exit liquidity.',
     'about.why2Title': 'Single-Window Ecosystem',
@@ -150,7 +150,7 @@ export const messages = {
     'about.step4Body': 'Assisting with property inspection, formal title deed issuance, tenancy onboarding, and ongoing asset management.',
 
     'about.officesTitle': 'Our Dubai Headquarters',
-    'about.officesLede': 'Visit or reach out to our PrudentDubai advisory office in Business Bay, Dubai.',
+    'about.officesLede': 'Visit or reach out to our Prudent Spaces advisory office in Business Bay, Dubai.',
     'about.dubai': 'Dubai Office',
     'about.visitSister': 'Visit PrudentDubai.com ↗',
     'about.complianceBadge': 'Regulatory Alignment',
@@ -160,7 +160,7 @@ export const messages = {
     'about.talkTeam': 'Talk to the team',
 
     // Contact Page & Lead Form
-    'contact.eyebrow': 'Talk to Prudent',
+    'contact.eyebrow': 'Talk to Prudent Spaces',
     'contact.title': 'Tell us what you are looking for.',
     'contact.lede': 'Share your preferred area, property type, budget, and timing. A clear brief helps us respond with a relevant next step.',
     'contact.phone': 'Phone / WhatsApp',
@@ -186,7 +186,7 @@ export const messages = {
     'contact.form.budgetPlaceholder': 'For example: AED 1.5M',
     'contact.form.message': 'Useful context',
     'contact.form.messagePlaceholder': 'Preferred areas, property type, timing or a project name',
-    'contact.form.consent': 'I agree that PrudentDubai may use these details to respond to this enquiry. I have not included sensitive identity or financial documents.',
+    'contact.form.consent': 'I agree that Prudent Spaces may use these details to respond to this enquiry. I have not included sensitive identity or financial documents.',
     'contact.form.send': 'Send enquiry',
     'contact.form.sending': 'Sending…',
     'contact.form.success': 'Thank you. Your enquiry was sent to the Prudent team.',
@@ -368,7 +368,7 @@ export const messages = {
     'terms.title': 'Terms and property information disclaimer',
     'terms.effective': 'Effective 30 August 2026',
     'terms.sec1Title': 'General information',
-    'terms.sec1Text': 'This website provides general property information and a way to contact the PrudentDubai team. It is not a contract, valuation, legal opinion, financial advice, tax advice or promise of investment performance.',
+    'terms.sec1Text': 'This website provides general property information and a way to contact the Prudent Spaces team. It is not a contract, valuation, legal opinion, financial advice, tax advice or promise of investment performance.',
     'terms.sec2Title': 'Listings and availability',
     'terms.sec2Text': 'Published opportunities identify an information source and verification date. Prices, incentives, unit choice, views, sizes, payment schedules, completion dates and availability may change after that date. Obtain current written confirmation and review the relevant reservation and sale documents before paying or signing.',
     'terms.sec3Title': 'No guaranteed outcome',
@@ -394,7 +394,7 @@ export const messages = {
     'footer.calculator': 'Property calculator',
     'footer.privacy': 'Privacy',
     'footer.terms': 'Terms & disclaimer',
-    'footer.copyright': 'PrudentDubai Properties',
+    'footer.copyright': 'Prudent Spaces',
 
     // Additional UI & Category keys
     'about.groupSynergy': 'GROUP SYNERGY',
@@ -530,7 +530,7 @@ export const messages = {
     'areas.panelBody': 'شارك المناطق المفضلة ونوع العقار. يجب التحقق من معلومات العقار المحدد من مصادر حالية ومعتمدة.',
 
     // About Page (Arabic)
-    'about.eyebrow': 'عن برودنت دبي',
+    'about.eyebrow': 'عن برودنت سبيسز',
     'about.title': 'شريكك الاستراتيجي للاستثمار العقاري والمؤسسي في دبي.',
     'about.lede': 'نجمع بين الخبرة العميقة في سوق العقارات بدبي واستشارات الاستثمار المؤسسي، الهيكلة الاستثمارية، وإدارة الأصول العقارية.',
     'about.approachTitle': 'طريقة أكثر تركيزاً للاستثمار',
@@ -547,7 +547,7 @@ export const messages = {
     'about.pillar4Title': 'العناية الواجبة والتدقيق المالي',
     'about.pillar4Body': 'حسابات رهن عقاري مستقلة، والتحقق من سندات الملكية والامتثال للمصرف المركزي.',
 
-    'about.whyTitle': 'لماذا يثق المستثمرون بشركة برودنت دبي',
+    'about.whyTitle': 'لماذا يثق المستثمرون بشركة برودنت سبيسز',
     'about.why1Title': 'مشورة مستقلة وبدون تضارب مصالح',
     'about.why1Body': 'تمثيل دقيق ومستقل للمشتري يركز على زيادة رأس المال طويلة الأجل، وسهولة إعادة البيع، والعوائد المجزية.',
     'about.why2Title': 'منظومة متكاملة في نافذة واحدة',
@@ -571,7 +571,7 @@ export const messages = {
     'about.step4Body': 'المساعدة في فحص واستلام العقار، وإصدار سند الملكية الرسمي، وإدارة المستأجرين، وتعظيم العائد الاستثماري.',
 
     'about.officesTitle': 'مقرنا الرئيسي في دبي',
-    'about.officesLede': 'تفضل بزيارة أو التواصل مع مكتب PrudentDubai الاستشاري في الخليج التجاري، دبي.',
+    'about.officesLede': 'تفضل بزيارة أو التواصل مع مكتب برودنت سبيسز الاستشاري في الخليج التجاري، دبي.',
     'about.dubai': 'مكتب دبي',
     'about.visitSister': 'زيارة PrudentDubai.com ↗',
     'about.complianceBadge': 'المعايير التنظيمية',
@@ -581,7 +581,7 @@ export const messages = {
     'about.talkTeam': 'تحدث مع الفريق',
 
     // Contact Page & Lead Form
-    'contact.eyebrow': 'تواصل مع برودنت',
+    'contact.eyebrow': 'تواصل مع برودنت سبيسز',
     'contact.title': 'أخبرنا بما تبحث عنه.',
     'contact.lede': 'شاركنا منطقتك المفضلة، ونوع العقار، والميزانية، والتوقيت المناسب. يساعدنا الملخص الواضح على تقديم استجابة دقيقة وعملية.',
     'contact.phone': 'الهاتف / واتساب',
@@ -607,7 +607,7 @@ export const messages = {
     'contact.form.budgetPlaceholder': 'مثال: 1.5 مليون درهم',
     'contact.form.message': 'تفاصيل إضافية',
     'contact.form.messagePlaceholder': 'المناطق المفضلة، نوع العقار، التوقيت، أو اسم المشروع',
-    'contact.form.consent': 'أوافق على استخدام PrudentDubai لهذه البيانات للرد على استفساري. أؤكد أنني لم أدرج أي مستندات هوية أو مالية حساسة.',
+    'contact.form.consent': 'أوافق على استخدام برودنت سبيسز لهذه البيانات للرد على استفساري. أؤكد أنني لم أدرج أي مستندات هوية أو مالية حساسة.',
     'contact.form.send': 'إرسال الاستفسار',
     'contact.form.sending': 'جارٍ الإرسال…',
     'contact.form.success': 'شكراً لك. تم إرسال استفسارك بنجاح إلى فريق برودنت.',
@@ -789,7 +789,7 @@ export const messages = {
     'terms.title': 'الشروط وإخلاء المسؤولية عن المعلومات العقارية',
     'terms.effective': 'سارية اعتباراً من 30 أغسطس 2026',
     'terms.sec1Title': 'معلومات عامة',
-    'terms.sec1Text': 'يوفر هذا الموقع معلومات عقارية عامة ووسيلة للتواصل مع فريق PrudentDubai. لا يُعتبر محتواه عقداً، أو تقييماً رسمياً، أو رأياً قانونياً، أو مشورة مالية أو ضريبية، أو وعداً بعوائد استثمارية.',
+    'terms.sec1Text': 'يوفر هذا الموقع معلومات عقارية عامة ووسيلة للتواصل مع فريق برودنت سبيسز. لا يُعتبر محتواه عقداً، أو تقييماً رسمياً، أو رأياً قانونياً، أو مشورة مالية أو ضريبية، أو وعداً بعوائد استثمارية.',
     'terms.sec2Title': 'القوائم والتوافر',
     'terms.sec2Text': 'توضح الفرص المنشورة مصدر المعلومات وتاريخ التحقق. قد تتغير الأسعار، والحوافز، وتوفر الوحدات، والإطلالات، والمساحات، وخطط السداد، ومواعيد الإنجاز بعد ذلك التاريخ. تأكد من الحصول على تأكيد خطي ومراجعة مستندات الحجز والبيع قبل الدفع أو التوقيع.',
     'terms.sec3Title': 'عدم ضمان النتائج',
@@ -815,7 +815,7 @@ export const messages = {
     'footer.calculator': 'حاسبة العقارات',
     'footer.privacy': 'الخصوصية',
     'footer.terms': 'الشروط وإخلاء المسؤولية',
-    'footer.copyright': 'برودنت دبي العقارية',
+    'footer.copyright': 'برودنت سبيسز',
 
     // Additional UI & Category keys in Arabic
     'about.groupSynergy': 'تكامل المجموعة',

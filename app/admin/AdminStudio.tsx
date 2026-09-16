@@ -59,7 +59,7 @@ const articleBlank = (): Article => ({
   sourceLabel: '',
   sourceUrl: 'https://',
   imageUrl: '',
-  author: 'Prudent Dubai Advisory Team',
+  author: 'Prudent Spaces Advisory Team',
   readTime: '5 min read',
 });
 
@@ -224,7 +224,7 @@ export default function AdminStudio() {
       <div className="admin-workspace">
         <header className="admin-toolbar">
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-            <Image src="/brand/smalllogo.png" alt="Prudent Dubai" width={40} height={27} />
+            <Image src="/brand/smalllogo.png" alt="Prudent Spaces" width={40} height={27} />
             <div>
               <span className="eyebrow">Private workspace</span>
               <h1>Boss Management Studio</h1>
@@ -478,7 +478,7 @@ export default function AdminStudio() {
                       <div style={{ display: 'flex', gap: 8, marginTop: 12, flexWrap: 'wrap' }}>
                         <a
                           href={`https://wa.me/${(activeLead.phone || '').replace(/\D/g, '')}?text=${encodeURIComponent(
-                            `Hello ${activeLead.name}, this is Vikas from Prudent Dubai Properties. Thank you for your inquiry regarding ${activeLead.interest}. How can I assist you with your property search in Dubai?`
+                            `Hello ${activeLead.name}, this is Vikas from Prudent Spaces. Thank you for your inquiry regarding ${activeLead.interest}. How can I assist you with your property search in Dubai?`
                           )}`}
                           target="_blank"
                           rel="noreferrer"

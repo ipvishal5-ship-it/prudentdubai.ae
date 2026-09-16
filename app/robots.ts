@@ -14,7 +14,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/admin', '/api/'],
       },
     ],
-    sitemap: 'https://prudentdubai.ae/sitemap.xml',
-    host: 'https://prudentdubai.ae',
+    sitemap: 'https://prudentspaces.ae/sitemap.xml',
+    host: 'https://prudentspaces.ae',
   };
 }

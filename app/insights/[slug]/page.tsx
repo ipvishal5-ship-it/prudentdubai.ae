@@ -27,7 +27,7 @@ export async function generateMetadata({
       title: item.title,
       description: item.excerpt,
       url: `/insights/${item.slug}`,
-      siteName: 'Prudent Dubai Properties',
+      siteName: 'Prudent Spaces',
       type: 'article',
       images: item.imageUrl ? [{ url: item.imageUrl }] : undefined,
     },
@@ -51,26 +51,26 @@ export default async function ArticlePage({
     '@type': 'Article',
     headline: item.title,
     description: item.excerpt,
-    url: `https://prudentdubai.ae/insights/${item.slug}`,
-    image: item.imageUrl ? (item.imageUrl.startsWith('http') ? item.imageUrl : `https://prudentdubai.ae${item.imageUrl}`) : 'https://prudentdubai.ae/brand/og-image.png',
+    url: `https://prudentspaces.ae/insights/${item.slug}`,
+    image: item.imageUrl ? (item.imageUrl.startsWith('http') ? item.imageUrl : `https://prudentspaces.ae${item.imageUrl}`) : 'https://prudentspaces.ae/brand/og-image.png',
     datePublished: item.publishedAt || item.updatedAt,
     dateModified: item.updatedAt || item.publishedAt,
     author: {
       '@type': 'Organization',
-      name: item.author || 'Prudent Dubai Properties',
-      url: 'https://prudentdubai.ae',
+      name: item.author || 'Prudent Spaces',
+      url: 'https://prudentspaces.ae',
     },
     publisher: {
       '@type': 'Organization',
-      name: 'Prudent Dubai Properties',
+      name: 'Prudent Spaces',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://prudentdubai.ae/brand/prudentlogo.png',
+        url: 'https://prudentspaces.ae/brand/prudentlogo.png',
       },
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `https://prudentdubai.ae/insights/${item.slug}`,
+      '@id': `https://prudentspaces.ae/insights/${item.slug}`,
     },
   };
 

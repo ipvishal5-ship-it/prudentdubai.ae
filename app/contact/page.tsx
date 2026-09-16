@@ -5,7 +5,7 @@ import { T } from '@/components/LanguageContext';
 import LeadForm from './LeadForm';
 import { pageMetadata } from '@/lib/metadata';
 
-export const metadata: Metadata = pageMetadata('Contact PrudentDubai | Talk to Our Dubai Property Advisory Team', 'Share your Dubai property requirements with the Prudent Dubai team. Direct guidance on off-plan, luxury areas, and acquisition.', '/contact');
+export const metadata: Metadata = pageMetadata('Contact Prudent Spaces | Talk to Our Dubai Property Advisory Team', 'Share your Dubai property requirements with the Prudent Spaces team. Direct guidance on off-plan, luxury areas, and acquisition.', '/contact');
 
 export default async function ContactPage() {
   const site = await getSiteSettings();

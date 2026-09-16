@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { T } from '@/components/LanguageContext';
 import { pageMetadata } from '@/lib/metadata';
 
-export const metadata: Metadata = pageMetadata('Terms and Disclaimer', 'Terms for using Prudent Dubai property information, calculators, links and enquiry services.', '/terms');
+export const metadata: Metadata = pageMetadata('Terms and Disclaimer', 'Terms for using Prudent Spaces property information, calculators, links and enquiry services.', '/terms');
 
 export default function TermsPage() {
   return (
