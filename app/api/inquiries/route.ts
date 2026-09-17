@@ -87,7 +87,7 @@ async function dispatchEmailNotification(leadData: Record<string, unknown>) {
     try {
       const host = process.env.SMTP_HOST || 'smtp.hostinger.com';
       const port = Number(process.env.SMTP_PORT) || 465;
-      const secure = process.env.SMTP_SECURE !== 'false';
+      const secure = process.env.SMTP_SECURE ? process.env.SMTP_SECURE === 'true' : port === 465;
 
       const transporter = nodemailer.createTransport({
         host,
@@ -97,6 +97,9 @@ async function dispatchEmailNotification(leadData: Record<string, unknown>) {
           user: smtpUser,
           pass: smtpPass,
         },
+        connectionTimeout: 8000,
+        greetingTimeout: 8000,
+        socketTimeout: 10000,
       });
 
       const info = await transporter.sendMail({
@@ -156,9 +159,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Request rejected.' }, { status: 403 });
   }
 
-  // 2. Strict Rate Limiting: Max 3 requests per 15 minutes per IP
+  // 2. Strict Rate Limiting: Max 5 requests per 15 minutes per IP
   const clientIp = requestIp(request);
-  if (!rateLimit(`lead:${clientIp}`, 3, 15 * 60_000)) {
+  if (!rateLimit(`lead:${clientIp}`, 5, 15 * 60_000)) {
     return NextResponse.json(
       { error: 'You have submitted multiple enquiries. Please wait 15 minutes or contact us via WhatsApp.' },
       { status: 429 },
@@ -203,10 +206,11 @@ export async function POST(request: Request) {
   // 6. Save lead to local disk storage (Zero lead loss guarantee)
   await saveLeadToDisk(leadRecord);
 
-  // 7. Dispatch background notifications (Webhook / Email / Telegram / OpenWA)
-  Promise.all([dispatchWebhookNotification(leadRecord), dispatchEmailNotification(leadRecord)]).catch((err) =>
-    console.warn('Background lead notification error:', err),
-  );
+  // 7. Dispatch notifications and AWAIT so Vercel serverless lambda does not freeze before completion
+  await Promise.allSettled([
+    dispatchWebhookNotification(leadRecord),
+    dispatchEmailNotification(leadRecord),
+  ]);
 
   return NextResponse.json({ ok: true });
 }
