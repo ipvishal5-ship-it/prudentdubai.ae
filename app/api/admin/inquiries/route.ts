@@ -47,8 +47,13 @@ async function readLeads(): Promise<Record<string, unknown>[]> {
 }
 
 async function writeLeads(leads: Record<string, unknown>[]) {
-  await fs.mkdir(DATA_DIR, { recursive: true });
-  await fs.writeFile(LEADS_FILE, `${JSON.stringify(leads, null, 2)}\n`, 'utf8');
+  try {
+    await fs.mkdir(DATA_DIR, { recursive: true });
+    await fs.writeFile(LEADS_FILE, `${JSON.stringify(leads, null, 2)}\n`, 'utf8');
+  } catch (err) {
+    // Gracefully ignore local disk write errors on serverless read-only filesystems
+    console.warn('Local disk write skipped:', err);
+  }
 }
 
 export async function GET() {
@@ -62,19 +67,54 @@ export async function PUT(request: Request) {
   const body = (await request.json().catch(() => null)) as { id?: string; leadStatus?: string; notes?: string } | null;
   if (!body?.id) return NextResponse.json({ error: 'Missing lead ID.' }, { status: 400 });
 
-  const leads = await readLeads();
-  const index = leads.findIndex((l) => l.id === body.id);
-  if (index < 0) return NextResponse.json({ error: 'Lead not found.' }, { status: 404 });
+  const webhookUrl = process.env.LEAD_WEBHOOK_URL;
+  if (webhookUrl) {
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 8_000);
+      await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          ...(process.env.LEAD_WEBHOOK_SECRET ? { authorization: `Bearer ${process.env.LEAD_WEBHOOK_SECRET}` } : {}),
+        },
+        body: JSON.stringify({
+          action: 'update',
+          rowId: body.id,
+          leadStatus: body.leadStatus || 'new',
+          notes: body.notes || '',
+        }),
+        signal: controller.signal,
+        cache: 'no-store',
+        redirect: 'follow',
+      });
+      clearTimeout(timeout);
+    } catch (err) {
+      console.warn('Webhook lead update error:', err);
+    }
+  }
 
-  leads[index] = {
-    ...leads[index],
-    leadStatus: body.leadStatus || leads[index].leadStatus || 'new',
-    notes: typeof body.notes === 'string' ? body.notes : leads[index].notes || '',
-    updatedAt: new Date().toISOString(),
-  };
+  // Also update local store if present
+  try {
+    const raw = await fs.readFile(LEADS_FILE, 'utf8').catch(() => '[]');
+    const localLeads = JSON.parse(raw);
+    if (Array.isArray(localLeads)) {
+      const index = localLeads.findIndex((l: Record<string, unknown>) => l.id === body.id);
+      if (index >= 0) {
+        localLeads[index] = {
+          ...localLeads[index],
+          leadStatus: body.leadStatus || localLeads[index].leadStatus || 'new',
+          notes: typeof body.notes === 'string' ? body.notes : localLeads[index].notes || '',
+          updatedAt: new Date().toISOString(),
+        };
+        await writeLeads(localLeads);
+      }
+    }
+  } catch {
+    // Non-fatal
+  }
 
-  await writeLeads(leads);
-  return NextResponse.json({ ok: true, lead: leads[index] });
+  return NextResponse.json({ ok: true, lead: { id: body.id, leadStatus: body.leadStatus, notes: body.notes } });
 }
 
 export async function DELETE(request: Request) {
@@ -82,8 +122,42 @@ export async function DELETE(request: Request) {
   const body = (await request.json().catch(() => null)) as { id?: string } | null;
   if (!body?.id) return NextResponse.json({ error: 'Missing lead ID.' }, { status: 400 });
 
-  const leads = await readLeads();
-  const filtered = leads.filter((l) => l.id !== body.id);
-  await writeLeads(filtered);
+  const webhookUrl = process.env.LEAD_WEBHOOK_URL;
+  if (webhookUrl) {
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 8_000);
+      await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          ...(process.env.LEAD_WEBHOOK_SECRET ? { authorization: `Bearer ${process.env.LEAD_WEBHOOK_SECRET}` } : {}),
+        },
+        body: JSON.stringify({
+          action: 'delete',
+          rowId: body.id,
+        }),
+        signal: controller.signal,
+        cache: 'no-store',
+        redirect: 'follow',
+      });
+      clearTimeout(timeout);
+    } catch (err) {
+      console.warn('Webhook lead delete error:', err);
+    }
+  }
+
+  // Also remove from local store if present
+  try {
+    const raw = await fs.readFile(LEADS_FILE, 'utf8').catch(() => '[]');
+    const localLeads = JSON.parse(raw);
+    if (Array.isArray(localLeads)) {
+      const filtered = localLeads.filter((l: Record<string, unknown>) => l.id !== body.id);
+      await writeLeads(filtered);
+    }
+  } catch {
+    // Non-fatal
+  }
+
   return NextResponse.json({ ok: true });
 }

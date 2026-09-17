@@ -22,7 +22,28 @@ export function isSameOrigin(request: Request) {
   const origin = request.headers.get('origin');
   if (!origin) return process.env.NODE_ENV !== 'production';
   try {
-    return new URL(origin).origin === new URL(request.url).origin;
+    const originUrl = new URL(origin);
+    const reqUrl = new URL(request.url);
+    if (originUrl.origin === reqUrl.origin) return true;
+
+    const host = request.headers.get('x-forwarded-host') || request.headers.get('host');
+    if (host && (originUrl.host === host || originUrl.host === host.split(':')[0])) {
+      return true;
+    }
+
+    const hostname = originUrl.hostname.toLowerCase();
+    if (
+      hostname === 'prudentspaces.ae' ||
+      hostname === 'www.prudentspaces.ae' ||
+      hostname === 'prudentdubai.ae' ||
+      hostname === 'www.prudentdubai.ae' ||
+      hostname === 'localhost' ||
+      hostname.endsWith('.vercel.app')
+    ) {
+      return true;
+    }
+
+    return false;
   } catch {
     return false;
   }
