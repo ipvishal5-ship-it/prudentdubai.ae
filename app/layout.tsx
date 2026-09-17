@@ -12,7 +12,17 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://prudentspaces.ae'),
   title: { default: 'Prudent Spaces | Dubai Luxury Property Advisory', template: '%s | Prudent Spaces' },
   description: 'Prudent Spaces provides direct property advisory across Dubai. Share your preferred area, property type, and goals, and our team will guide you with clear pricing and data-backed insights.',
-  icons: { icon: '/brand/smalllogo.png', apple: '/brand/smalllogo.png' },
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: '48x48', type: 'image/x-icon' },
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
+    ],
+    shortcut: '/favicon.ico',
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+  },
   openGraph: { title: 'Prudent Spaces', description: 'Your Dubai property partner for area selection, home categories, and direct buying support.', url: 'https://prudentspaces.ae', siteName: 'Prudent Spaces', type: 'website', locale: 'en_AE' },
   twitter: { card: 'summary_large_image' },
   alternates: {
