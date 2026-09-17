@@ -118,46 +118,74 @@ export async function PUT(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  if (!(await authorised(request))) return NextResponse.json({ error: 'Unauthorised.' }, { status: 401 });
-  const body = (await request.json().catch(() => null)) as { id?: string } | null;
-  if (!body?.id) return NextResponse.json({ error: 'Missing lead ID.' }, { status: 400 });
-
-  const webhookUrl = process.env.LEAD_WEBHOOK_URL;
-  if (webhookUrl) {
-    try {
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 8_000);
-      await fetch(webhookUrl, {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',
-          ...(process.env.LEAD_WEBHOOK_SECRET ? { authorization: `Bearer ${process.env.LEAD_WEBHOOK_SECRET}` } : {}),
-        },
-        body: JSON.stringify({
-          action: 'delete',
-          rowId: body.id,
-        }),
-        signal: controller.signal,
-        cache: 'no-store',
-        redirect: 'follow',
-      });
-      clearTimeout(timeout);
-    } catch (err) {
-      console.warn('Webhook lead delete error:', err);
-    }
-  }
-
-  // Also remove from local store if present
   try {
-    const raw = await fs.readFile(LEADS_FILE, 'utf8').catch(() => '[]');
-    const localLeads = JSON.parse(raw);
-    if (Array.isArray(localLeads)) {
-      const filtered = localLeads.filter((l: Record<string, unknown>) => l.id !== body.id);
-      await writeLeads(filtered);
+    if (!(await authorised(request))) return NextResponse.json({ error: 'Unauthorised.' }, { status: 401 });
+    
+    // Support ID from URL query param (?id=...) or JSON body
+    const url = new URL(request.url);
+    let id = url.searchParams.get('id');
+    if (!id) {
+      const body = (await request.json().catch(() => null)) as { id?: string } | null;
+      id = body?.id || null;
     }
-  } catch {
-    // Non-fatal
-  }
+    if (!id) return NextResponse.json({ error: 'Missing lead ID.' }, { status: 400 });
 
-  return NextResponse.json({ ok: true });
+    const webhookUrl = process.env.LEAD_WEBHOOK_URL;
+    if (webhookUrl) {
+      try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 8_000);
+        await fetch(webhookUrl, {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+            ...(process.env.LEAD_WEBHOOK_SECRET ? { authorization: `Bearer ${process.env.LEAD_WEBHOOK_SECRET}` } : {}),
+          },
+          body: JSON.stringify({
+            action: 'delete',
+            rowId: id,
+          }),
+          signal: controller.signal,
+          cache: 'no-store',
+          redirect: 'follow',
+        });
+        clearTimeout(timeout);
+      } catch (err) {
+        console.warn('Webhook lead delete error:', err);
+      }
+    }
+
+    // Also remove from local store if present
+    try {
+      const raw = await fs.readFile(LEADS_FILE, 'utf8').catch(() => '[]');
+      const localLeads = JSON.parse(raw);
+      if (Array.isArray(localLeads)) {
+        const filtered = localLeads.filter((l: Record<string, unknown>) => l.id !== id);
+        await writeLeads(filtered);
+      }
+    } catch {
+      // Non-fatal
+    }
+
+    return NextResponse.json({ ok: true, deletedId: id });
+  } catch (err) {
+    console.error('DELETE lead fatal error:', err);
+    return NextResponse.json({ error: 'Failed to delete lead' }, { status: 500 });
+  }
+}
+
+export async function POST(request: Request) {
+  try {
+    if (!(await authorised(request))) return NextResponse.json({ error: 'Unauthorised.' }, { status: 401 });
+    const body = (await request.json().catch(() => null)) as { action?: string; id?: string } | null;
+    if (body?.action === 'delete' && body.id) {
+      return DELETE(new Request(`${request.url}?id=${encodeURIComponent(body.id)}`, {
+        method: 'DELETE',
+        headers: request.headers,
+      }));
+    }
+    return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
+  } catch (err) {
+    return NextResponse.json({ error: String(err) }, { status: 500 });
+  }
 }

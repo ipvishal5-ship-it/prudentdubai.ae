@@ -20,6 +20,8 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const { locale, setLocale, t } = useLanguage();
 
+  if (pathname?.startsWith('/admin')) return null;
+
   return (
     <header className="site-header">
       <div className="container nav">

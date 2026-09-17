@@ -1,12 +1,16 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
 import { useLanguage } from './LanguageContext';
 import siteSettings from '@/content/site.json';
 
 export default function FloatingWhatsApp() {
+  const pathname = usePathname();
   const { locale, t } = useLanguage();
   const rawNumber = siteSettings.whatsapp || '971555541538';
   const isRtl = locale === 'ar';
+
+  if (pathname?.startsWith('/admin')) return null;
   
   const text = isRtl
     ? 'مرحباً برودنت سبيسز، أرغب في الاستفسار عن العقارات والفرص الاستثمارية في دبي.'
