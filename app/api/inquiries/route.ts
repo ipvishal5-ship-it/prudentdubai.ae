@@ -5,6 +5,7 @@ import nodemailer from 'nodemailer';
 import { leadSchema } from '@/lib/data';
 import { isSameOrigin, rateLimit, requestIp } from '@/lib/request-security';
 import { validateEmailAddress } from '@/lib/email-validator';
+import { verifyDomainHasMx } from '@/lib/email-dns';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const LEADS_FILE = path.join(DATA_DIR, 'inquiries.json');
@@ -186,6 +187,31 @@ export async function POST(request: Request) {
   const emailCheck = validateEmailAddress(email);
   if (!emailCheck.valid) {
     return NextResponse.json({ error: emailCheck.error }, { status: 400 });
+  }
+
+  // 6. Real-time DNS MX check: Verify email domain actually has active mail servers
+  const emailDomain = email.split('@')[1];
+  if (emailDomain) {
+    const mxCheck = await verifyDomainHasMx(emailDomain);
+    if (!mxCheck.valid) {
+      return NextResponse.json({ error: mxCheck.error }, { status: 400 });
+    }
+  }
+
+  // 7. Server-side Phone number validation (Format & anti-dummy check)
+  const digitsOnly = phone.replace(/\D/g, '');
+  if (digitsOnly.length < 8 || digitsOnly.length > 16) {
+    return NextResponse.json(
+      { error: 'Please provide a valid phone number with country code (8 to 16 digits).' },
+      { status: 400 }
+    );
+  }
+  // Check for dummy repeating digits like "00000000" or sequential spam "12345678"
+  if (/^(\d)\1{7,}$/.test(digitsOnly) || digitsOnly === '123456789' || digitsOnly === '987654321') {
+    return NextResponse.json(
+      { error: 'Please enter a genuine contact phone number so our advisory team can reach you.' },
+      { status: 400 }
+    );
   }
 
   const leadRecord = {

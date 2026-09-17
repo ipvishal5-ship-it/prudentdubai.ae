@@ -1,11 +1,22 @@
 const DISPOSABLE_EMAIL_DOMAINS = new Set([
+  // Popular Disposable Mail Services
   'mailinator.com',
   'tempmail.com',
+  'temp-mail.org',
+  'temp-mail.io',
   '10minutemail.com',
+  '10minutemail.net',
   'guerrillamail.com',
+  'guerrillamail.net',
+  'guerrillamail.biz',
+  'guerrillamail.org',
   'yopmail.com',
+  'yopmail.fr',
+  'yopmail.net',
   'throwawaymail.com',
   'trashmail.com',
+  'trashmail.net',
+  'trashmail.org',
   'dispostable.com',
   'sharklasers.com',
   'getnada.com',
@@ -21,18 +32,77 @@ const DISPOSABLE_EMAIL_DOMAINS = new Set([
   'inboxbear.com',
   'mytemp.email',
   'nospam.ze.tc',
+  'emailondeck.com',
+  'mohmal.com',
+  'dropmail.me',
+  'generator.email',
+  'inboxkitten.com',
+  'burnermail.io',
+  'tempmailaddress.com',
+  'minuteinbox.com',
+  'getairmail.com',
+  'meltmail.com',
+  'trashmail.de',
+  'discard.email',
+  'spambog.com',
+  'tempail.com',
+  'internxt.com',
+  'anonbox.net',
+  'privatemail.com',
+  'luxusmail.org',
+  'jetable.org',
+  'generator.email',
+  'fakemail.net',
+  'tmpmail.net',
+  'tmpmail.org',
+  'clipmail.eu',
+  'armyspy.com',
+  'cuvox.de',
+  'dayrep.com',
+  'einrot.com',
+  'fleckens.hu',
+  'gustr.com',
+  'jourrapide.com',
+  'rhyta.com',
+  'superrito.com',
+  'teleworm.us',
 ]);
 
 const FAKE_DOMAIN_PATTERNS = [
-  /^test\.com$/i,
-  /^fake\.com$/i,
-  /^example\.com$/i,
-  /^asdf\.com$/i,
-  /^qwerty\.com$/i,
-  /^abc\.com$/i,
-  /^foo\.com$/i,
-  /^bar\.com$/i,
+  /^test\./i,
+  /^fake\./i,
+  /^example\./i,
+  /^asdf\./i,
+  /^qwerty\./i,
+  /^abc\./i,
+  /^foo\./i,
+  /^bar\./i,
+  /^none\./i,
+  /^noemail\./i,
+  /^sample\./i,
+  /^testing\./i,
 ];
+
+const FAKE_USERNAMES = new Set([
+  'test',
+  'testing',
+  'fake',
+  'asdf',
+  'qwerty',
+  'admin',
+  'user',
+  'sample',
+  'dummy',
+  'nobody',
+  'none',
+  'noemail',
+  'null',
+  'undefined',
+  'xyz',
+  'abc',
+  '123456',
+  '000000',
+]);
 
 export function validateEmailAddress(email: string): { valid: boolean; error?: string } {
   const trimmed = email.trim().toLowerCase();
@@ -58,8 +128,21 @@ export function validateEmailAddress(email: string): { valid: boolean; error?: s
     return { valid: false, error: 'Email username is too short.' };
   }
 
+  // Reject obvious fake usernames
+  if (FAKE_USERNAMES.has(username)) {
+    return { valid: false, error: 'Please provide a genuine personal or corporate email address.' };
+  }
+
+  // Check repeating characters (e.g. "aaaaaa", "111111")
+  if (/^(.)\1{4,}$/.test(username)) {
+    return { valid: false, error: 'Please provide a valid email address.' };
+  }
+
   if (DISPOSABLE_EMAIL_DOMAINS.has(domain)) {
-    return { valid: false, error: 'Temporary or disposable email addresses are not accepted. Please use a permanent email.' };
+    return {
+      valid: false,
+      error: 'Temporary or disposable email addresses are not accepted. Please use a permanent email.',
+    };
   }
 
   for (const pattern of FAKE_DOMAIN_PATTERNS) {
