@@ -14,6 +14,29 @@ async function authorised(request?: Request) {
 }
 
 async function readLeads(): Promise<Record<string, unknown>[]> {
+  const webhookUrl = process.env.LEAD_WEBHOOK_URL;
+  if (webhookUrl) {
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 6_000);
+      const res = await fetch(webhookUrl, {
+        method: 'GET',
+        cache: 'no-store',
+        redirect: 'follow',
+        signal: controller.signal,
+      });
+      clearTimeout(timeout);
+      if (res.ok) {
+        const data = (await res.json()) as { leads?: Record<string, unknown>[] };
+        if (Array.isArray(data.leads) && data.leads.length > 0) {
+          return data.leads;
+        }
+      }
+    } catch (err) {
+      console.warn('Google Sheet live sync fallback:', err);
+    }
+  }
+
   try {
     const raw = await fs.readFile(LEADS_FILE, 'utf8');
     const parsed = JSON.parse(raw);
