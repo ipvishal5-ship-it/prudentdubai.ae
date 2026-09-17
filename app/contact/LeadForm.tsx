@@ -4,7 +4,7 @@ import { FormEvent, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useLanguage } from '@/components/LanguageContext';
 import { COUNTRIES, findCountry, validatePhoneNumber } from '@/lib/phone-country';
-import { validateEmailAddress } from '@/lib/email-validator';
+import { validateEmailAddress, validateLeadName } from '@/lib/email-validator';
 
 export default function LeadForm({ whatsapp }: { whatsapp: string }) {
   const { locale, t } = useLanguage();
@@ -28,7 +28,7 @@ export default function LeadForm({ whatsapp }: { whatsapp: string }) {
   const [emailAddress, setEmailAddress] = useState('');
   const [status, setStatus] = useState<'idle' | 'busy' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
-  const [fieldErrors, setFieldErrors] = useState<{ phone?: string; email?: string }>({});
+  const [fieldErrors, setFieldErrors] = useState<{ name?: string; phone?: string; email?: string }>({});
 
   const activeCountry = findCountry(selectedCountryCode);
 
@@ -39,6 +39,7 @@ export default function LeadForm({ whatsapp }: { whatsapp: string }) {
     setMessage('');
 
     const form = new FormData(formElement);
+    const rawName = String(form.get('name') || '').trim();
     const rawEmail = String(form.get('email') || '');
     const rawPhone = String(form.get('phone') || '');
     const honeypot = String(form.get('website') || '');
@@ -51,7 +52,16 @@ export default function LeadForm({ whatsapp }: { whatsapp: string }) {
       return;
     }
 
-    // 1. Validate Email Address
+    // 1. Validate Full Name (blocks "test", "fake", repeating chars)
+    const nameCheck = validateLeadName(rawName);
+    if (!nameCheck.valid) {
+      setStatus('error');
+      setFieldErrors((prev) => ({ ...prev, name: nameCheck.error }));
+      setMessage(nameCheck.error || 'Please enter your genuine full name.');
+      return;
+    }
+
+    // 2. Validate Email Address (blocks test prefixes, repeating digits/chars, disposable domains)
     const emailCheck = validateEmailAddress(rawEmail);
     if (!emailCheck.valid) {
       setStatus('error');
@@ -60,7 +70,7 @@ export default function LeadForm({ whatsapp }: { whatsapp: string }) {
       return;
     }
 
-    // 2. Validate Phone Number against Selected Country
+    // 3. Validate Phone Number against Selected Country
     const phoneCheck = validatePhoneNumber(rawPhone, activeCountry);
     if (!phoneCheck.valid) {
       setStatus('error');
@@ -122,13 +132,17 @@ export default function LeadForm({ whatsapp }: { whatsapp: string }) {
         <label className="field-label">
           {t('contact.form.name')} *
           <input
-            className="field-input"
+            className={`field-input ${fieldErrors.name ? 'input-error' : ''}`}
             name="name"
             required
             maxLength={100}
             autoComplete="name"
             placeholder="e.g. Alexander Vance"
+            onChange={() => {
+              if (fieldErrors.name) setFieldErrors((prev) => ({ ...prev, name: undefined }));
+            }}
           />
+          {fieldErrors.name && <span className="field-hint-error">{fieldErrors.name}</span>}
         </label>
         <label className="field-label">
           {t('contact.form.email')} *

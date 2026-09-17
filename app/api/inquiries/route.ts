@@ -4,7 +4,7 @@ import path from 'node:path';
 import nodemailer from 'nodemailer';
 import { leadSchema } from '@/lib/data';
 import { isSameOrigin, rateLimit, requestIp } from '@/lib/request-security';
-import { validateEmailAddress } from '@/lib/email-validator';
+import { validateEmailAddress, validateLeadName } from '@/lib/email-validator';
 import { verifyDomainHasMx } from '@/lib/email-dns';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
@@ -183,13 +183,19 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true });
   }
 
-  // 5. Server-side Email validation (Disposable & Fake Email check)
+  // 5. Server-side Name validation (blocks "test", "fake", repeating chars)
+  const nameCheck = validateLeadName(name);
+  if (!nameCheck.valid) {
+    return NextResponse.json({ error: nameCheck.error }, { status: 400 });
+  }
+
+  // 6. Server-side Email validation (Disposable & Fake Email check)
   const emailCheck = validateEmailAddress(email);
   if (!emailCheck.valid) {
     return NextResponse.json({ error: emailCheck.error }, { status: 400 });
   }
 
-  // 6. Real-time DNS MX check: Verify email domain actually has active mail servers
+  // 7. Real-time DNS MX check: Verify email domain actually has active mail servers
   const emailDomain = email.split('@')[1];
   if (emailDomain) {
     const mxCheck = await verifyDomainHasMx(emailDomain);
