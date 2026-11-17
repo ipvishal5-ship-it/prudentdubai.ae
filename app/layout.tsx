@@ -7,6 +7,8 @@ import { CurrencyProvider } from '@/components/CurrencyContext';
 import { LanguageProvider } from '@/components/LanguageContext';
 import MotionProvider from '@/components/MotionProvider';
 import { getSiteSettings } from '@/lib/content';
+import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://prudentspaces.ae'),
@@ -131,6 +133,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <FloatingWhatsApp />
           </CurrencyProvider>
         </LanguageProvider>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
